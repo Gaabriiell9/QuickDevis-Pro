@@ -801,9 +801,15 @@ export default function LandingPage() {
               <Link href="/register" className="hover:text-slate-700">
                 Inscription
               </Link>
-              <span>Mentions légales</span>
-              <span>CGU</span>
-              <span>Confidentialité</span>
+              <Link href="/mentions-legales" className="hover:text-slate-700">
+                Mentions légales
+              </Link>
+              <Link href="/cgu" className="hover:text-slate-700">
+                CGU
+              </Link>
+              <Link href="/confidentialite" className="hover:text-slate-700">
+                Confidentialité
+              </Link>
             </div>
 
             <p className="text-xs text-slate-400">

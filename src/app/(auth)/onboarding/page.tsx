@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSession } from "next-auth/react";
@@ -11,6 +11,7 @@ import { Loader2, Building2, FileText, MapPin, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Card,
   CardContent,
@@ -54,6 +55,7 @@ export default function OnboardingPage() {
     handleSubmit,
     formState: { errors },
     trigger,
+    control,
   } = useForm<OnboardingForm>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: { currency: "EUR", locale: "fr-FR", country: "FR" },
@@ -229,12 +231,47 @@ export default function OnboardingPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="currency">Devise</Label>
-                <Input id="currency" placeholder="EUR" {...register("currency")} />
+                <Label>Devise</Label>
+                <Controller
+                  name="currency"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value ?? "EUR"} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="EUR">EUR — Euro (€)</SelectItem>
+                        <SelectItem value="USD">USD — Dollar américain ($)</SelectItem>
+                        <SelectItem value="GBP">GBP — Livre sterling (£)</SelectItem>
+                        <SelectItem value="CHF">CHF — Franc suisse (Fr)</SelectItem>
+                        <SelectItem value="CAD">CAD — Dollar canadien (C$)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="locale">Langue</Label>
-                <Input id="locale" placeholder="fr-FR" {...register("locale")} />
+                <Label>Langue des documents</Label>
+                <Controller
+                  name="locale"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value ?? "fr-FR"} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="fr-FR">🇫🇷 Français (France)</SelectItem>
+                        <SelectItem value="fr-BE">🇧🇪 Français (Belgique)</SelectItem>
+                        <SelectItem value="fr-CH">🇨🇭 Français (Suisse)</SelectItem>
+                        <SelectItem value="en-US">🇺🇸 English (US)</SelectItem>
+                        <SelectItem value="en-GB">🇬🇧 English (UK)</SelectItem>
+                        <SelectItem value="es-ES">🇪🇸 Español</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               </div>
             </CardContent>
           </Card>

@@ -34,8 +34,8 @@ export default function ConfidentialitePage() {
           <section>
             <h2 className="text-lg font-bold text-slate-800 mb-3">1. Responsable du traitement</h2>
             <p>
-              Le responsable du traitement des données personnelles est [Nom de la société],
-              joignable à l&apos;adresse email [contact@exemple.fr].
+              Le responsable du traitement des données personnelles est Gabriel Farias,
+              joignable à l&apos;adresse email joaofarias115@gmail.com.
             </p>
           </section>
 
@@ -101,7 +101,7 @@ export default function ConfidentialitePage() {
               <li><strong>Droit d&apos;opposition</strong> : vous opposer à certains traitements</li>
             </ul>
             <p className="mt-3">
-              Pour exercer vos droits, contactez-nous à [contact@exemple.fr].
+              Pour exercer vos droits, contactez-nous à joaofarias115@gmail.com.
               Vous pouvez également introduire une réclamation auprès de la CNIL (www.cnil.fr).
             </p>
           </section>

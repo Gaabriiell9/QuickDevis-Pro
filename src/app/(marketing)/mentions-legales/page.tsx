@@ -35,13 +35,13 @@ export default function MentionsLegalesPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-800 mb-3">1. Éditeur du site</h2>
             <p>
-              Le site QuickDevis Pro est édité par [Nom de la société], [Forme juridique],
-              au capital de [Montant] euros, immatriculée au RCS de [Ville] sous le numéro [SIRET].
+              Le site QuickDevis Pro est édité par Gabriel Farias, Développeur indépendant,
+              
             </p>
             <p className="mt-2">
-              Siège social : [Adresse complète]<br />
-              Email : [contact@exemple.fr]<br />
-              Téléphone : [+33 X XX XX XX XX]
+              Siège social : Bordeaux, France<br />
+              Email : joaofarias115@gmail.com<br />
+              Téléphone : 
             </p>
           </section>
 
@@ -57,9 +57,9 @@ export default function MentionsLegalesPage() {
             <h2 className="text-lg font-bold text-slate-800 mb-3">3. Propriété intellectuelle</h2>
             <p>
               L&apos;ensemble du contenu de ce site (textes, images, graphiques, logo, icônes, sons, logiciels)
-              est la propriété exclusive de [Nom de la société] ou de ses partenaires.
+              est la propriété exclusive de Gabriel Farias ou de ses partenaires.
               Toute reproduction, distribution, modification, adaptation, retransmission ou publication
-              de ces différents éléments est strictement interdite sans l&apos;accord exprès par écrit de [Nom de la société].
+              de ces différents éléments est strictement interdite sans l&apos;accord exprès par écrit de Gabriel Farias.
             </p>
           </section>
 
@@ -68,7 +68,7 @@ export default function MentionsLegalesPage() {
             <p>
               Les informations contenues sur ce site sont aussi précises que possible et le site est
               périodiquement remis à jour, mais peut toutefois contenir des inexactitudes, des omissions
-              ou des lacunes. [Nom de la société] ne peut être tenu responsable pour tout dommage ou préjudice
+              ou des lacunes. Gabriel Farias ne peut être tenu responsable pour tout dommage ou préjudice
               résultant de l&apos;utilisation de ces informations.
             </p>
           </section>

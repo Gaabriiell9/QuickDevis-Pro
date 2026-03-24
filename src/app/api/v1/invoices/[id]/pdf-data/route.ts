@@ -29,6 +29,12 @@ export async function GET(
   if ((invoice as any).templateId) {
     const tmpl = await prisma.template.findUnique({ where: { id: (invoice as any).templateId }, select: { content: true } });
     templateConfig = tmpl?.content ?? null;
+  } else {
+    const defaultTmpl = await prisma.template.findFirst({
+      where: { organizationId: orgId, type: "INVOICE", isDefault: true, deletedAt: null },
+      select: { content: true },
+    });
+    templateConfig = defaultTmpl?.content ?? null;
   }
 
   const clientName =

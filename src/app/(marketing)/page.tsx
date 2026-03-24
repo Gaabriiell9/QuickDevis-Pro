@@ -485,7 +485,7 @@ export default function LandingPage() {
               className="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-slate-500"
             >
               La solution tout-en-un pour les indépendants et PME françaises.
-              Devis, factures, clients et paiements — centralisés et conformes.
+              Devis · factures · clients et paiements — centralisés et conformes.
             </motion.p>
 
             {/* CTAs */}

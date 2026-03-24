@@ -495,7 +495,7 @@ export default function LandingPage() {
               className="mb-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
             >
               <Link href="/register">
-                <Button className="h-12 bg-indigo-600 px-8 text-base font-semibold text-white shadow-lg hover:bg-indigo-700">
+                <Button className="h-12 bg-indigo-600 px-8 text-base font-semibold text-white shadow-lg shadow-indigo-300/60 transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-400/50 hover:scale-[1.02]">
                   Commencer gratuitement
                   <ArrowRight className="ml-2 size-4" />
                 </Button>
@@ -575,8 +575,8 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: i * 0.08 }}
-                  whileHover={{ scale: 1.02, boxShadow: "0 8px 32px rgba(99,102,241,0.10)" }}
-                  className="group cursor-default rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-shadow"
+                  whileHover={{ scale: 1.02, boxShadow: "0 12px 40px rgba(99,102,241,0.13)" }}
+                  className="group cursor-default rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all hover:border-indigo-100"
                 >
                   <div
                     className={cn(

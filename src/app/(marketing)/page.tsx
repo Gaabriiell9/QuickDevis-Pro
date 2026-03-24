@@ -20,6 +20,7 @@ import {
   X,
   TrendingUp,
   Bell,
+  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -515,16 +516,16 @@ export default function LandingPage() {
               className="flex flex-wrap items-center justify-center gap-3"
             >
               {[
-                { icon: "🔒", label: "Données sécurisées" },
-                { icon: "🇫🇷", label: "Conforme législation française" },
-                { icon: "⚡", label: "Gratuit pour démarrer" },
-              ].map((badge) => (
+                { Icon: Shield, label: "Données sécurisées" },
+                { Icon: Globe, label: "Conforme législation française" },
+                { Icon: Zap, label: "Gratuit pour démarrer" },
+              ].map(({ Icon, label }) => (
                 <span
-                  key={badge.label}
+                  key={label}
                   className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-xs font-medium text-slate-600"
                 >
-                  <span>{badge.icon}</span>
-                  {badge.label}
+                  <Icon className="size-3.5 text-slate-400" />
+                  {label}
                 </span>
               ))}
             </motion.div>
@@ -812,8 +813,10 @@ export default function LandingPage() {
               </Link>
             </div>
 
-            <p className="text-xs text-slate-400">
-              © {new Date().getFullYear()} QuickDevis Pro. Fait avec ♥ en France.
+            <p className="flex items-center gap-1 text-xs text-slate-400">
+              © {new Date().getFullYear()} QuickDevis Pro. Fait avec
+              <Heart className="size-3 fill-rose-400 text-rose-400" />
+              en France.
             </p>
           </div>
         </div>

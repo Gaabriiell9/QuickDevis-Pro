@@ -161,6 +161,7 @@ model Organization {
   vatNumber  String?
   iban       String?
   bic        String?
+  plan       String    @default("FREE")
   currency   String    @default("EUR")
   locale     String    @default("fr-FR")
   timezone   String    @default("Europe/Paris")

@@ -43,7 +43,7 @@ export default function InvoiceDetailPage() {
       method: "POST",
       credentials: "include",
     });
-    if (!res.ok) { toast.error("Erreur"); return; }
+    if (!res.ok) { toast.error("Impossible de marquer la facture comme payée"); return; }
     toast.success("Facture marquée comme payée");
     qc.invalidateQueries({ queryKey: ["invoice", id] });
   };
@@ -78,7 +78,7 @@ export default function InvoiceDetailPage() {
       toast.success("Facture envoyée par email");
       setSendOpen(false);
       qc.invalidateQueries({ queryKey: ["invoice", id] });
-    } catch { toast.error("Erreur"); }
+    } catch { toast.error("Une erreur est survenue lors de l'envoi"); }
     finally { setSendLoading(false); }
   };
 

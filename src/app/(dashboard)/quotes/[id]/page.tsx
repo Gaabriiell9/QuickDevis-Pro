@@ -37,13 +37,20 @@ export default function QuoteDetailPage() {
     },
   });
 
+  const ACTION_MESSAGES: Record<string, { success: string; error: string }> = {
+    accept:    { success: "Devis accepté",    error: "Impossible d'accepter ce devis" },
+    reject:    { success: "Devis refusé",     error: "Impossible de refuser ce devis" },
+    duplicate: { success: "Devis dupliqué",   error: "Impossible de dupliquer ce devis" },
+  };
+
   const handleAction = async (action: string, redirectTo?: string) => {
     const res = await fetch(`/api/v1/quotes/${id}/${action}`, {
       method: "POST",
       credentials: "include",
     });
-    if (!res.ok) { toast.error("Erreur"); return; }
-    toast.success("Fait");
+    const msg = ACTION_MESSAGES[action];
+    if (!res.ok) { toast.error(msg?.error ?? "Une erreur est survenue"); return; }
+    toast.success(msg?.success ?? "Action effectuée");
     qc.invalidateQueries({ queryKey: ["quote", id] });
     if (redirectTo) router.push(redirectTo);
   };
@@ -89,7 +96,7 @@ export default function QuoteDetailPage() {
       toast.success("Devis envoyé par email");
       setSendOpen(false);
       qc.invalidateQueries({ queryKey: ["quote", id] });
-    } catch { toast.error("Erreur"); }
+    } catch { toast.error("Une erreur est survenue lors de l'envoi"); }
     finally { setSendLoading(false); }
   };
 

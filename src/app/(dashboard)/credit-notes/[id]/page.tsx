@@ -32,13 +32,20 @@ export default function CreditNoteDetailPage() {
     },
   });
 
+  const CN_ACTION_MESSAGES: Record<string, { success: string; error: string }> = {
+    send:    { success: "Avoir envoyé",   error: "Impossible d'envoyer cet avoir" },
+    apply:   { success: "Avoir appliqué", error: "Impossible d'appliquer cet avoir" },
+    cancel:  { success: "Avoir annulé",   error: "Impossible d'annuler cet avoir" },
+  };
+
   const handleAction = async (action: string) => {
     const res = await fetch(`/api/v1/credit-notes/${id}/${action}`, {
       method: "POST",
       credentials: "include",
     });
-    if (!res.ok) { toast.error("Erreur"); return; }
-    toast.success("Statut mis à jour");
+    const msg = CN_ACTION_MESSAGES[action];
+    if (!res.ok) { toast.error(msg?.error ?? "Une erreur est survenue"); return; }
+    toast.success(msg?.success ?? "Statut mis à jour");
     qc.invalidateQueries({ queryKey: ["credit-note", id] });
   };
 

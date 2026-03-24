@@ -55,6 +55,7 @@ export async function POST(
         createdById: token.id as string,
         reference,
         subject: quote.subject,
+        templateId: quote.templateId,
         dueDate,
         notes: quote.notes,
         termsAndConditions: quote.termsAndConditions,

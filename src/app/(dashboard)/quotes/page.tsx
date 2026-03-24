@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Plus, Search, MoreHorizontal, Trash2, FileText } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Trash2, FileText, Eye, Pencil, Copy } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useQuotes } from "@/hooks/use-quotes";
 import { PageHeader } from "@/components/shared/page-header";
@@ -14,7 +14,8 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { formatMoney } from "@/lib/utils/money";
 import { formatDateShort } from "@/lib/utils/dates";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
@@ -23,6 +24,7 @@ export default function QuotesPage() {
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; label: string } | null>(null);
+  const [duplicatingId, setDuplicatingId] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuotes({ search, status, page });
 
@@ -30,12 +32,29 @@ export default function QuotesPage() {
     if (!deleteTarget) return;
     const res = await fetch(`/api/v1/quotes/${deleteTarget.id}`, { method: "DELETE", credentials: "include" });
     if (res.ok) {
-      toast.success("Supprimé avec succès");
+      toast.success("Devis supprimé");
       await queryClient.invalidateQueries({ queryKey: ["quotes"] });
     } else {
-      toast.error("Erreur lors de la suppression");
+      toast.error("Impossible de supprimer ce devis");
     }
     setDeleteTarget(null);
+  }
+
+  async function handleDuplicate(id: string, reference: string) {
+    setDuplicatingId(id);
+    try {
+      const res = await fetch(`/api/v1/quotes/${id}/duplicate`, { method: "POST", credentials: "include" });
+      if (res.ok) {
+        toast.success(`Devis ${reference} dupliqué`);
+        await queryClient.invalidateQueries({ queryKey: ["quotes"] });
+      } else {
+        toast.error("Impossible de dupliquer ce devis");
+      }
+    } catch {
+      toast.error("Erreur serveur");
+    } finally {
+      setDuplicatingId(null);
+    }
   }
 
   return (
@@ -71,14 +90,19 @@ export default function QuotesPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input className="pl-9" placeholder="Rechercher..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
         </div>
-        <select className="h-10 rounded-md border border-input bg-background px-3 text-sm" value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }}>
-          <option value="">Tous les statuts</option>
-          <option value="DRAFT">Brouillon</option>
-          <option value="SENT">Envoyé</option>
-          <option value="ACCEPTED">Accepté</option>
-          <option value="REJECTED">Refusé</option>
-          <option value="EXPIRED">Expiré</option>
-        </select>
+        <Select value={status || "ALL"} onValueChange={(v) => { setStatus(v === "ALL" ? "" : v); setPage(1); }}>
+          <SelectTrigger className="w-[168px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">Tous les statuts</SelectItem>
+            <SelectItem value="DRAFT">Brouillon</SelectItem>
+            <SelectItem value="SENT">Envoyé</SelectItem>
+            <SelectItem value="ACCEPTED">Accepté</SelectItem>
+            <SelectItem value="REJECTED">Refusé</SelectItem>
+            <SelectItem value="EXPIRED">Expiré</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {isLoading ? (
@@ -118,6 +142,26 @@ export default function QuotesPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild>
+                          <Link href={`/quotes/${q.id}`}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            Voir
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/quotes/${q.id}/edit`}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Modifier
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          disabled={duplicatingId === q.id}
+                          onClick={() => handleDuplicate(q.id, q.reference)}
+                        >
+                          <Copy className="mr-2 h-4 w-4" />
+                          Dupliquer
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem
                           className="text-destructive focus:text-destructive"
                           onClick={() => setDeleteTarget({ id: q.id, label: q.reference })}

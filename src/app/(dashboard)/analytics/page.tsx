@@ -61,8 +61,8 @@ const QUOTE_STATUS_LABELS: Record<string, string> = {
 export default function AnalyticsPage() {
   const { data: summary, isLoading: summaryLoading } = useDashboardSummary();
 
-  const { data: invoicesData, isLoading: invoicesLoading } = useInvoices({ pageSize: 100 } as any);
-  const { data: quotesData, isLoading: quotesLoading } = useQuotes({ pageSize: 100 } as any);
+  const { data: invoicesData, isLoading: invoicesLoading } = useInvoices({ pageSize: 100 });
+  const { data: quotesData, isLoading: quotesLoading } = useQuotes({ pageSize: 100 });
 
   const isLoading = summaryLoading || invoicesLoading || quotesLoading;
 

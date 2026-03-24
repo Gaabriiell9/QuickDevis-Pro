@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 interface InvoicesParams {
   page?: number;
+  pageSize?: number;
   search?: string;
   status?: string;
 }
@@ -9,6 +10,7 @@ interface InvoicesParams {
 export function useInvoices(params: InvoicesParams = {}) {
   const searchParams = new URLSearchParams();
   if (params.page) searchParams.set("page", String(params.page));
+  if (params.pageSize) searchParams.set("pageSize", String(params.pageSize));
   if (params.search) searchParams.set("search", params.search);
   if (params.status) searchParams.set("status", params.status);
 

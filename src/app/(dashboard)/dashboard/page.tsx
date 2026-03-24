@@ -109,25 +109,23 @@ export default function DashboardPage() {
             <Skeleton className="h-64" />
           ) : (
             <ResponsiveContainer width="100%" height={256}>
-              <AreaChart data={[]}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip formatter={(v) => formatMoney(Number(v))} />
-                <Area
-                  type="monotone"
-                  dataKey="facture"
-                  stroke="#3b82f6"
-                  fill="#3b82f6"
-                  fillOpacity={0.1}
-                  name="Facturé"
-                />
+              <AreaChart data={summary?.monthlyRevenue ?? []}>
+                <defs>
+                  <linearGradient id="gradEncaisse" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.15} />
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(215 20% 91%)" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 12 }} />
+                <Tooltip formatter={(v) => formatMoney(Number(v))} labelStyle={{ fontWeight: 600 }} />
                 <Area
                   type="monotone"
                   dataKey="encaisse"
-                  stroke="#22c55e"
-                  fill="#22c55e"
-                  fillOpacity={0.1}
+                  stroke="#6366f1"
+                  strokeWidth={2}
+                  fill="url(#gradEncaisse)"
                   name="Encaissé"
                 />
               </AreaChart>

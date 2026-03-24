@@ -59,8 +59,15 @@ export default function OnboardingPage() {
     defaultValues: { currency: "EUR", locale: "fr-FR", country: "FR" },
   });
 
+  const stepFields: Record<number, (keyof OnboardingForm)[]> = {
+    1: ["name", "email", "phone", "website"],
+    2: ["siret", "vatNumber"],
+    3: ["address", "postalCode", "city", "country"],
+    4: ["currency", "locale"],
+  };
+
   const nextStep = async () => {
-    const valid = await trigger();
+    const valid = await trigger(stepFields[step]);
     if (valid) setStep((s) => Math.min(s + 1, 4));
   };
 

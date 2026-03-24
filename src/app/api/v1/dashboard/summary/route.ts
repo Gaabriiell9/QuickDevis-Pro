@@ -27,7 +27,9 @@ export async function GET(req: NextRequest) {
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const startOfYear = new Date(now.getFullYear(), 0, 1);
 
-  const [caMoisResult, caAnneeResult, totalDevis, totalFactures, facturesPayees, facturesRetard, attente, devisAcceptes, devisNonDraft, recentQuotes, recentInvoices] = await Promise.all([
+  const twelveMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+
+  const [caMoisResult, caAnneeResult, totalDevis, totalFactures, facturesPayees, facturesRetard, attente, devisAcceptes, devisNonDraft, recentQuotes, recentInvoices, paidInvoices12m] = await Promise.all([
     prisma.invoice.aggregate({
       where: { organizationId: orgId, status: "PAID", paidAt: { gte: startOfMonth }, deletedAt: null },
       _sum: { total: true },
@@ -69,9 +71,31 @@ export async function GET(req: NextRequest) {
       take: 3,
       include: { client: true },
     }),
+    prisma.invoice.findMany({
+      where: {
+        organizationId: orgId,
+        status: "PAID",
+        paidAt: { gte: twelveMonthsAgo },
+        deletedAt: null,
+      },
+      select: { paidAt: true, total: true },
+    }),
   ]);
 
   const tauxConversion = devisNonDraft > 0 ? Math.round((devisAcceptes / devisNonDraft) * 100) : 0;
+
+  const monthlyRevenue = Array.from({ length: 12 }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - (11 - i), 1);
+    const label = d.toLocaleDateString("fr-FR", { month: "short" });
+    const encaisse = paidInvoices12m
+      .filter((inv) => {
+        if (!inv.paidAt) return false;
+        const paid = new Date(inv.paidAt);
+        return paid.getMonth() === d.getMonth() && paid.getFullYear() === d.getFullYear();
+      })
+      .reduce((sum, inv) => sum + Number(inv.total), 0);
+    return { month: label, encaisse };
+  });
 
   const recentDocuments = [
     ...recentQuotes.map((q) => ({ ...q, docType: "quote" })),
@@ -90,5 +114,6 @@ export async function GET(req: NextRequest) {
     montantEnAttente: Number(attente._sum.amountDue ?? 0),
     tauxConversion,
     recentDocuments,
+    monthlyRevenue,
   });
 }

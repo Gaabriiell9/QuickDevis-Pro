@@ -64,7 +64,8 @@ export default function NewInvoicePage() {
         const defaultTpl = list.find((t: any) => t.isDefault);
         if (defaultTpl) setValue("templateId", defaultTpl.id);
       });
-  }, [setValue]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<InvoiceForm>({
     resolver: zodResolver(schema) as any,
     defaultValues: { items: [{ description: "", quantity: 1, unitPrice: 0, vatRate: 20 }], issueDate: new Date().toISOString().split("T")[0] },

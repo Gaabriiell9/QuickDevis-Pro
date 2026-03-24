@@ -67,7 +67,8 @@ export default function NewQuotePage() {
         const defaultTpl = list.find((t: any) => t.isDefault);
         if (defaultTpl) setValue("templateId", defaultTpl.id);
       });
-  }, [setValue]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<QuoteForm>({
     resolver: zodResolver(schema) as any,

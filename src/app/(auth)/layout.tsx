@@ -1,4 +1,5 @@
 import { APP_NAME } from "@/config/app";
+import { AuthAnimatedWrapper } from "@/components/shared/auth-animated-wrapper";
 
 export default function AuthLayout({
   children,
@@ -6,7 +7,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-background">
+    <div className="relative min-h-screen flex items-center justify-center bg-background animate-in">
       <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
@@ -22,7 +23,7 @@ export default function AuthLayout({
             Gestion de devis et factures
           </p>
         </div>
-        {children}
+        <AuthAnimatedWrapper>{children}</AuthAnimatedWrapper>
       </div>
     </div>
   );

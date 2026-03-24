@@ -61,8 +61,13 @@ export default function NewQuotePage() {
   useEffect(() => {
     fetch("/api/v1/templates?type=QUOTE", { credentials: "include" })
       .then(r => r.json())
-      .then(d => setTemplates(d.data ?? []));
-  }, []);
+      .then(d => {
+        const list = d.data ?? [];
+        setTemplates(list);
+        const defaultTpl = list.find((t: any) => t.isDefault);
+        if (defaultTpl) setValue("templateId", defaultTpl.id);
+      });
+  }, [setValue]);
 
   const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<QuoteForm>({
     resolver: zodResolver(schema) as any,

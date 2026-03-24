@@ -58,8 +58,13 @@ export default function NewInvoicePage() {
   useEffect(() => {
     fetch("/api/v1/templates?type=INVOICE", { credentials: "include" })
       .then(r => r.json())
-      .then(d => setTemplates(d.data ?? []));
-  }, []);
+      .then(d => {
+        const list = d.data ?? [];
+        setTemplates(list);
+        const defaultTpl = list.find((t: any) => t.isDefault);
+        if (defaultTpl) setValue("templateId", defaultTpl.id);
+      });
+  }, [setValue]);
   const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<InvoiceForm>({
     resolver: zodResolver(schema) as any,
     defaultValues: { items: [{ description: "", quantity: 1, unitPrice: 0, vatRate: 20 }], issueDate: new Date().toISOString().split("T")[0] },

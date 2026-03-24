@@ -442,9 +442,10 @@ export default function LandingPage() {
       <section className="relative overflow-hidden pb-24 pt-32">
         {/* Background décor */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div className="hero-blob-1 absolute -top-40 left-1/2 h-[640px] w-[640px] rounded-full bg-indigo-100/70 blur-3xl" />
-          <div className="hero-blob-2 absolute -right-32 top-16 h-96 w-96 rounded-full bg-violet-100/50 blur-2xl" />
-          <div className="hero-blob-3 absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-sky-100/40 blur-3xl" />
+          <div className="hero-grid-bg absolute inset-0" />
+          <div className="hero-blob-1 absolute -top-40 left-1/2 h-[700px] w-[700px] rounded-full bg-indigo-600 opacity-[0.06] blur-3xl" />
+          <div className="hero-blob-2 absolute -right-40 top-0 h-[520px] w-[520px] rounded-full bg-violet-600 opacity-[0.04] blur-3xl" />
+          <div className="hero-blob-3 absolute -left-32 bottom-8 h-96 w-96 rounded-full bg-sky-500 opacity-[0.04] blur-3xl" />
         </div>
 
         <div className="mx-auto max-w-7xl px-6">

@@ -18,47 +18,49 @@ import {
   Settings,
   RefreshCcw,
   LogOut,
+  Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { usePlan, type Plan } from "@/hooks/use-plan";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const navSections = [
   {
     title: "Principal",
     items: [
-      { href: "/dashboard", label: "Tableau de bord", icon: LayoutDashboard, color: "text-blue-400" },
+      { href: "/dashboard", label: "Tableau de bord", icon: LayoutDashboard, color: "text-blue-400", locked: undefined as Plan | undefined },
     ],
   },
   {
     title: "Commercial",
     items: [
-      { href: "/clients", label: "Clients", icon: Users, color: "text-blue-400" },
-      { href: "/quotes", label: "Devis", icon: FileText, color: "text-blue-400" },
-      { href: "/invoices", label: "Factures", icon: Receipt, color: "text-blue-400" },
-      { href: "/credit-notes", label: "Avoirs", icon: RefreshCcw, color: "text-blue-400" },
-      { href: "/payments", label: "Paiements", icon: CreditCard, color: "text-blue-400" },
+      { href: "/clients", label: "Clients", icon: Users, color: "text-blue-400", locked: undefined as Plan | undefined },
+      { href: "/quotes", label: "Devis", icon: FileText, color: "text-blue-400", locked: undefined as Plan | undefined },
+      { href: "/invoices", label: "Factures", icon: Receipt, color: "text-blue-400", locked: undefined as Plan | undefined },
+      { href: "/credit-notes", label: "Avoirs", icon: RefreshCcw, color: "text-blue-400", locked: undefined as Plan | undefined },
+      { href: "/payments", label: "Paiements", icon: CreditCard, color: "text-blue-400", locked: undefined as Plan | undefined },
     ],
   },
   {
     title: "Catalogue",
     items: [
-      { href: "/products", label: "Produits & Services", icon: Package, color: "text-violet-400" },
-      { href: "/templates", label: "Templates", icon: Layout, color: "text-violet-400" },
-      { href: "/documents", label: "Documents", icon: FolderOpen, color: "text-violet-400" },
+      { href: "/products", label: "Produits & Services", icon: Package, color: "text-violet-400", locked: undefined as Plan | undefined },
+      { href: "/templates", label: "Templates", icon: Layout, color: "text-violet-400", locked: "PRO" as Plan },
+      { href: "/documents", label: "Documents", icon: FolderOpen, color: "text-violet-400", locked: undefined as Plan | undefined },
     ],
   },
   {
     title: "Analyse",
     items: [
-      { href: "/analytics", label: "Analytiques", icon: BarChart2, color: "text-emerald-400" },
-      { href: "/team", label: "Équipe", icon: Users2, color: "text-emerald-400" },
+      { href: "/analytics", label: "Analytiques", icon: BarChart2, color: "text-emerald-400", locked: "PRO" as Plan },
+      { href: "/team", label: "Équipe", icon: Users2, color: "text-emerald-400", locked: "BUSINESS" as Plan },
     ],
   },
   {
     title: "Compte",
     items: [
-      { href: "/profile", label: "Profil", icon: User, color: "text-slate-400" },
-      { href: "/settings", label: "Paramètres", icon: Settings, color: "text-slate-400" },
+      { href: "/profile", label: "Profil", icon: User, color: "text-slate-400", locked: undefined as Plan | undefined },
+      { href: "/settings", label: "Paramètres", icon: Settings, color: "text-slate-400", locked: undefined as Plan | undefined },
     ],
   },
 ];
@@ -71,6 +73,7 @@ export function AppSidebar({ onClose }: AppSidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user;
+  const { hasAccess } = usePlan();
   const initials = user?.name
     ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
     : "?";
@@ -101,6 +104,7 @@ export function AppSidebar({ onClose }: AppSidebarProps) {
                 const isActive =
                   pathname === item.href ||
                   (item.href !== "/dashboard" && pathname.startsWith(item.href));
+                const locked = item.locked && !hasAccess(item.locked);
                 return (
                   <li key={item.href}>
                     <Link
@@ -119,7 +123,13 @@ export function AppSidebar({ onClose }: AppSidebarProps) {
                           isActive ? "text-white" : item.color
                         )}
                       />
-                      {item.label}
+                      <span className="flex-1 truncate">{item.label}</span>
+                      {locked && (
+                        <span className="ml-auto flex items-center gap-1 rounded-full bg-indigo-900/60 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-300">
+                          <Lock className="size-2.5" />
+                          {item.locked === "BUSINESS" ? "Business" : "Pro"}
+                        </span>
+                      )}
                     </Link>
                   </li>
                 );

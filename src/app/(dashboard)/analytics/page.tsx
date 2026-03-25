@@ -4,6 +4,7 @@ import { useDashboardSummary } from "@/hooks/use-dashboard-summary";
 import { useInvoices } from "@/hooks/use-invoices";
 import { useQuotes } from "@/hooks/use-quotes";
 import { PageHeader } from "@/components/shared/page-header";
+import { PlanGate } from "@/components/shared/plan-gate";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatMoney } from "@/lib/utils/money";
@@ -129,7 +130,11 @@ export default function AnalyticsPage() {
         title="Analytiques"
         description="Vue d'ensemble de vos performances commerciales"
       />
-
+      <PlanGate
+        plan="PRO"
+        feature="Accédez aux statistiques avancées de votre activité"
+        className="min-h-[480px]"
+      >
       {/* KPIs */}
       <div className="grid gap-4 md:grid-cols-3">
         {kpis.map((kpi) => {
@@ -245,6 +250,7 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
       </div>
+      </PlanGate>
     </div>
   );
 }

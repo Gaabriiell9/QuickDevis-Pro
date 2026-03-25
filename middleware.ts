@@ -35,12 +35,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(loginUrl)
   }
 
-  // Redirige vers onboarding si pas encore complété (SAUF si déjà sur /onboarding)
-  if (isAuthenticated && isProtectedRoute) {
-    const onboardingDone = token?.onboardingCompleted as boolean | undefined
-    if (!onboardingDone && !pathname.startsWith("/onboarding")) {
-      return NextResponse.redirect(new URL("/onboarding", req.url))
-    }
+  // Bug 1 fix : session incomplète sur route protégée → renvoyer vers /login
+  // callbackUrl=/onboarding pour que le login page y redirige après connexion
+  // (évite la boucle : /dashboard → /login → /dashboard → …)
+  if (isAuthenticated && !onboardingCompleted && isProtectedRoute) {
+    return NextResponse.redirect(new URL("/login?callbackUrl=%2Fonboarding", req.url))
   }
 
   return NextResponse.next()

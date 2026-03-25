@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Check, Sparkles, Shield, RotateCcw } from "lucide-react";
+import { ArrowRight, Check, Shield, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // ─── Decorative right-side visual ────────────────────────────────────────────
@@ -21,7 +21,7 @@ function WelcomeVisual() {
             <p className="text-sm text-slate-400">Studio Dupont</p>
           </div>
           <span className="bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full shrink-0">
-            Payée ✓
+            Payée
           </span>
         </div>
 
@@ -111,15 +111,14 @@ export default function WelcomePage() {
         </div>
 
         {/* Badge */}
-        <div className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 border border-indigo-100 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 mb-6 w-fit">
-          <Sparkles className="size-3" />
-          Essai Pro 14 jours offert — gratuit, sans carte
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 border border-slate-200 px-3.5 py-1.5 text-xs font-semibold text-slate-600 mb-6 w-fit">
+          Accès gratuit immédiat · Aucune carte requise
         </div>
 
         {/* Heading */}
         <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
           Bienvenue,<br />
-          <span className="text-indigo-600">{firstName}</span> 👋
+          <span className="text-indigo-600">{firstName}</span>
         </h1>
 
         <p className="text-lg text-slate-500 leading-relaxed mb-8 max-w-md">
@@ -153,11 +152,11 @@ export default function WelcomePage() {
       </div>
 
       {/* ── Right column — decorative ── */}
-      <div className="hidden md:flex flex-1 bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-700 items-center justify-center p-12 relative overflow-hidden">
+      <div className="hidden md:flex flex-1 min-h-screen bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-700 items-center justify-center p-12 relative overflow-hidden">
         {/* Background orbs */}
-        <div className="absolute -top-32 -right-32 size-96 rounded-full bg-white/5" />
-        <div className="absolute -bottom-24 -left-24 size-80 rounded-full bg-white/5" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[600px] rounded-full bg-white/[0.03]" />
+        <div className="pointer-events-none absolute -top-32 -right-32 size-96 rounded-full bg-white/5" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 size-80 rounded-full bg-white/5" />
+        <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[600px] rounded-full bg-white/[0.03]" />
 
         <WelcomeVisual />
       </div>

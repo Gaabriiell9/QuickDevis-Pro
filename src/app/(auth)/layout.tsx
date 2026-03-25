@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { APP_NAME } from "@/config/app";
 import { AuthAnimatedWrapper } from "@/components/shared/auth-animated-wrapper";
 
@@ -8,6 +10,13 @@ export default function AuthLayout({
 }) {
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-background animate-in">
+      <Link
+        href="/"
+        className="absolute top-4 left-4 flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-accent"
+      >
+        <ArrowLeft className="size-4" />
+        Accueil
+      </Link>
       <div
         className="absolute inset-0 opacity-[0.03]"
         style={{

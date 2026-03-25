@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Plus, Search, MoreHorizontal, Trash2, Receipt } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Trash2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useInvoices } from "@/hooks/use-invoices";
 import { PageHeader } from "@/components/shared/page-header";
-import { EmptyState } from "@/components/shared/empty-state";
+import { RichEmptyState } from "@/components/shared/rich-empty-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -81,7 +81,7 @@ export default function InvoicesPage() {
       {isLoading ? (
         <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => (<Skeleton key={i} className="h-14" />))}</div>
       ) : !data?.data?.length ? (
-        <EmptyState icon={Receipt} title="Aucune facture" description="Créez votre première facture." action={<Button asChild><Link href="/invoices/new">Créer une facture</Link></Button>} />
+        <RichEmptyState variant="invoices" />
       ) : (
         <>
           <Table>

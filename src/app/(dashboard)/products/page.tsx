@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Plus, Search, MoreHorizontal, Trash2, Package, Pencil } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Trash2, Pencil } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useProducts } from "@/hooks/use-products";
 import { PageHeader } from "@/components/shared/page-header";
-import { EmptyState } from "@/components/shared/empty-state";
+import { RichEmptyState } from "@/components/shared/rich-empty-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -64,7 +64,7 @@ export default function ProductsPage() {
       {isLoading ? (
         <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => (<Skeleton key={i} className="h-14" />))}</div>
       ) : !data?.data?.length ? (
-        <EmptyState icon={Package} title="Aucun produit" description="Ajoutez votre premier produit ou service." action={<Button asChild><Link href="/products/new">Ajouter</Link></Button>} />
+        <RichEmptyState variant="products" />
       ) : (
         <Table>
           <TableHeader>

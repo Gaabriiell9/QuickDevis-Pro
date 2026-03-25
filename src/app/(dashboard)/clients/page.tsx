@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Plus, Search, MoreHorizontal, Trash2, Users } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Trash2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useClients } from "@/hooks/use-clients";
 import { PageHeader } from "@/components/shared/page-header";
-import { EmptyState } from "@/components/shared/empty-state";
+import { RichEmptyState } from "@/components/shared/rich-empty-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -84,12 +84,7 @@ export default function ClientsPage() {
       {isLoading ? (
         <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => (<Skeleton key={i} className="h-14" />))}</div>
       ) : !data?.data?.length ? (
-        <EmptyState
-          icon={Users}
-          title="Aucun client"
-          description="Ajoutez votre premier client pour commencer."
-          action={<Button asChild><Link href="/clients/new">Ajouter un client</Link></Button>}
-        />
+        <RichEmptyState variant="clients" />
       ) : (
         <>
           <Table>

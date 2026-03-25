@@ -52,23 +52,47 @@ export const authOptions: NextAuthOptions = {
       : []),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async signIn({ user, account }) {
+      // Bloquer les utilisateurs supprimés (credentials uniquement — OAuth crée
+      // le user via l'adapter avant d'appeler ce callback)
+      if (account?.type === "credentials") {
+        const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
+        if (!dbUser || dbUser.deletedAt) return false;
+      }
+      return true;
+    },
+
+    async jwt({ token, user, account, trigger, session }) {
+      // Premier appel après sign-in : user est défini
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role ?? "USER";
         token.organizationId = null;
         token.onboardingCompleted = false;
+
+        // Pour OAuth, AdapterUser n'a pas `role` — relire depuis la DB
+        if (account?.type === "oauth") {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { role: true },
+          });
+          token.role = dbUser?.role ?? "USER";
+        } else {
+          token.role = (user as any).role ?? "USER";
+        }
       }
 
       if (trigger === "signIn" || trigger === "signUp") {
-        const userId = token.id as string;
-        const membership = await prisma.organizationMember.findFirst({
-          where: { userId, joinedAt: { not: null } },
-          select: { organizationId: true },
-        });
-        if (membership) {
-          token.organizationId = membership.organizationId;
-          token.onboardingCompleted = true;
+        // Utiliser token.sub comme fallback : NextAuth le populate toujours
+        const userId = (token.id ?? token.sub) as string | undefined;
+        if (userId) {
+          const membership = await prisma.organizationMember.findFirst({
+            where: { userId, joinedAt: { not: null } },
+            select: { organizationId: true },
+          });
+          if (membership) {
+            token.organizationId = membership.organizationId;
+            token.onboardingCompleted = true;
+          }
         }
       }
 

@@ -15,6 +15,13 @@ export async function middleware(req: NextRequest) {
   const isAuthenticated = !!token
   const isAuthRoute = AUTH_ROUTES.some(r => pathname.startsWith(r))
   const isProtectedRoute = PROTECTED_PREFIXES.some(p => pathname.startsWith(p))
+  const onboardingCompleted = token?.onboardingCompleted as boolean | undefined
+
+  // Bug 2 fix : onboarding incomplet → laisser accéder aux pages auth librement
+  // (ex : retour arrière depuis /onboarding vers /login)
+  if (isAuthenticated && !onboardingCompleted && isAuthRoute) {
+    return NextResponse.next()
+  }
 
   // Redirige les connectés hors des pages auth (SAUF /onboarding)
   if (isAuthenticated && isAuthRoute && !pathname.startsWith("/onboarding")) {

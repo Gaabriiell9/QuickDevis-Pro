@@ -78,7 +78,7 @@ export default function RegisterPage() {
         return;
       }
 
-      router.push("/onboarding");
+      router.push("/welcome");
       router.refresh();
     } catch {
       toast.error("Une erreur est survenue");

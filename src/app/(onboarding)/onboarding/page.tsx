@@ -298,9 +298,9 @@ export default function OnboardingPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-white">
+    <div className="flex bg-white">
       {/* ── Left — form ── */}
-      <div className="flex-1 flex flex-col px-6 sm:px-10 md:px-14 lg:px-20 py-10 md:py-12 max-w-2xl">
+      <div className="w-full md:w-1/2 flex flex-col px-6 sm:px-10 md:px-12 lg:px-16 py-10 min-h-screen">
         {/* Logo + progress */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-2">
@@ -577,7 +577,7 @@ export default function OnboardingPage() {
       </div>
 
       {/* ── Right — contextual visual ── */}
-      <div className="hidden md:flex flex-1 max-w-lg bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-700 relative overflow-hidden">
+      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-700 sticky top-0 h-screen overflow-hidden relative">
         {/* Background orbs */}
         <div className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-white/5" />
         <div className="pointer-events-none absolute -bottom-16 -left-16 size-64 rounded-full bg-white/5" />

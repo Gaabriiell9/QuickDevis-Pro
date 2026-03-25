@@ -95,11 +95,11 @@ function VisualStep2({ legalForm, name }: { legalForm: LegalForm; name: string }
         </div>
         <div className="space-y-1.5">
           {[
-            { w: "75%", color: "bg-slate-200" },
-            { w: "55%", color: "bg-slate-100" },
-            { w: "65%", color: "bg-slate-100" },
+            { w: "75%" },
+            { w: "55%" },
+            { w: "65%" },
           ].map((line, i) => (
-            <div key={i} className="h-2 rounded-full" style={{ width: line.w, background: "#e2e8f0" }} />
+            <div key={i} className="h-2 rounded-full bg-slate-200" style={{ width: line.w }} />
           ))}
         </div>
         <div className="mt-5 pt-4 border-t border-slate-100">
@@ -169,7 +169,7 @@ function VisualStep4({ name }: { name: string }) {
             <Check className="size-8 text-white" strokeWidth={3} />
           </div>
         </div>
-        <p className="text-white text-xl font-bold text-center">Prêt à démarrer !</p>
+        <p className="text-white text-xl font-bold text-center">Tout est prêt !</p>
         <p className="text-indigo-200 text-sm text-center max-w-48">
           {name || "Votre entreprise"} est configurée et prête à facturer.
         </p>
@@ -202,21 +202,21 @@ const LEGAL_FORMS: { key: LegalForm; label: string; desc: string; icon: typeof B
   { key: "SASU", label: "SASU",             desc: "SAS unipersonnelle",   icon: Briefcase },
 ];
 
-// ─── Progress dots ──────────────────────────────────────────────────────────
+// ─── Progress bar ───────────────────────────────────────────────────────────
 
-function ProgressDots({ step, total }: { step: number; total: number }) {
+function ProgressBar({ step, total }: { step: number; total: number }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5">
       {Array.from({ length: total }).map((_, i) => (
         <div
           key={i}
           className={cn(
-            "rounded-full transition-all duration-300",
+            "h-1.5 rounded-full transition-all duration-300",
             i + 1 === step
-              ? "w-6 h-2.5 bg-indigo-600"
+              ? "w-8 bg-indigo-600"
               : i + 1 < step
-              ? "w-2.5 h-2.5 bg-indigo-300"
-              : "w-2.5 h-2.5 bg-slate-200"
+              ? "w-4 bg-indigo-300"
+              : "w-4 bg-slate-200"
           )}
         />
       ))}
@@ -254,7 +254,7 @@ export default function OnboardingPage() {
   const stepFieldsToValidate: Record<number, (keyof OnboardingForm)[]> = {
     1: [],
     2: ["name"],
-    3: ["currency", "locale"],
+    3: [],
     4: [],
   };
 
@@ -309,7 +309,7 @@ export default function OnboardingPage() {
             </div>
             <span className="font-bold text-slate-900 tracking-tight text-sm">QuickDevis Pro</span>
           </div>
-          <ProgressDots step={step} total={TOTAL_STEPS} />
+          <ProgressBar step={step} total={TOTAL_STEPS} />
         </div>
 
         {/* Step label */}
@@ -320,7 +320,7 @@ export default function OnboardingPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col flex-1">
           {/* ── Step 1 ── */}
           {step === 1 && (
-            <div className="space-y-6">
+            <div key="step-1" className="space-y-6 animate-in fade-in duration-200">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
                   Par quoi voulez-vous commencer ?
@@ -334,7 +334,7 @@ export default function OnboardingPage() {
                     type="button"
                     onClick={() => setStartFocus(key)}
                     className={cn(
-                      "flex flex-col items-start gap-3 rounded-xl border-2 p-4 text-left transition-all duration-150 hover:border-indigo-300 hover:bg-indigo-50/50",
+                      "relative flex flex-col items-start gap-3 rounded-xl border-2 p-4 text-left transition-all duration-150 hover:border-indigo-300 hover:bg-indigo-50/50",
                       startFocus === key
                         ? "border-indigo-600 bg-indigo-50 shadow-sm"
                         : "border-slate-200 bg-white"
@@ -365,7 +365,7 @@ export default function OnboardingPage() {
 
           {/* ── Step 2 ── */}
           {step === 2 && (
-            <div className="space-y-6">
+            <div key="step-2" className="space-y-6 animate-in fade-in duration-200">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
                   Votre entreprise
@@ -431,7 +431,7 @@ export default function OnboardingPage() {
 
           {/* ── Step 3 ── */}
           {step === 3 && (
-            <div className="space-y-6">
+            <div key="step-3" className="space-y-6 animate-in fade-in duration-200">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
                   Personnalisation
@@ -451,11 +451,11 @@ export default function OnboardingPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="EUR">🇪🇺 EUR — Euro (€)</SelectItem>
-                          <SelectItem value="USD">🇺🇸 USD — Dollar ($)</SelectItem>
-                          <SelectItem value="GBP">🇬🇧 GBP — Livre sterling (£)</SelectItem>
-                          <SelectItem value="CHF">🇨🇭 CHF — Franc suisse (Fr)</SelectItem>
-                          <SelectItem value="CAD">🇨🇦 CAD — Dollar canadien (C$)</SelectItem>
+                          <SelectItem value="EUR">EUR — Euro (€)</SelectItem>
+                          <SelectItem value="USD">USD — Dollar ($)</SelectItem>
+                          <SelectItem value="GBP">GBP — Livre sterling (£)</SelectItem>
+                          <SelectItem value="CHF">CHF — Franc suisse (Fr)</SelectItem>
+                          <SelectItem value="CAD">CAD — Dollar canadien (C$)</SelectItem>
                         </SelectContent>
                       </Select>
                     )}
@@ -473,11 +473,11 @@ export default function OnboardingPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="fr-FR">🇫🇷 Français (France)</SelectItem>
-                          <SelectItem value="fr-BE">🇧🇪 Français (Belgique)</SelectItem>
-                          <SelectItem value="fr-CH">🇨🇭 Français (Suisse)</SelectItem>
-                          <SelectItem value="en-US">🇺🇸 English (US)</SelectItem>
-                          <SelectItem value="en-GB">🇬🇧 English (UK)</SelectItem>
+                          <SelectItem value="fr-FR">Français (France)</SelectItem>
+                          <SelectItem value="fr-BE">Français (Belgique)</SelectItem>
+                          <SelectItem value="fr-CH">Français (Suisse)</SelectItem>
+                          <SelectItem value="en-US">English (US)</SelectItem>
+                          <SelectItem value="en-GB">English (UK)</SelectItem>
                         </SelectContent>
                       </Select>
                     )}
@@ -486,11 +486,15 @@ export default function OnboardingPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <Label htmlFor="siret" className="text-sm font-semibold text-slate-700">SIRET</Label>
+                    <Label htmlFor="siret" className="text-sm font-semibold text-slate-700">
+                      SIRET <span className="text-slate-400 font-normal">(optionnel)</span>
+                    </Label>
                     <Input id="siret" placeholder="123 456 789 00012" className="h-11" {...register("siret")} />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="vatNumber" className="text-sm font-semibold text-slate-700">N° TVA</Label>
+                    <Label htmlFor="vatNumber" className="text-sm font-semibold text-slate-700">
+                      N° TVA <span className="text-slate-400 font-normal">(optionnel)</span>
+                    </Label>
                     <Input id="vatNumber" placeholder="FR12345678901" className="h-11" {...register("vatNumber")} />
                   </div>
                 </div>
@@ -500,10 +504,10 @@ export default function OnboardingPage() {
 
           {/* ── Step 4 ── */}
           {step === 4 && (
-            <div className="space-y-6">
+            <div key="step-4" className="space-y-6 animate-in fade-in duration-200">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
-                  Tout est prêt ! 🎉
+                  Tout est prêt !
                 </h2>
                 <p className="text-slate-500">Vérifiez vos informations avant de terminer.</p>
               </div>
@@ -536,41 +540,56 @@ export default function OnboardingPage() {
           )}
 
           {/* ── Navigation ── */}
-          <div className="flex gap-3 mt-auto pt-8">
-            {step > 1 && (
-              <Button
-                type="button"
-                variant="outline"
-                className="h-11 px-5 gap-2"
-                onClick={() => setStep((s) => s - 1)}
-              >
-                <ArrowLeft className="size-4" />
-                Retour
-              </Button>
-            )}
+          <div className="mt-auto pt-8">
+            <div className="flex gap-3">
+              {step > 1 && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-11 px-5 gap-2"
+                  onClick={() => setStep((s) => s - 1)}
+                >
+                  <ArrowLeft className="size-4" />
+                  Retour
+                </Button>
+              )}
 
-            {step < TOTAL_STEPS ? (
-              <Button
+              {step < TOTAL_STEPS ? (
+                <Button
+                  type="button"
+                  className="flex-1 h-11 bg-indigo-600 hover:bg-indigo-700 font-semibold gap-2"
+                  onClick={nextStep}
+                >
+                  Continuer
+                  <ArrowRight className="size-4" />
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  className="flex-1 h-11 bg-indigo-600 hover:bg-indigo-700 font-semibold gap-2"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <>
+                      Accéder à mon tableau de bord
+                      <ArrowRight className="size-4" />
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
+
+            {/* Skip step 3 */}
+            {step === 3 && (
+              <button
                 type="button"
-                className="flex-1 h-11 bg-indigo-600 hover:bg-indigo-700 font-semibold gap-2"
                 onClick={nextStep}
+                className="mt-4 text-sm text-slate-400 hover:text-slate-600 transition-colors"
               >
-                {step === 1 && !startFocus ? "Passer" : "Continuer"}
-                <ArrowRight className="size-4" />
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                className="flex-1 h-11 bg-indigo-600 hover:bg-indigo-700 font-semibold gap-2"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <Check className="size-4" />
-                )}
-                Accéder à mon tableau de bord
-              </Button>
+                Passer cette étape →
+              </button>
             )}
           </div>
         </form>

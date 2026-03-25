@@ -6,6 +6,7 @@ import { Layout, Plus, MoreHorizontal, Trash2, Copy, Pencil, Star } from "lucide
 import Link from "next/link";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/shared/page-header";
+import { PlanGate } from "@/components/shared/plan-gate";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -131,6 +132,11 @@ export default function TemplatesPage() {
         }
       />
 
+      <PlanGate
+        plan="PRO"
+        feature="Créez et personnalisez vos propres templates PDF"
+        className="min-h-[360px]"
+      >
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-56 rounded-xl" />)}
@@ -185,6 +191,7 @@ export default function TemplatesPage() {
           })}
         </div>
       )}
+      </PlanGate>
     </div>
   );
 }

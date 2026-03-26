@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   FileText,
   Receipt,
@@ -129,8 +130,7 @@ const plans = [
 
 const testimonials = [
   {
-    initials: "ML",
-    color: "bg-indigo-600",
+    image: "/images/testimonial-1.jpg",
     name: "Marie Lefebvre",
     role: "Graphiste freelance",
     content:
@@ -138,8 +138,7 @@ const testimonials = [
     rating: 5,
   },
   {
-    initials: "TD",
-    color: "bg-violet-600",
+    image: "/images/testimonial-2.jpg",
     name: "Thomas Dubois",
     role: "Plombier artisan",
     content:
@@ -147,8 +146,7 @@ const testimonials = [
     rating: 5,
   },
   {
-    initials: "SC",
-    color: "bg-emerald-600",
+    image: "/images/testimonial-3.jpg",
     name: "Sophie Chartier",
     role: "Consultante RH",
     content:
@@ -533,14 +531,39 @@ export default function LandingPage() {
             </motion.div>
           </motion.div>
 
-          {/* Dashboard mockup */}
+          {/* Dashboard mockup + freelancer photo */}
           <motion.div
             initial={{ opacity: 0, y: 48 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
             className="mx-auto mt-20 max-w-5xl"
           >
-            <MockDashboard />
+            <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-5 items-end">
+              {/* Freelancer photo */}
+              <div className="hidden lg:flex flex-col gap-3">
+                <div className="relative h-64 w-full rounded-2xl overflow-hidden shadow-xl shadow-slate-200/60 border border-slate-100">
+                  <Image
+                    src="/images/hero-freelancer.jpg"
+                    alt="Indépendant utilisant QuickDevis Pro"
+                    fill
+                    className="object-cover"
+                    sizes="220px"
+                    priority
+                  />
+                </div>
+                <div className="rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
+                  <div className="flex items-center gap-1 mb-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="size-3 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-xs font-semibold text-slate-800">« Indispensable au quotidien »</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">Sophie L. · Consultante freelance</p>
+                </div>
+              </div>
+              {/* Dashboard */}
+              <MockDashboard />
+            </div>
           </motion.div>
         </div>
       </section>
@@ -740,13 +763,14 @@ export default function LandingPage() {
                   &ldquo;{t.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div
-                    className={cn(
-                      "flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white",
-                      t.color
-                    )}
-                  >
-                    {t.initials}
+                  <div className="relative size-10 shrink-0 rounded-full overflow-hidden border border-slate-100">
+                    <Image
+                      src={t.image}
+                      alt={t.name}
+                      fill
+                      className="object-cover"
+                      sizes="40px"
+                    />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-slate-900">{t.name}</p>

@@ -55,6 +55,7 @@ async function main() {
       vatNumber: "FR12345678901",
       currency: "EUR",
       locale: "fr-FR",
+      plan: "PRO",
     },
   });
   console.log("✅ Organization created:", org.name);
@@ -70,7 +71,7 @@ async function main() {
   });
   console.log("✅ Organization member created");
 
-  // Create templates
+  // Create templates — all use Abby layout, only color/style/font varies
   await prisma.template.createMany({
     data: [
       {
@@ -79,7 +80,29 @@ async function main() {
         type: "QUOTE",
         isDefault: true,
         content: {
-          style: "CLASSIC", primaryColor: "#4338CA", secondaryColor: "#0F172A",
+          style: "CLASSIC", primaryColor: "#4f46e5", secondaryColor: "#0F172A",
+          showLogo: true, showSignatureBlock: true, showBankDetails: false, showStamp: true,
+          headerStyle: "SPLIT", tableStyle: "STRIPED", fontStyle: "SANS",
+        },
+      },
+      {
+        organizationId: org.id,
+        name: "Classique Indigo",
+        type: "INVOICE",
+        isDefault: true,
+        content: {
+          style: "CLASSIC", primaryColor: "#4f46e5", secondaryColor: "#0F172A",
+          showLogo: true, showSignatureBlock: false, showBankDetails: true, showStamp: true,
+          headerStyle: "SPLIT", tableStyle: "STRIPED", fontStyle: "SANS",
+        },
+      },
+      {
+        organizationId: org.id,
+        name: "Moderne Slate",
+        type: "QUOTE",
+        isDefault: false,
+        content: {
+          style: "MODERN", primaryColor: "#0F172A", secondaryColor: "#334155",
           showLogo: true, showSignatureBlock: true, showBankDetails: false, showStamp: true,
           headerStyle: "SPLIT", tableStyle: "STRIPED", fontStyle: "SANS",
         },
@@ -88,7 +111,7 @@ async function main() {
         organizationId: org.id,
         name: "Moderne Slate",
         type: "INVOICE",
-        isDefault: true,
+        isDefault: false,
         content: {
           style: "MODERN", primaryColor: "#0F172A", secondaryColor: "#334155",
           showLogo: true, showSignatureBlock: false, showBankDetails: true, showStamp: true,
@@ -108,18 +131,40 @@ async function main() {
       },
       {
         organizationId: org.id,
+        name: "Minimaliste",
+        type: "INVOICE",
+        isDefault: false,
+        content: {
+          style: "MINIMAL", primaryColor: "#1E293B", secondaryColor: "#475569",
+          showLogo: true, showSignatureBlock: false, showBankDetails: true, showStamp: false,
+          headerStyle: "SPLIT", tableStyle: "MINIMAL", fontStyle: "SANS",
+        },
+      },
+      {
+        organizationId: org.id,
+        name: "Premium Noir",
+        type: "QUOTE",
+        isDefault: false,
+        content: {
+          style: "BOLD", primaryColor: "#111827", secondaryColor: "#111827",
+          showLogo: true, showSignatureBlock: true, showBankDetails: false, showStamp: true,
+          headerStyle: "SPLIT", tableStyle: "BORDERED", fontStyle: "SANS",
+        },
+      },
+      {
+        organizationId: org.id,
         name: "Premium Noir",
         type: "INVOICE",
         isDefault: false,
         content: {
-          style: "BOLD", primaryColor: "#4338CA", secondaryColor: "#111827",
+          style: "BOLD", primaryColor: "#111827", secondaryColor: "#111827",
           showLogo: true, showSignatureBlock: false, showBankDetails: true, showStamp: true,
-          headerStyle: "CENTERED", tableStyle: "BORDERED", fontStyle: "SANS",
+          headerStyle: "SPLIT", tableStyle: "BORDERED", fontStyle: "SANS",
         },
       },
     ],
   });
-  console.log("✅ Templates created: 4");
+  console.log("✅ Templates created: 8 (4 variants × QUOTE + INVOICE)");
 
   // Create document sequences
   await prisma.documentSequence.createMany({

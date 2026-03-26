@@ -64,8 +64,9 @@ export default function CompanySettingsPage() {
   const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) { toast.error("Logo trop lourd (max 2 Mo)"); return; }
-    if (!file.type.startsWith("image/")) { toast.error("Format invalide (JPG, PNG, SVG)"); return; }
+    const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/svg+xml"];
+    if (file.size > 2 * 1024 * 1024) { toast.error("Fichier trop lourd (max 2 Mo)"); return; }
+    if (!ALLOWED_TYPES.includes(file.type)) { toast.error("Seuls les formats JPG, PNG, WebP et SVG sont acceptés"); return; }
 
     setLogoLoading(true);
     const reader = new FileReader();
@@ -128,7 +129,7 @@ export default function CompanySettingsPage() {
               </div>
             )}
             <div className="flex flex-col gap-2">
-              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
+              <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml" className="hidden" onChange={handleLogoChange} />
               <Button type="button" variant="outline" size="sm" disabled={logoLoading} onClick={() => fileRef.current?.click()}>
                 {logoLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
                 {logo ? "Changer le logo" : "Uploader un logo"}

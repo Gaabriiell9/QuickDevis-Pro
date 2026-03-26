@@ -37,6 +37,12 @@ export interface PreviewItem {
   vatRate: number;
 }
 
+export interface PreviewTheme {
+  primaryColor?: string;
+  tableStyle?: "STRIPED" | "BORDERED" | "MINIMAL";
+  fontStyle?: "SANS" | "SERIF";
+}
+
 export interface PreviewData {
   type: "quote" | "invoice";
   reference: string;
@@ -51,6 +57,7 @@ export interface PreviewData {
   client: PreviewClient | null;
   items: PreviewItem[];
   currency?: string;
+  theme?: PreviewTheme;
 }
 
 // ─── Status map ───────────────────────────────────────────────────────────────
@@ -104,8 +111,21 @@ export function DocumentPreview({ data }: DocumentPreviewProps) {
   const endDateLabel = type === "quote" ? "Date de validité" : "Date d'échéance";
   const endDate = type === "quote" ? data.validUntilDate : data.dueDate;
 
+  const primary = data.theme?.primaryColor ?? "#4f46e5";
+  const tableStyle = data.theme?.tableStyle ?? "STRIPED";
+  const fontFamily = data.theme?.fontStyle === "SERIF"
+    ? "Georgia, 'Times New Roman', serif"
+    : "system-ui, -apple-system, sans-serif";
+
+  function rowBg(i: number): string {
+    if (tableStyle === "MINIMAL") return "#ffffff";
+    if (tableStyle === "BORDERED") return "#ffffff";
+    return i % 2 === 0 ? "#ffffff" : "#f8fafc";
+  }
+  const cellBorder = tableStyle === "BORDERED" ? `1px solid #e2e8f0` : undefined;
+
   return (
-    <div className="relative bg-white shadow-xl text-slate-800 overflow-hidden" style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontSize: "13px", lineHeight: "1.6" }}>
+    <div className="relative bg-white shadow-xl text-slate-800 overflow-hidden" style={{ fontFamily, fontSize: "13px", lineHeight: "1.6" }}>
 
       {/* Watermark */}
       {status === "DRAFT" && (
@@ -130,7 +150,7 @@ export function DocumentPreview({ data }: DocumentPreviewProps) {
 
           {/* Document type + reference + status */}
           <div className="text-right">
-            <p className="font-black text-indigo-600 tracking-tight" style={{ fontSize: "36px", lineHeight: 1 }}>
+            <p className="font-black tracking-tight" style={{ fontSize: "36px", lineHeight: 1, color: primary }}>
               {type === "quote" ? "DEVIS" : "FACTURE"}
             </p>
             <p className="text-base font-bold text-slate-700 mt-1">{reference}</p>
@@ -148,7 +168,7 @@ export function DocumentPreview({ data }: DocumentPreviewProps) {
         {/* ── Émetteur / Client ── */}
         <div className="grid grid-cols-2 gap-6 border-t border-slate-100 pt-5 mb-5">
           <div>
-            <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">Émetteur</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: primary }}>Émetteur</p>
             <p className="font-semibold text-slate-800">{org.name}</p>
             {org.address && <p className="text-slate-500">{org.address}</p>}
             {(org.postalCode || org.city) && (
@@ -161,7 +181,7 @@ export function DocumentPreview({ data }: DocumentPreviewProps) {
           </div>
 
           <div>
-            <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">Client</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: primary }}>Client</p>
             {client ? (
               <>
                 <p className="font-semibold text-slate-800">{client.displayName}</p>
@@ -200,7 +220,7 @@ export function DocumentPreview({ data }: DocumentPreviewProps) {
         <div className="mb-7">
           <table className="w-full" style={{ borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ backgroundColor: "#4f46e5", color: "white" }}>
+              <tr style={{ backgroundColor: primary, color: "white" }}>
                 <th className="text-left py-2.5 px-3 font-semibold text-xs w-8">#</th>
                 <th className="text-left py-2.5 px-3 font-semibold text-xs">Désignation</th>
                 <th className="text-center py-2.5 px-3 font-semibold text-xs w-16">Unité</th>
@@ -215,13 +235,13 @@ export function DocumentPreview({ data }: DocumentPreviewProps) {
                   <td colSpan={6} className="py-10 text-center text-slate-400 italic text-sm">Aucune ligne ajoutée</td>
                 </tr>
               ) : items.map((item, i) => (
-                <tr key={i} style={{ backgroundColor: i % 2 === 0 ? "#ffffff" : "#f8fafc" }}>
-                  <td className="py-2.5 px-3 text-slate-400">{i + 1}</td>
-                  <td className="py-2.5 px-3 font-medium text-slate-800">{item.description || "—"}</td>
-                  <td className="py-2.5 px-3 text-center text-slate-500">{item.unit || "—"}</td>
-                  <td className="py-2.5 px-3 text-right text-slate-600">{item.quantity}</td>
-                  <td className="py-2.5 px-3 text-right text-slate-600">{formatMoney(item.unitPrice, currency)}</td>
-                  <td className="py-2.5 px-3 text-right font-semibold text-slate-800">
+                <tr key={i} style={{ backgroundColor: rowBg(i) }}>
+                  <td className="py-2.5 px-3 text-slate-400" style={{ border: cellBorder }}>{i + 1}</td>
+                  <td className="py-2.5 px-3 font-medium text-slate-800" style={{ border: cellBorder }}>{item.description || "—"}</td>
+                  <td className="py-2.5 px-3 text-center text-slate-500" style={{ border: cellBorder }}>{item.unit || "—"}</td>
+                  <td className="py-2.5 px-3 text-right text-slate-600" style={{ border: cellBorder }}>{item.quantity}</td>
+                  <td className="py-2.5 px-3 text-right text-slate-600" style={{ border: cellBorder }}>{formatMoney(item.unitPrice, currency)}</td>
+                  <td className="py-2.5 px-3 text-right font-semibold text-slate-800" style={{ border: cellBorder }}>
                     {formatMoney((item.quantity || 0) * (item.unitPrice || 0), currency)}
                   </td>
                 </tr>
@@ -276,7 +296,7 @@ export function DocumentPreview({ data }: DocumentPreviewProps) {
 
               <div className="flex justify-between gap-8 border-t border-slate-200 pt-2.5 mt-1.5">
                 <span className="font-bold text-slate-900">Total TTC</span>
-                <span className="font-extrabold text-indigo-600 text-base">{formatMoney(total, currency)}</span>
+                <span className="font-extrabold text-base" style={{ color: primary }}>{formatMoney(total, currency)}</span>
               </div>
             </div>
           </div>

@@ -114,6 +114,13 @@ export default function QuoteEditPage() {
   });
   const { data: org } = useCurrentOrganization();
   const { data: clientsData } = useClients({ pageSize: 200 } as any);
+  const { data: templatesData } = useQuery({
+    queryKey: ["templates", "QUOTE"],
+    queryFn: async () => {
+      const res = await fetch("/api/v1/templates?type=QUOTE", { credentials: "include" });
+      return res.ok ? res.json() : { data: [] };
+    },
+  });
 
   // Form
   const form = useForm<QuoteEditForm>({
@@ -202,6 +209,19 @@ export default function QuoteEditPage() {
       }
     : null;
 
+  const templates = (templatesData?.data ?? []) as any[];
+  const activeTemplate =
+    templates.find((t: any) => t.id === quote?.templateId) ??
+    templates.find((t: any) => t.isDefault) ??
+    templates[0];
+  const templateTheme = activeTemplate?.content
+    ? {
+        primaryColor: activeTemplate.content.primaryColor,
+        tableStyle: activeTemplate.content.tableStyle,
+        fontStyle: activeTemplate.content.fontStyle,
+      }
+    : undefined;
+
   const previewData: PreviewData = {
     type: "quote",
     reference: quote?.reference ?? "—",
@@ -230,6 +250,7 @@ export default function QuoteEditPage() {
       vatRate: Number(item.vatRate) || 0,
     })),
     currency: org?.currency ?? "EUR",
+    theme: templateTheme,
   };
 
   const totals = calcTotals(previewData.items);

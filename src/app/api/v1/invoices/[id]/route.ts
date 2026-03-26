@@ -42,9 +42,10 @@ export async function PATCH(
 
   const { id } = await params;
   const orgId = await getOrgId(token.id as string);
+  if (!orgId) return NextResponse.json({ error: "No organization" }, { status: 400 });
 
   const existing = await prisma.invoice.findFirst({
-    where: { id, organizationId: orgId ?? undefined },
+    where: { id, organizationId: orgId, deletedAt: null },
     select: { status: true },
   });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -53,10 +54,77 @@ export async function PATCH(
   }
 
   const body = await req.json();
-  await prisma.invoice.updateMany({
-    where: { id, organizationId: orgId ?? undefined },
-    data: body,
-  });
+  const { items, subject, issueDate, dueDate, notes, termsAndConditions, clientId } = body;
+
+  if (items && Array.isArray(items)) {
+    // Full edit: replace items + recalculate totals
+    let subtotal = 0;
+    let vatAmount = 0;
+    for (const item of items) {
+      const s = (Number(item.quantity) || 0) * (Number(item.unitPrice) || 0);
+      subtotal += s;
+      vatAmount += s * ((Number(item.vatRate) || 0) / 100);
+    }
+    const total = subtotal + vatAmount;
+
+    await prisma.$transaction(async (tx) => {
+      await tx.invoice.update({
+        where: { id },
+        data: {
+          ...(clientId ? { clientId } : {}),
+          ...(subject !== undefined ? { subject } : {}),
+          ...(issueDate ? { issueDate: new Date(issueDate) } : {}),
+          ...(dueDate !== undefined
+            ? { dueDate: dueDate ? new Date(dueDate) : null }
+            : {}),
+          ...(notes !== undefined ? { notes } : {}),
+          ...(termsAndConditions !== undefined ? { termsAndConditions } : {}),
+          subtotal,
+          vatAmount,
+          total,
+          amountDue: total,
+        },
+      });
+
+      await tx.invoiceItem.deleteMany({ where: { invoiceId: id } });
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const s = (Number(item.quantity) || 0) * (Number(item.unitPrice) || 0);
+        const v = s * ((Number(item.vatRate) || 0) / 100);
+        await tx.invoiceItem.create({
+          data: {
+            invoiceId: id,
+            position: i,
+            description: item.description ?? "",
+            unit: item.unit || null,
+            quantity: Number(item.quantity) || 0,
+            unitPrice: Number(item.unitPrice) || 0,
+            vatRate: Number(item.vatRate) || 0,
+            subtotal: s,
+            vatAmount: v,
+            total: s + v,
+          },
+        });
+      }
+    });
+  } else {
+    // Metadata-only update
+    const data: Record<string, unknown> = {};
+    if (clientId !== undefined) data.clientId = clientId;
+    if (subject !== undefined) data.subject = subject;
+    if (issueDate) data.issueDate = new Date(issueDate);
+    if (dueDate !== undefined) data.dueDate = dueDate ? new Date(dueDate) : null;
+    if (notes !== undefined) data.notes = notes;
+    if (termsAndConditions !== undefined) data.termsAndConditions = termsAndConditions;
+    if (body.status) data.status = body.status;
+    if (body.sentAt) data.sentAt = new Date(body.sentAt);
+    if (body.paidAt) data.paidAt = new Date(body.paidAt);
+
+    if (Object.keys(data).length > 0) {
+      await prisma.invoice.update({ where: { id }, data });
+    }
+  }
 
   return NextResponse.json({ success: true });
 }

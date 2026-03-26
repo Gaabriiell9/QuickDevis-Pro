@@ -147,7 +147,7 @@ export default function TemplatesPage() {
           {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-56 rounded-xl" />)}
         </div>
       ) : !data?.data?.length ? (
-        <EmptyState icon={Layout} title="Aucun template" description="Consultez ou créez des modèles pour vos devis et factures." action={canCreate ? <Button asChild><Link href="/templates/new">Créer un template</Link></Button> : undefined} />
+        <EmptyState icon={Layout} title="Aucun template personnalisé" description="Créez votre premier template pour personnaliser la couleur et la police de vos documents." action={canCreate ? <Button asChild><Link href="/templates/new">Créer un template</Link></Button> : undefined} />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {data.data.map((t: any) => {

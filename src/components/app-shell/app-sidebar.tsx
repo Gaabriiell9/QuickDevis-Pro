@@ -45,7 +45,7 @@ const navSections = [
     title: "Catalogue",
     items: [
       { href: "/products", label: "Produits & Services", icon: Package, color: "text-violet-400", locked: undefined as Plan | undefined },
-      { href: "/templates", label: "Templates", icon: Layout, color: "text-violet-400", locked: "PRO" as Plan },
+      { href: "/templates", label: "Templates", icon: Layout, color: "text-violet-400", locked: undefined as Plan | undefined },
       { href: "/documents", label: "Documents", icon: FolderOpen, color: "text-violet-400", locked: undefined as Plan | undefined },
     ],
   },

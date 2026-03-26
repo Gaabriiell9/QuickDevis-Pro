@@ -447,123 +447,135 @@ export default function LandingPage() {
         </div>
 
         <div className="mx-auto max-w-7xl px-6">
-          <motion.div
-            variants={stagger}
-            initial="initial"
-            animate="animate"
-            className="mx-auto max-w-4xl text-center"
-          >
-            {/* Pill badge */}
-            <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
-              <span className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50 px-3.5 py-1 text-xs font-semibold text-indigo-700">
-                <Zap className="size-3" />
-                Gratuit pour démarrer · Aucune carte requise
-              </span>
-            </motion.div>
-
-            {/* Title */}
-            <motion.h1
-              variants={fadeUp}
-              transition={{ duration: 0.5 }}
-              className="mb-4 text-5xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-6xl lg:text-7xl"
-            >
-              Gérez vos devis et factures
-            </motion.h1>
-            <motion.h1
-              variants={fadeUp}
-              transition={{ duration: 0.5 }}
-              className="mb-6 text-5xl font-extrabold leading-tight tracking-tight text-indigo-600 sm:text-6xl lg:text-7xl"
-            >
-              en quelques clics.
-            </motion.h1>
-
-            {/* Subtitle */}
-            <motion.p
-              variants={fadeUp}
-              transition={{ duration: 0.5 }}
-              className="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-slate-500"
-            >
-              La solution tout-en-un pour les indépendants et PME françaises.
-              Devis · factures · clients et paiements — centralisés et conformes.
-            </motion.p>
-
-            {/* CTAs */}
+          {/* ── 2-col : texte gauche / photo droite ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20">
+            {/* Left — text */}
             <motion.div
-              variants={fadeUp}
-              transition={{ duration: 0.5 }}
-              className="mb-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
+              variants={stagger}
+              initial="initial"
+              animate="animate"
             >
-              <Link href="/register">
-                <Button className="h-12 bg-indigo-600 px-8 text-base font-semibold text-white shadow-lg shadow-indigo-300/60 transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-400/50 hover:scale-[1.02]">
-                  Commencer gratuitement
-                  <ArrowRight className="ml-2 size-4" />
-                </Button>
-              </Link>
-              <Link href="/login">
-                <Button
-                  variant="outline"
-                  className="h-12 border-slate-200 px-8 text-base font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-50"
-                >
-                  Se connecter
-                </Button>
-              </Link>
-            </motion.div>
-
-            {/* Trust badges */}
-            <motion.div
-              variants={fadeUp}
-              transition={{ duration: 0.5 }}
-              className="flex flex-wrap items-center justify-center gap-3"
-            >
-              {[
-                { Icon: Shield, label: "Données sécurisées" },
-                { Icon: Globe, label: "Conforme législation française" },
-                { Icon: Zap, label: "Gratuit pour démarrer" },
-              ].map(({ Icon, label }) => (
-                <span
-                  key={label}
-                  className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-xs font-medium text-slate-600"
-                >
-                  <Icon className="size-3.5 text-slate-400" />
-                  {label}
+              {/* Pill badge */}
+              <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
+                <span className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50 px-3.5 py-1 text-xs font-semibold text-indigo-700">
+                  <Zap className="size-3" />
+                  Gratuit pour démarrer · Aucune carte requise
                 </span>
-              ))}
-            </motion.div>
-          </motion.div>
+              </motion.div>
 
-          {/* Dashboard mockup + freelancer photo */}
+              {/* Title */}
+              <motion.h1
+                variants={fadeUp}
+                transition={{ duration: 0.5 }}
+                className="mb-4 text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl"
+              >
+                Gérez vos devis et factures
+              </motion.h1>
+              <motion.h1
+                variants={fadeUp}
+                transition={{ duration: 0.5 }}
+                className="mb-6 text-4xl font-extrabold leading-tight tracking-tight text-indigo-600 sm:text-5xl lg:text-6xl"
+              >
+                en quelques clics.
+              </motion.h1>
+
+              {/* Subtitle */}
+              <motion.p
+                variants={fadeUp}
+                transition={{ duration: 0.5 }}
+                className="mb-10 max-w-lg text-lg leading-relaxed text-slate-500"
+              >
+                La solution tout-en-un pour les indépendants et PME françaises.
+                Devis · factures · clients et paiements — centralisés et conformes.
+              </motion.p>
+
+              {/* CTAs */}
+              <motion.div
+                variants={fadeUp}
+                transition={{ duration: 0.5 }}
+                className="mb-10 flex flex-col gap-3 sm:flex-row"
+              >
+                <Link href="/register">
+                  <Button className="h-12 bg-indigo-600 px-8 text-base font-semibold text-white shadow-lg shadow-indigo-300/60 transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-400/50 hover:scale-[1.02]">
+                    Commencer gratuitement
+                    <ArrowRight className="ml-2 size-4" />
+                  </Button>
+                </Link>
+                <Link href="/login">
+                  <Button
+                    variant="outline"
+                    className="h-12 border-slate-200 px-8 text-base font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                  >
+                    Se connecter
+                  </Button>
+                </Link>
+              </motion.div>
+
+              {/* Trust badges */}
+              <motion.div
+                variants={fadeUp}
+                transition={{ duration: 0.5 }}
+                className="flex flex-wrap gap-3"
+              >
+                {[
+                  { Icon: Shield, label: "Données sécurisées" },
+                  { Icon: Globe, label: "Conforme législation française" },
+                  { Icon: Zap, label: "Gratuit pour démarrer" },
+                ].map(({ Icon, label }) => (
+                  <span
+                    key={label}
+                    className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-xs font-medium text-slate-600"
+                  >
+                    <Icon className="size-3.5 text-slate-400" />
+                    {label}
+                  </span>
+                ))}
+              </motion.div>
+            </motion.div>
+
+            {/* Right — freelancer photo */}
+            <motion.div
+              initial={{ opacity: 0, x: 32 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="relative hidden lg:block"
+            >
+              <div className="relative aspect-[4/3] w-full rounded-3xl overflow-hidden shadow-2xl shadow-indigo-200/50">
+                <Image
+                  src="/images/hero-freelancer.jpg"
+                  alt="Indépendante utilisant QuickDevis Pro"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  priority
+                />
+              </div>
+              {/* Floating rating chip */}
+              <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl border border-slate-100 px-4 py-3">
+                <div className="flex items-center gap-1 mb-1">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="size-3.5 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-xs font-semibold text-slate-800">4,9 · +10 000 utilisateurs</p>
+              </div>
+              {/* Floating doc chip */}
+              <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl border border-slate-100 px-4 py-3">
+                <p className="text-xs text-slate-500 mb-0.5">Devis créé</p>
+                <p className="text-sm font-bold text-indigo-600">DEV-2025-047</p>
+                <p className="text-xs text-slate-400">3 200 € · envoyé</p>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* ── Dashboard mockup (full width) ── */}
           <motion.div
             initial={{ opacity: 0, y: 48 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
-            className="mx-auto mt-20 max-w-5xl"
+            className="mx-auto max-w-5xl"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-5 items-end">
-              {/* Freelancer photo */}
-              <div className="hidden lg:flex flex-col gap-3">
-                <div className="relative h-64 w-full rounded-2xl overflow-hidden shadow-xl shadow-slate-200/60 border border-slate-100">
-                  <Image
-                    src="/images/hero-freelancer.jpg"
-                    alt="Indépendant utilisant QuickDevis Pro"
-                    fill
-                    className="object-cover"
-                    sizes="220px"
-                    priority
-                  />
-                </div>
-                <div className="rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
-                  <div className="flex items-center gap-1 mb-1">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="size-3 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-xs font-semibold text-slate-800">« Indispensable au quotidien »</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Sophie L. · Consultante freelance</p>
-                </div>
-              </div>
-              {/* Dashboard */}
-              <MockDashboard />
-            </div>
+            <MockDashboard />
           </motion.div>
         </div>
       </section>

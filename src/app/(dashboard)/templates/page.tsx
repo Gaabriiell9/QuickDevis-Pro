@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Layout, Plus, MoreHorizontal, Trash2, Copy, Pencil, Star } from "lucide-react";
+import { Layout, Plus, MoreHorizontal, Trash2, Copy, Pencil, Star, Lock } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/shared/page-header";
-import { PlanGate } from "@/components/shared/plan-gate";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { usePlan } from "@/hooks/use-plan";
 
 const TYPE_LABELS: Record<string, string> = { QUOTE: "Devis", INVOICE: "Facture", CREDIT_NOTE: "Avoir" };
 const STYLE_LABELS: Record<string, string> = { CLASSIC: "Classique", MODERN: "Moderne", MINIMAL: "Minimaliste", BOLD: "Bold" };
@@ -60,6 +60,8 @@ function TemplateMiniPreview({ config }: { config: any }) {
 export default function TemplatesPage() {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
   const queryClient = useQueryClient();
+  const { hasAccess } = usePlan();
+  const canCreate = hasAccess("PRO");
 
   const { data, isLoading } = useQuery({
     queryKey: ["templates"],
@@ -126,23 +128,26 @@ export default function TemplatesPage() {
         title="Templates"
         description="Modèles de mise en page pour vos documents PDF"
         action={
-          <Button asChild size="sm">
-            <Link href="/templates/new"><Plus className="mr-2 h-4 w-4" />Nouveau template</Link>
-          </Button>
+          canCreate ? (
+            <Button asChild size="sm">
+              <Link href="/templates/new"><Plus className="mr-2 h-4 w-4" />Nouveau template</Link>
+            </Button>
+          ) : (
+            <Button size="sm" variant="outline" disabled className="opacity-60 cursor-not-allowed">
+              <Lock className="mr-2 h-4 w-4" />
+              Nouveau template
+              <span className="ml-2 rounded-full bg-indigo-100 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700">PRO</span>
+            </Button>
+          )
         }
       />
 
-      <PlanGate
-        plan="PRO"
-        feature="Créez et personnalisez vos propres templates PDF"
-        className="min-h-[360px]"
-      >
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-56 rounded-xl" />)}
         </div>
       ) : !data?.data?.length ? (
-        <EmptyState icon={Layout} title="Aucun template" description="Créez des modèles personnalisés pour vos devis et factures." action={<Button asChild><Link href="/templates/new">Créer un template</Link></Button>} />
+        <EmptyState icon={Layout} title="Aucun template" description="Consultez ou créez des modèles pour vos devis et factures." action={canCreate ? <Button asChild><Link href="/templates/new">Créer un template</Link></Button> : undefined} />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {data.data.map((t: any) => {
@@ -191,7 +196,6 @@ export default function TemplatesPage() {
           })}
         </div>
       )}
-      </PlanGate>
     </div>
   );
 }

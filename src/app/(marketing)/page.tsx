@@ -546,7 +546,8 @@ export default function LandingPage() {
                   alt="Indépendante utilisant QuickDevis Pro"
                   fill
                   className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  quality={90}
                   priority
                 />
               </div>

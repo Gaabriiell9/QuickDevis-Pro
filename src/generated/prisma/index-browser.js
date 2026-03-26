@@ -179,6 +179,7 @@ exports.Prisma.OrganizationScalarFieldEnum = {
   vatNumber: 'vatNumber',
   iban: 'iban',
   bic: 'bic',
+  plan: 'plan',
   currency: 'currency',
   locale: 'locale',
   timezone: 'timezone',

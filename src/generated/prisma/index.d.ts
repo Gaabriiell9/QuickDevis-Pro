@@ -7272,6 +7272,7 @@ export namespace Prisma {
     vatNumber: string | null
     iban: string | null
     bic: string | null
+    plan: string | null
     currency: string | null
     locale: string | null
     timezone: string | null
@@ -7296,6 +7297,7 @@ export namespace Prisma {
     vatNumber: string | null
     iban: string | null
     bic: string | null
+    plan: string | null
     currency: string | null
     locale: string | null
     timezone: string | null
@@ -7320,6 +7322,7 @@ export namespace Prisma {
     vatNumber: number
     iban: number
     bic: number
+    plan: number
     currency: number
     locale: number
     timezone: number
@@ -7346,6 +7349,7 @@ export namespace Prisma {
     vatNumber?: true
     iban?: true
     bic?: true
+    plan?: true
     currency?: true
     locale?: true
     timezone?: true
@@ -7370,6 +7374,7 @@ export namespace Prisma {
     vatNumber?: true
     iban?: true
     bic?: true
+    plan?: true
     currency?: true
     locale?: true
     timezone?: true
@@ -7394,6 +7399,7 @@ export namespace Prisma {
     vatNumber?: true
     iban?: true
     bic?: true
+    plan?: true
     currency?: true
     locale?: true
     timezone?: true
@@ -7491,6 +7497,7 @@ export namespace Prisma {
     vatNumber: string | null
     iban: string | null
     bic: string | null
+    plan: string
     currency: string
     locale: string
     timezone: string
@@ -7532,6 +7539,7 @@ export namespace Prisma {
     vatNumber?: boolean
     iban?: boolean
     bic?: boolean
+    plan?: boolean
     currency?: boolean
     locale?: boolean
     timezone?: boolean
@@ -7570,6 +7578,7 @@ export namespace Prisma {
     vatNumber?: boolean
     iban?: boolean
     bic?: boolean
+    plan?: boolean
     currency?: boolean
     locale?: boolean
     timezone?: boolean
@@ -7594,6 +7603,7 @@ export namespace Prisma {
     vatNumber?: boolean
     iban?: boolean
     bic?: boolean
+    plan?: boolean
     currency?: boolean
     locale?: boolean
     timezone?: boolean
@@ -7653,6 +7663,7 @@ export namespace Prisma {
       vatNumber: string | null
       iban: string | null
       bic: string | null
+      plan: string
       currency: string
       locale: string
       timezone: string
@@ -8080,6 +8091,7 @@ export namespace Prisma {
     readonly vatNumber: FieldRef<"Organization", 'String'>
     readonly iban: FieldRef<"Organization", 'String'>
     readonly bic: FieldRef<"Organization", 'String'>
+    readonly plan: FieldRef<"Organization", 'String'>
     readonly currency: FieldRef<"Organization", 'String'>
     readonly locale: FieldRef<"Organization", 'String'>
     readonly timezone: FieldRef<"Organization", 'String'>
@@ -26565,6 +26577,7 @@ export namespace Prisma {
     vatNumber: 'vatNumber',
     iban: 'iban',
     bic: 'bic',
+    plan: 'plan',
     currency: 'currency',
     locale: 'locale',
     timezone: 'timezone',
@@ -27508,6 +27521,7 @@ export namespace Prisma {
     vatNumber?: StringNullableFilter<"Organization"> | string | null
     iban?: StringNullableFilter<"Organization"> | string | null
     bic?: StringNullableFilter<"Organization"> | string | null
+    plan?: StringFilter<"Organization"> | string
     currency?: StringFilter<"Organization"> | string
     locale?: StringFilter<"Organization"> | string
     timezone?: StringFilter<"Organization"> | string
@@ -27545,6 +27559,7 @@ export namespace Prisma {
     vatNumber?: SortOrderInput | SortOrder
     iban?: SortOrderInput | SortOrder
     bic?: SortOrderInput | SortOrder
+    plan?: SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -27585,6 +27600,7 @@ export namespace Prisma {
     vatNumber?: StringNullableFilter<"Organization"> | string | null
     iban?: StringNullableFilter<"Organization"> | string | null
     bic?: StringNullableFilter<"Organization"> | string | null
+    plan?: StringFilter<"Organization"> | string
     currency?: StringFilter<"Organization"> | string
     locale?: StringFilter<"Organization"> | string
     timezone?: StringFilter<"Organization"> | string
@@ -27622,6 +27638,7 @@ export namespace Prisma {
     vatNumber?: SortOrderInput | SortOrder
     iban?: SortOrderInput | SortOrder
     bic?: SortOrderInput | SortOrder
+    plan?: SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -27652,6 +27669,7 @@ export namespace Prisma {
     vatNumber?: StringNullableWithAggregatesFilter<"Organization"> | string | null
     iban?: StringNullableWithAggregatesFilter<"Organization"> | string | null
     bic?: StringNullableWithAggregatesFilter<"Organization"> | string | null
+    plan?: StringWithAggregatesFilter<"Organization"> | string
     currency?: StringWithAggregatesFilter<"Organization"> | string
     locale?: StringWithAggregatesFilter<"Organization"> | string
     timezone?: StringWithAggregatesFilter<"Organization"> | string
@@ -29764,6 +29782,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -29801,6 +29820,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -29838,6 +29858,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -29875,6 +29896,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -29912,6 +29934,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -29936,6 +29959,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -29960,6 +29984,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -32434,6 +32459,7 @@ export namespace Prisma {
     vatNumber?: SortOrder
     iban?: SortOrder
     bic?: SortOrder
+    plan?: SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -32458,6 +32484,7 @@ export namespace Prisma {
     vatNumber?: SortOrder
     iban?: SortOrder
     bic?: SortOrder
+    plan?: SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -32482,6 +32509,7 @@ export namespace Prisma {
     vatNumber?: SortOrder
     iban?: SortOrder
     bic?: SortOrder
+    plan?: SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -38400,6 +38428,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -38436,6 +38465,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -38535,6 +38565,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -38571,6 +38602,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -38660,6 +38692,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -38696,6 +38729,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -38944,6 +38978,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -38980,6 +39015,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -39064,6 +39100,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -39100,6 +39137,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -39290,6 +39328,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -39326,6 +39365,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -39476,6 +39516,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -39512,6 +39553,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -39815,6 +39857,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -39851,6 +39894,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -40290,6 +40334,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -40326,6 +40371,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -40714,6 +40760,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -40750,6 +40797,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -41282,6 +41330,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -41318,6 +41367,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -41484,6 +41534,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -41520,6 +41571,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -41682,6 +41734,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -41718,6 +41771,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -41983,6 +42037,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42019,6 +42074,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42452,6 +42508,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -42488,6 +42545,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -42680,6 +42738,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42716,6 +42775,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42784,6 +42844,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -42820,6 +42881,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -42872,6 +42934,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42908,6 +42971,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42944,6 +43008,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -42980,6 +43045,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -43032,6 +43098,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43068,6 +43135,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43104,6 +43172,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -43140,6 +43209,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -43239,6 +43309,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43275,6 +43346,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43364,6 +43436,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -43400,6 +43473,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -43452,6 +43526,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43488,6 +43563,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43524,6 +43600,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -43560,6 +43637,7 @@ export namespace Prisma {
     vatNumber?: string | null
     iban?: string | null
     bic?: string | null
+    plan?: string
     currency?: string
     locale?: string
     timezone?: string
@@ -43659,6 +43737,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43695,6 +43774,7 @@ export namespace Prisma {
     vatNumber?: NullableStringFieldUpdateOperationsInput | string | null
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string

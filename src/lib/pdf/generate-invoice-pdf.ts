@@ -66,10 +66,22 @@ export function generateInvoicePdf(data: PdfInvoiceData): void {
   // ── HEADER ─────────────────────────────────────────────────────────────────
   let y = 18;
 
-  doc.setFont(FONT, "bold");
-  doc.setFontSize(18);
-  doc.setTextColor(C.black[0], C.black[1], C.black[2]);
-  doc.text(org.name || "Votre Entreprise", ML, y);
+  // Org logo or name — left
+  if (org.logo) {
+    try {
+      doc.addImage(org.logo, "", ML, 10, 42, 12);
+    } catch {
+      doc.setFont(FONT, "bold");
+      doc.setFontSize(18);
+      doc.setTextColor(C.black[0], C.black[1], C.black[2]);
+      doc.text(org.name || "Votre Entreprise", ML, y);
+    }
+  } else {
+    doc.setFont(FONT, "bold");
+    doc.setFontSize(18);
+    doc.setTextColor(C.black[0], C.black[1], C.black[2]);
+    doc.text(org.name || "Votre Entreprise", ML, y);
+  }
 
   doc.setFont(FONT, "bold");
   doc.setFontSize(32);

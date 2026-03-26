@@ -68,6 +68,7 @@ export async function GET(
       email: invoice.organization.email,
       siret: invoice.organization.siret,
       vatNumber: invoice.organization.vatNumber,
+      logo: (invoice.organization as any).logo ?? null,
       iban: (invoice.organization as any).iban ?? null,
       bic: (invoice.organization as any).bic ?? null,
     },

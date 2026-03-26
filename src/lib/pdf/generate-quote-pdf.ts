@@ -63,11 +63,24 @@ export function generateQuotePdf(data: PdfQuoteData): void {
   // ── HEADER ─────────────────────────────────────────────────────────────────
   let y = 18;
 
-  // Org name — left
-  doc.setFont(FONT, "bold");
-  doc.setFontSize(18);
-  doc.setTextColor(C.black[0], C.black[1], C.black[2]);
-  doc.text(org.name || "Votre Entreprise", ML, y);
+  // Org logo or name — left
+  if (org.logo) {
+    // max 42mm wide × 21mm tall, object-contain
+    try {
+      doc.addImage(org.logo, "", ML, 10, 42, 12);
+    } catch {
+      // fallback to text if image fails
+      doc.setFont(FONT, "bold");
+      doc.setFontSize(18);
+      doc.setTextColor(C.black[0], C.black[1], C.black[2]);
+      doc.text(org.name || "Votre Entreprise", ML, y);
+    }
+  } else {
+    doc.setFont(FONT, "bold");
+    doc.setFontSize(18);
+    doc.setTextColor(C.black[0], C.black[1], C.black[2]);
+    doc.text(org.name || "Votre Entreprise", ML, y);
+  }
 
   // "DEVIS" — right, primary color, very large
   doc.setFont(FONT, "bold");

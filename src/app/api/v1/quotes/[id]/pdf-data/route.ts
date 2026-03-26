@@ -63,6 +63,7 @@ export async function GET(
       email: quote.organization.email,
       siret: quote.organization.siret,
       vatNumber: quote.organization.vatNumber,
+      logo: (quote.organization as any).logo ?? null,
       iban: (quote.organization as any).iban ?? null,
       bic: (quote.organization as any).bic ?? null,
     },

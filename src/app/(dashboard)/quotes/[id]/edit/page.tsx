@@ -233,6 +233,7 @@ export default function QuoteEditPage() {
     termsAndConditions: watchAll.termsAndConditions,
     org: {
       name: org?.name ?? "",
+      logo: (org as any)?.logo ?? null,
       address: org?.address,
       postalCode: org?.postalCode,
       city: org?.city,

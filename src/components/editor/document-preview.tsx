@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 
 export interface PreviewOrg {
   name: string;
+  logo?: string | null;
   address?: string | null;
   postalCode?: string | null;
   city?: string | null;
@@ -137,9 +138,14 @@ export function DocumentPreview({ data }: DocumentPreviewProps) {
       <div className="p-10">
         {/* ── Header ── */}
         <div className="flex items-start justify-between mb-8">
-          {/* Company name */}
+          {/* Company name / logo */}
           <div className="max-w-[55%]">
-            <h1 className="text-2xl font-extrabold text-slate-900 leading-tight">{org.name || "Votre Entreprise"}</h1>
+            {org.logo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={org.logo} alt={org.name} style={{ maxWidth: "120px", maxHeight: "60px", objectFit: "contain" }} className="mb-1" />
+            ) : (
+              <h1 className="text-2xl font-extrabold text-slate-900 leading-tight">{org.name || "Votre Entreprise"}</h1>
+            )}
             {org.address && <p className="text-slate-500 text-xs mt-1">{org.address}</p>}
             {(org.postalCode || org.city) && (
               <p className="text-slate-500 text-xs">{[org.postalCode, org.city].filter(Boolean).join(" ")}</p>

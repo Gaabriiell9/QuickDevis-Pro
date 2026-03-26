@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formatMoney } from "@/lib/utils/money";
 import { formatDateShort } from "@/lib/utils/dates";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FileDown, Loader2, Mail } from "lucide-react";
+import { FileDown, Loader2, Mail, Pencil } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -154,6 +154,14 @@ export default function QuoteDetailPage() {
         breadcrumb={[{ label: "Devis", href: "/quotes" }, { label: quote.reference }]}
         action={
           <div className="flex gap-2 flex-wrap">
+            {(quote.status === "DRAFT" || quote.status === "SENT") && (
+              <Button size="sm" variant="outline" asChild>
+                <Link href={`/quotes/${id}/edit`}>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Modifier
+                </Link>
+              </Button>
+            )}
             <Button
               size="sm"
               variant="outline"

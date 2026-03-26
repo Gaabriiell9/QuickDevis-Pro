@@ -13,7 +13,7 @@ import { formatMoney } from "@/lib/utils/money";
 import { formatDateShort } from "@/lib/utils/dates";
 import { PAYMENT_METHOD_LABELS } from "@/lib/constants/payment-methods";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FileDown, Loader2, Mail } from "lucide-react";
+import { FileDown, Loader2, Mail, Pencil } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -136,6 +136,14 @@ export default function InvoiceDetailPage() {
         breadcrumb={[{ label: "Factures", href: "/invoices" }, { label: invoice.reference }]}
         action={
           <div className="flex gap-2 flex-wrap">
+            {invoice.status !== "PAID" && (
+              <Button size="sm" variant="outline" asChild>
+                <Link href={`/invoices/${id}/edit`}>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Modifier
+                </Link>
+              </Button>
+            )}
             <Button
               size="sm"
               variant="outline"

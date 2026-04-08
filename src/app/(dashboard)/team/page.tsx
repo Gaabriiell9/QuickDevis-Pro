@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Users2 } from "lucide-react";
 import { PageHeader } from "@/components/shared/page-header";
 import { EmptyState } from "@/components/shared/empty-state";
+import { PlanGate } from "@/components/shared/plan-gate";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -39,6 +40,7 @@ export default function TeamPage() {
         description="Membres ayant accès à votre organisation"
       />
 
+      <PlanGate plan="BUSINESS" feature="Gérez plusieurs utilisateurs au sein de votre organisation." className="min-h-[300px]">
       {isLoading ? (
         <div className="space-y-2">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -91,6 +93,7 @@ export default function TeamPage() {
           })}
         </div>
       )}
+      </PlanGate>
     </div>
   );
 }

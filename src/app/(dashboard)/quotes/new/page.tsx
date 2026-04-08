@@ -91,11 +91,12 @@ export default function NewQuotePage() {
         credentials: "include",
         body: JSON.stringify(data),
       });
-      if (!res.ok) { const b = await res.json(); toast.error(b.error ?? "Erreur"); return; }
+      if (!res.ok) { const b = await res.json(); toast.error(b.message ?? b.error ?? "Erreur"); return; }
       const quote = await res.json();
       toast.success("Devis créé");
       await queryClient.invalidateQueries({ queryKey: ["quotes"] });
       await queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
+      await queryClient.invalidateQueries({ queryKey: ["plan-usage"] });
       router.push(`/quotes/${quote.id}`);
     } catch { toast.error("Erreur serveur"); }
     finally { setIsLoading(false); }

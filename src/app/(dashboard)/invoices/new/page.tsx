@@ -78,11 +78,12 @@ export default function NewInvoicePage() {
     setIsLoading(true);
     try {
       const res = await fetch("/api/v1/invoices", { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify(data) });
-      if (!res.ok) { const b = await res.json(); toast.error(b.error ?? "Erreur"); return; }
+      if (!res.ok) { const b = await res.json(); toast.error(b.message ?? b.error ?? "Erreur"); return; }
       const inv = await res.json();
       toast.success("Facture créée");
       await queryClient.invalidateQueries({ queryKey: ["invoices"] });
       await queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
+      await queryClient.invalidateQueries({ queryKey: ["plan-usage"] });
       router.push(`/invoices/${inv.id}`);
     } catch { toast.error("Erreur serveur"); }
     finally { setIsLoading(false); }

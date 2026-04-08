@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Plus, Search, MoreHorizontal, Trash2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useInvoices } from "@/hooks/use-invoices";
+import { usePlanUsage } from "@/hooks/use-plan-usage";
+import { PlanQuotaBadge } from "@/components/shared/plan-quota-badge";
 import { PageHeader } from "@/components/shared/page-header";
 import { RichEmptyState } from "@/components/shared/rich-empty-state";
 import { Button } from "@/components/ui/button";
@@ -25,6 +27,7 @@ export default function InvoicesPage() {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; label: string } | null>(null);
   const queryClient = useQueryClient();
   const { data, isLoading } = useInvoices({ search, status, page });
+  const { data: usage } = usePlanUsage();
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -60,7 +63,18 @@ export default function InvoicesPage() {
 
       <PageHeader
         title="Factures"
-        action={<Button asChild><Link href="/invoices/new"><Plus className="mr-2 h-4 w-4" />Nouvelle facture</Link></Button>}
+        action={
+          <div className="flex items-center gap-3">
+            {usage?.limits.invoicesPerMonth && (
+              <PlanQuotaBadge
+                used={usage.invoicesThisMonth}
+                limit={usage.limits.invoicesPerMonth}
+                label="ce mois"
+              />
+            )}
+            <Button asChild><Link href="/invoices/new"><Plus className="mr-2 h-4 w-4" />Nouvelle facture</Link></Button>
+          </div>
+        }
       />
 
       <div className="flex gap-3">

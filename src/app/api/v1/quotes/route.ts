@@ -98,6 +98,23 @@ export async function POST(req: NextRequest) {
   const orgId = await getOrgId(token.id as string);
   if (!orgId) return NextResponse.json({ error: "No organization" }, { status: 400 });
 
+  // Limite plan FREE : 5 devis par mois
+  const org = await prisma.organization.findUnique({ where: { id: orgId }, select: { plan: true } });
+  if (org?.plan === "FREE") {
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    const count = await prisma.quote.count({
+      where: { organizationId: orgId, deletedAt: null, createdAt: { gte: startOfMonth } },
+    });
+    if (count >= 5) {
+      return NextResponse.json(
+        { error: "Limite atteinte", message: "Vous avez atteint la limite de 5 devis par mois sur le plan Gratuit. Passez au plan Pro pour des devis illimités." },
+        { status: 403 }
+      );
+    }
+  }
+
   try {
     const body = await req.json();
     const data = postSchema.parse(body);

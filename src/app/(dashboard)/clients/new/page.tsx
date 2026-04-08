@@ -56,13 +56,14 @@ export default function NewClientPage() {
       });
       if (!res.ok) {
         const body = await res.json();
-        toast.error(body.error ?? "Erreur");
+        toast.error(body.message ?? body.error ?? "Erreur");
         return;
       }
       const client = await res.json();
       toast.success("Client créé");
       await queryClient.invalidateQueries({ queryKey: ["clients"] });
       await queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
+      await queryClient.invalidateQueries({ queryKey: ["plan-usage"] });
       router.push(`/clients/${client.id}`);
     } catch {
       toast.error("Erreur serveur");

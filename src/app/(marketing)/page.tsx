@@ -2,6 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Link from "next/link";
 import {
   FileText,
@@ -74,6 +77,7 @@ const features = [
 const plans = [
   {
     name: "Gratuit",
+    planKey: null as string | null,
     price: "0€",
     period: "",
     desc: "Parfait pour démarrer",
@@ -88,6 +92,7 @@ const plans = [
   },
   {
     name: "Pro",
+    planKey: "pro" as string | null,
     price: "15€",
     period: "/mois",
     desc: "Pour les indépendants actifs",
@@ -103,6 +108,7 @@ const plans = [
   },
   {
     name: "Premium",
+    planKey: "premium" as string | null,
     price: "32€",
     period: "/mois",
     desc: "Pour les équipes et PME",
@@ -123,6 +129,38 @@ const plans = [
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const { status } = useSession();
+  const router = useRouter();
+
+  async function handleCommencer(planKey: string | null) {
+    if (!planKey) {
+      router.push("/register");
+      return;
+    }
+    if (status !== "authenticated") {
+      router.push(`/register?plan=${planKey}`);
+      return;
+    }
+    setLoadingPlan(planKey);
+    try {
+      const res = await fetch("/api/v1/billing/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planKey }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error(data.error ?? "Impossible de lancer le paiement. Réessayez.");
+      }
+    } catch {
+      toast.error("Erreur serveur. Réessayez.");
+    } finally {
+      setLoadingPlan(null);
+    }
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -550,18 +588,18 @@ export default function LandingPage() {
                 </ul>
 
                 <div className="mt-auto">
-                  <Link href="/register">
-                    <Button
-                      className={cn(
-                        "w-full font-semibold",
-                        plan.popular
-                          ? "bg-indigo-600 text-white hover:bg-indigo-700"
-                          : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                      )}
-                    >
-                      Commencer
-                    </Button>
-                  </Link>
+                  <Button
+                    onClick={() => handleCommencer(plan.planKey)}
+                    disabled={loadingPlan === plan.planKey}
+                    className={cn(
+                      "w-full font-semibold",
+                      plan.popular
+                        ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                        : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    )}
+                  >
+                    {loadingPlan === plan.planKey ? "Redirection…" : "Commencer"}
+                  </Button>
                 </div>
               </motion.div>
             ))}

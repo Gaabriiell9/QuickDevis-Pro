@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Plus, Search, MoreHorizontal, Trash2, Eye, Pencil, Copy } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useQuotes } from "@/hooks/use-quotes";
+import { usePlanUsage } from "@/hooks/use-plan-usage";
+import { PlanQuotaBadge } from "@/components/shared/plan-quota-badge";
 import { PageHeader } from "@/components/shared/page-header";
 import { RichEmptyState } from "@/components/shared/rich-empty-state";
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,7 @@ export default function QuotesPage() {
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuotes({ search, status, page });
+  const { data: usage } = usePlanUsage();
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -79,9 +82,18 @@ export default function QuotesPage() {
       <PageHeader
         title="Devis"
         action={
-          <Button asChild>
-            <Link href="/quotes/new"><Plus className="mr-2 h-4 w-4" />Nouveau devis</Link>
-          </Button>
+          <div className="flex items-center gap-3">
+            {usage?.limits.quotesPerMonth && (
+              <PlanQuotaBadge
+                used={usage.quotesThisMonth}
+                limit={usage.limits.quotesPerMonth}
+                label="ce mois"
+              />
+            )}
+            <Button asChild>
+              <Link href="/quotes/new"><Plus className="mr-2 h-4 w-4" />Nouveau devis</Link>
+            </Button>
+          </div>
         }
       />
 

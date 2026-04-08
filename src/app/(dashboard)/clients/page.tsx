@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Plus, Search, MoreHorizontal, Trash2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useClients } from "@/hooks/use-clients";
+import { usePlanUsage } from "@/hooks/use-plan-usage";
+import { PlanQuotaBadge } from "@/components/shared/plan-quota-badge";
 import { PageHeader } from "@/components/shared/page-header";
 import { RichEmptyState } from "@/components/shared/rich-empty-state";
 import { Button } from "@/components/ui/button";
@@ -24,6 +26,7 @@ export default function ClientsPage() {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; label: string } | null>(null);
   const queryClient = useQueryClient();
   const { data, isLoading } = useClients({ search, type, page });
+  const { data: usage } = usePlanUsage();
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -60,12 +63,21 @@ export default function ClientsPage() {
       <PageHeader
         title="Clients"
         action={
-          <Button asChild>
-            <Link href="/clients/new">
-              <Plus className="mr-2 h-4 w-4" />
-              Nouveau client
-            </Link>
-          </Button>
+          <div className="flex items-center gap-3">
+            {usage?.limits.clientsTotal && (
+              <PlanQuotaBadge
+                used={usage.clientsTotal}
+                limit={usage.limits.clientsTotal}
+                label="clients"
+              />
+            )}
+            <Button asChild>
+              <Link href="/clients/new">
+                <Plus className="mr-2 h-4 w-4" />
+                Nouveau client
+              </Link>
+            </Button>
+          </div>
         }
       />
 

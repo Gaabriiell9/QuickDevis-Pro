@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { AppSidebar } from "@/components/app-shell/app-sidebar";
 import { AppTopbar } from "@/components/app-shell/app-topbar";
 import { useCurrentOrganization } from "@/hooks/use-current-organization";
+import { useSession } from "next-auth/react";
 
 export default function DashboardLayout({
   children,
@@ -14,7 +15,28 @@ export default function DashboardLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: org } = useCurrentOrganization();
+  const { status } = useSession();
   const pathname = usePathname();
+
+  // Déclenche le checkout Stripe si un plan est en attente (venant de l'inscription ou du login)
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    const pendingPlan = sessionStorage.getItem("pendingPlan");
+    if (!pendingPlan) return;
+    sessionStorage.removeItem("pendingPlan");
+
+    fetch("/api/v1/billing/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ plan: pendingPlan }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.url) window.location.href = data.url;
+      })
+      .catch(() => {});
+  }, [status]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {

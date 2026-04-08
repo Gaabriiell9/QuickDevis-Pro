@@ -38,6 +38,7 @@ type RegisterForm = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const plan = searchParams.get("plan");
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -174,7 +175,7 @@ export default function RegisterPage() {
           )}
           <p className="text-sm text-center text-muted-foreground">
             Déjà un compte ?{" "}
-            <Link href="/login" className="underline hover:text-foreground">
+            <Link href={plan ? `/login?plan=${plan}` : "/login"} className="underline hover:text-foreground">
               Se connecter
             </Link>
           </p>

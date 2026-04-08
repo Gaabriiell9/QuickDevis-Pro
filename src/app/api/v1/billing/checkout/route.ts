@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { prisma } from "@/lib/db/prisma";
 import { requireAuth, getOrgId } from "@/lib/auth/guards";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -36,17 +37,43 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
 
+  const org = await prisma.organization.findUnique({
+    where: { id: organizationId },
+    select: { stripeCustomerId: true, stripeSubscriptionId: true },
+  });
+
+  // Vérifie si un abonnement actif existe déjà sur Stripe
+  if (org?.stripeSubscriptionId) {
+    try {
+      const sub = await stripe.subscriptions.retrieve(org.stripeSubscriptionId);
+      if (sub.status === "active" || sub.status === "trialing") {
+        return NextResponse.json(
+          { error: "Vous avez déjà un abonnement actif." },
+          { status: 400 }
+        );
+      }
+    } catch {
+      // Subscription introuvable sur Stripe → on laisse passer
+    }
+  }
+
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
   try {
-    const session = await stripe.checkout.sessions.create({
+    const sessionParams: Stripe.Checkout.SessionCreateParams = {
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
       metadata: { organizationId },
       success_url: `${appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/#tarifs`,
-    });
+    };
 
+    // Réutilise le customer Stripe existant si disponible
+    if (org?.stripeCustomerId) {
+      sessionParams.customer = org.stripeCustomerId;
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
     return NextResponse.json({ url: session.url });
   } catch (err) {
     console.error("[billing/checkout] Stripe error:", err);

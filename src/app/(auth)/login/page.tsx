@@ -32,6 +32,7 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
+  const plan = searchParams.get("plan");
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -56,6 +57,9 @@ export default function LoginPage() {
         return;
       }
 
+      if (plan) {
+        sessionStorage.setItem("pendingPlan", plan);
+      }
       router.push(callbackUrl);
       router.refresh();
     } catch {

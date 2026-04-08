@@ -1,8 +1,20 @@
+"use client";
+
+import { useEffect } from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 
 export default function BillingSuccessPage() {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    // Invalide le cache plan/organisation pour que le dashboard reflète le nouveau plan immédiatement
+    queryClient.invalidateQueries({ queryKey: ["organization"] });
+    queryClient.invalidateQueries({ queryKey: ["plan-usage"] });
+  }, [queryClient]);
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
       <div className="w-full max-w-md rounded-2xl border border-slate-100 bg-white p-10 shadow-sm text-center">

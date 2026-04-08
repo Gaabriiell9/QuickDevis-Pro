@@ -35,21 +35,23 @@ export default function MentionsLegalesPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-800 mb-3">1. Éditeur du site</h2>
             <p>
-              Le site QuickDevis Pro est édité par Gabriel Farias, Développeur indépendant,
-              
+              Le site QuickDevis Pro est édité par Gabriel Farias, Développeur indépendant, GF Web.
             </p>
             <p className="mt-2">
-              Siège social : Bordeaux, France<br />
-              Email : joaofarias115@gmail.com<br />
-              Téléphone : 
+              Siège social : 8 Avenue Robert Schuman, Bât. N75, 33130 Bègles, France<br />
+              SIRET : 10303012800013<br />
+              Email : gfweb.pro@outlook.fr<br />
+              Téléphone : 06 80 37 45 69
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold text-slate-800 mb-3">2. Hébergement</h2>
             <p>
-              Le site est hébergé par [Nom de l&apos;hébergeur], [Adresse de l&apos;hébergeur],
-              [Site web de l&apos;hébergeur].
+              Le site est hébergé par Vercel Inc., 340 Pine Street Suite 701, San Francisco, CA 94104, USA.{" "}
+              <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
+                vercel.com
+              </a>
             </p>
           </section>
 

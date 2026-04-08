@@ -118,106 +118,6 @@ const plans = [
   },
 ];
 
-// ─── Mock Dashboard ───────────────────────────────────────────────────────────
-
-function MockDashboard() {
-  return (
-    <div className="w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-indigo-100/50">
-      {/* Topbar */}
-      <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-6 py-3">
-        <div className="flex items-center gap-2">
-          <div className="flex size-6 items-center justify-center rounded bg-indigo-600 text-xs font-bold text-white">
-            QD
-          </div>
-          <span className="text-sm font-semibold text-slate-700">QuickDevis Pro</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-20 rounded-full bg-slate-200" />
-          <div className="size-7 rounded-full bg-indigo-100" />
-        </div>
-      </div>
-
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="flex w-14 flex-col items-center gap-3 border-r border-slate-100 bg-slate-900 py-4">
-          {[LayoutDashboard, FileText, Receipt, Users, CreditCard].map(
-            (Icon, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "flex size-8 items-center justify-center rounded-lg transition-colors",
-                  i === 0 ? "bg-indigo-600 text-white" : "text-slate-500 hover:text-slate-300"
-                )}
-              >
-                <Icon className="size-4" />
-              </div>
-            )
-          )}
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 p-5">
-          {/* KPI row */}
-          <div className="mb-4 grid grid-cols-3 gap-3">
-            {[
-              { label: "Chiffre d'affaires", value: "24 850 €", trend: "+12%", color: "text-emerald-600" },
-              { label: "Devis en attente", value: "8", trend: "3 urgents", color: "text-amber-600" },
-              { label: "Factures impayées", value: "3 450 €", trend: "2 factures", color: "text-rose-600" },
-            ].map((kpi, i) => (
-              <div key={i} className="rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
-                <p className="mb-1 text-[10px] font-medium text-slate-400">{kpi.label}</p>
-                <p className="text-base font-bold text-slate-800">{kpi.value}</p>
-                <p className={cn("text-[10px] font-medium", kpi.color)}>{kpi.trend}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Mini chart bar */}
-          <div className="mb-4 rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
-            <p className="mb-2 text-[10px] font-semibold text-slate-500">Revenus mensuels</p>
-            <div className="flex items-end gap-1.5 h-12">
-              {[40, 65, 45, 80, 55, 90, 70, 85, 60, 95, 75, 100].map((h, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    "flex-1 rounded-sm",
-                    i === 11 ? "bg-indigo-600" : "bg-indigo-100"
-                  )}
-                  style={{ height: `${h}%` }}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Recent docs table */}
-          <div className="rounded-xl border border-slate-100 bg-white shadow-sm">
-            <div className="border-b border-slate-100 px-3 py-2">
-              <p className="text-[10px] font-semibold text-slate-500">Documents récents</p>
-            </div>
-            {[
-              { ref: "DEV-2024-047", client: "Dupont SAS", amount: "3 200 €", status: "Envoyé", color: "bg-amber-100 text-amber-700" },
-              { ref: "FAC-2024-031", client: "Martin & Co", amount: "1 850 €", status: "Payé", color: "bg-emerald-100 text-emerald-700" },
-              { ref: "DEV-2024-046", client: "Leclerc Auto", amount: "7 450 €", status: "Brouillon", color: "bg-slate-100 text-slate-600" },
-            ].map((row, i) => (
-              <div key={i} className="flex items-center justify-between px-3 py-2 border-b border-slate-50 last:border-0">
-                <div className="flex items-center gap-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
-                  <span className="text-[10px] font-mono text-slate-600">{row.ref}</span>
-                </div>
-                <span className="text-[10px] text-slate-500">{row.client}</span>
-                <span className="text-[10px] font-semibold text-slate-700">{row.amount}</span>
-                <span className={cn("rounded-full px-1.5 py-0.5 text-[9px] font-medium", row.color)}>
-                  {row.status}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
@@ -352,7 +252,7 @@ export default function LandingPage() {
               <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
                 <span className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50 px-3.5 py-1 text-xs font-semibold text-indigo-700">
                   <Zap className="size-3" />
-                  Gratuit pour démarrer · Aucune carte requise
+                  Gratuit pour démarrer, aucune carte requise
                 </span>
               </motion.div>
 
@@ -379,7 +279,7 @@ export default function LandingPage() {
                 className="mb-10 max-w-lg text-lg leading-relaxed text-slate-500"
               >
                 La solution tout-en-un pour les indépendants et PME françaises.
-                Devis · factures · clients et paiements — centralisés et conformes.
+                Devis, factures, clients et paiements, centralisés et conformes.
               </motion.p>
 
               {/* CTAs */}
@@ -388,12 +288,6 @@ export default function LandingPage() {
                 transition={{ duration: 0.5 }}
                 className="mb-10 flex flex-col gap-3 sm:flex-row"
               >
-                <Link href="/register">
-                  <Button className="h-12 bg-indigo-600 px-8 text-base font-semibold text-white shadow-lg shadow-indigo-300/60 transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-400/50 hover:scale-[1.02]">
-                    Commencer gratuitement
-                    <ArrowRight className="ml-2 size-4" />
-                  </Button>
-                </Link>
                 <Link href="/login">
                   <Button
                     variant="outline"
@@ -529,20 +423,11 @@ export default function LandingPage() {
                   <p className="text-[10px] font-medium text-slate-500">Devis créé</p>
                 </div>
                 <p className="text-xs font-bold text-indigo-600">DEV-2025-047</p>
-                <p className="text-[10px] text-slate-400">3 200 € · envoyé</p>
+                <p className="text-[10px] text-slate-400">3 200 € envoyé</p>
               </div>
             </motion.div>
           </div>
 
-          {/* ── Dashboard mockup (full width) ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 48 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-            className="mx-auto max-w-5xl"
-          >
-            <MockDashboard />
-          </motion.div>
         </div>
       </section>
 

@@ -1,9 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
   FileText,
   Receipt,
@@ -11,7 +10,7 @@ import {
   Download,
   Users,
   LayoutDashboard,
-  Star,
+  Package,
   Check,
   ArrowRight,
   Shield,
@@ -19,8 +18,6 @@ import {
   Globe,
   Menu,
   X,
-  TrendingUp,
-  Bell,
   Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -74,13 +71,6 @@ const features = [
   },
 ];
 
-const stats = [
-  { value: 10000, suffix: "+", label: "utilisateurs actifs" },
-  { value: 500000, suffix: "+", label: "documents créés" },
-  { value: 99.9, suffix: "%", label: "de disponibilité" },
-  { value: 2, suffix: " min", label: "pour créer un devis" },
-];
-
 const plans = [
   {
     name: "Gratuit",
@@ -127,103 +117,6 @@ const plans = [
     ],
   },
 ];
-
-const testimonials = [
-  {
-    image: "/images/testimonial-1.jpg",
-    name: "Marie Lefebvre",
-    role: "Graphiste freelance",
-    content:
-      "Depuis que j'utilise QuickDevis Pro, je passe moins de temps sur l'administratif et plus sur mes projets. Indispensable !",
-    rating: 5,
-  },
-  {
-    image: "/images/testimonial-2.jpg",
-    name: "Thomas Dubois",
-    role: "Plombier artisan",
-    content:
-      "Interface simple, devis envoyés en 2 minutes depuis mon téléphone. Mes clients sont impressionnés par le rendu professionnel.",
-    rating: 5,
-  },
-  {
-    image: "/images/testimonial-3.jpg",
-    name: "Sophie Chartier",
-    role: "Consultante RH",
-    content:
-      "La conformité à la législation française me rassure vraiment. Je n'ai plus à vérifier chaque facture manuellement.",
-    rating: 5,
-  },
-];
-
-// ─── Animated Counter ────────────────────────────────────────────────────────
-
-function AnimatedCounter({
-  target,
-  suffix,
-}: {
-  target: number;
-  suffix: string;
-}) {
-  const [count, setCount] = useState(0);
-  const [started, setStarted] = useState(false);
-  const ref = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStarted(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!started) return;
-    const duration = 1800;
-    const steps = 60;
-    const increment = target / steps;
-    let current = 0;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(current));
-      }
-    }, duration / steps);
-    return () => clearInterval(timer);
-  }, [started, target]);
-
-  const display =
-    target % 1 !== 0 ? count.toFixed(1) : count.toLocaleString("fr-FR");
-
-  return (
-    <span ref={ref}>
-      {display}
-      {suffix}
-    </span>
-  );
-}
-
-// ─── Star Rating ─────────────────────────────────────────────────────────────
-
-function StarRating({ count }: { count: number }) {
-  return (
-    <div className="flex gap-0.5">
-      {Array.from({ length: count }).map((_, i) => (
-        <Star key={i} className="size-4 fill-amber-400 text-amber-400" />
-      ))}
-    </div>
-  );
-}
 
 // ─── Mock Dashboard ───────────────────────────────────────────────────────────
 
@@ -515,7 +408,7 @@ export default function LandingPage() {
               <motion.div
                 variants={fadeUp}
                 transition={{ duration: 0.5 }}
-                className="flex flex-wrap gap-3"
+                className="flex flex-wrap items-center gap-4"
               >
                 {[
                   { Icon: Shield, label: "Données sécurisées" },
@@ -533,38 +426,110 @@ export default function LandingPage() {
               </motion.div>
             </motion.div>
 
-            {/* Right — freelancer photo */}
+            {/* Right — App Mockup */}
             <motion.div
               initial={{ opacity: 0, x: 32 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="relative hidden lg:block"
             >
-              <div className="relative aspect-[4/3] w-full rounded-3xl overflow-hidden shadow-2xl shadow-indigo-200/50">
-                <Image
-                  src="/images/hero-freelancer.jpg"
-                  alt="Indépendante utilisant QuickDevis Pro"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  quality={90}
-                  priority
-                />
-              </div>
-              {/* Floating rating chip */}
-              <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl border border-slate-100 px-4 py-3">
-                <div className="flex items-center gap-1 mb-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="size-3.5 fill-amber-400 text-amber-400" />
-                  ))}
+              {/* Fond décoratif */}
+              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-indigo-50 to-violet-50" />
+              <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-200/40 blur-3xl" />
+              <div className="absolute -right-6 top-8 h-48 w-48 rounded-full bg-violet-200/30 blur-2xl" />
+
+              {/* Conteneur mockup */}
+              <div className="relative rounded-2xl bg-slate-900 shadow-2xl shadow-indigo-300/30 ring-1 ring-white/10">
+                {/* Barre de titre macOS */}
+                <div className="flex items-center gap-1.5 px-3 py-2.5">
+                  <div className="size-2.5 rounded-full bg-rose-500" />
+                  <div className="size-2.5 rounded-full bg-amber-400" />
+                  <div className="size-2.5 rounded-full bg-emerald-500" />
+                  <div className="mx-auto h-1.5 w-28 rounded-full bg-slate-700" />
                 </div>
-                <p className="text-xs font-semibold text-slate-800">4,9 · +10 000 utilisateurs</p>
+
+                {/* Écran */}
+                <div className="flex overflow-hidden rounded-b-2xl" style={{ height: 320 }}>
+                  {/* Sidebar */}
+                  <div className="flex w-12 shrink-0 flex-col items-center gap-3 bg-indigo-700 py-4">
+                    <div className="mb-2 flex size-7 items-center justify-center rounded-lg bg-white/20 text-[9px] font-extrabold text-white">
+                      QD
+                    </div>
+                    {[LayoutDashboard, FileText, Users, Package].map((Icon, i) => (
+                      <div
+                        key={i}
+                        className={cn(
+                          "flex size-7 items-center justify-center rounded-lg transition-colors",
+                          i === 0 ? "bg-white/20" : "opacity-40 hover:opacity-70"
+                        )}
+                      >
+                        <Icon className="size-3.5 text-white" />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Zone principale */}
+                  <div className="flex-1 overflow-hidden bg-slate-50 p-3">
+                    {/* Header */}
+                    <div className="mb-3 flex items-center justify-between border-b border-slate-100 pb-2">
+                      <div>
+                        <p className="text-[11px] font-bold text-slate-800">Tableau de bord</p>
+                        <p className="text-[9px] text-slate-400">Avril 2025</p>
+                      </div>
+                      <div className="flex size-6 items-center justify-center rounded-full bg-indigo-100">
+                        <span className="text-[8px] font-bold text-indigo-700">JD</span>
+                      </div>
+                    </div>
+
+                    {/* KPI cards */}
+                    <div className="mb-3 grid grid-cols-3 gap-1.5">
+                      {[
+                        { label: "Chiffre d'affaires", value: "24 850 €", badge: "+12%", bc: "bg-emerald-100 text-emerald-700" },
+                        { label: "Devis en attente", value: "8", badge: "3 urgents", bc: "bg-amber-100 text-amber-700" },
+                        { label: "Factures impayées", value: "3 450 €", badge: "2 factures", bc: "bg-rose-100 text-rose-700" },
+                      ].map((kpi, i) => (
+                        <div key={i} className="rounded-lg border border-slate-100 bg-white p-2 shadow-sm">
+                          <p className="mb-0.5 text-[7px] leading-tight text-slate-400">{kpi.label}</p>
+                          <p className="text-[11px] font-bold text-slate-800">{kpi.value}</p>
+                          <span className={cn("mt-0.5 inline-block rounded px-1 py-px text-[7px] font-semibold", kpi.bc)}>
+                            {kpi.badge}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Devis récents */}
+                    <div className="overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm">
+                      <div className="border-b border-slate-100 px-2.5 py-1.5">
+                        <p className="text-[9px] font-semibold text-slate-600">Devis récents</p>
+                      </div>
+                      {[
+                        { ref: "DEV-2025-047", client: "Martin SARL",  amount: "3 200 €", status: "Envoyé",   sc: "bg-blue-100 text-blue-700" },
+                        { ref: "DEV-2025-046", client: "Dupont & Co",  amount: "1 850 €", status: "Accepté",  sc: "bg-emerald-100 text-emerald-700" },
+                        { ref: "DEV-2025-045", client: "Leblanc SAS",  amount: "920 €",   status: "Brouillon", sc: "bg-slate-100 text-slate-500" },
+                      ].map((row, i) => (
+                        <div key={i} className="flex items-center gap-2 border-b border-slate-50 px-2.5 py-1.5 last:border-0">
+                          <span className="w-[68px] shrink-0 font-mono text-[7px] text-slate-500">{row.ref}</span>
+                          <span className="min-w-0 flex-1 truncate text-[7px] text-slate-500">{row.client}</span>
+                          <span className="shrink-0 text-[7px] font-semibold text-slate-700">{row.amount}</span>
+                          <span className={cn("shrink-0 rounded px-1.5 py-px text-[7px] font-medium", row.sc)}>{row.status}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
-              {/* Floating doc chip */}
-              <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl border border-slate-100 px-4 py-3">
-                <p className="text-xs text-slate-500 mb-0.5">Devis créé</p>
-                <p className="text-sm font-bold text-indigo-600">DEV-2025-047</p>
-                <p className="text-xs text-slate-400">3 200 € · envoyé</p>
+
+              {/* Badge flottant — "Devis créé" */}
+              <div className="absolute -right-4 -top-4 rounded-xl border border-slate-100 bg-white p-3 shadow-xl">
+                <div className="mb-1 flex items-center gap-1.5">
+                  <div className="flex size-4 items-center justify-center rounded-full bg-emerald-100">
+                    <Check className="size-2.5 text-emerald-600" />
+                  </div>
+                  <p className="text-[10px] font-medium text-slate-500">Devis créé</p>
+                </div>
+                <p className="text-xs font-bold text-indigo-600">DEV-2025-047</p>
+                <p className="text-[10px] text-slate-400">3 200 € · envoyé</p>
               </div>
             </motion.div>
           </div>
@@ -628,29 +593,6 @@ export default function LandingPage() {
                 </motion.div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── STATS ── */}
-      <section className="bg-indigo-950 py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid grid-cols-2 gap-10 lg:grid-cols-4">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="text-center"
-              >
-                <div className="mb-1 text-4xl font-extrabold tracking-tight text-white lg:text-5xl">
-                  <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                </div>
-                <p className="text-sm font-medium text-indigo-300">{stat.label}</p>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
@@ -742,60 +684,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ── */}
-      <section className="bg-slate-50 py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-16 text-center"
-          >
-            <span className="mb-3 inline-block rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
-              Témoignages
-            </span>
-            <h2 className="text-4xl font-extrabold tracking-tight text-slate-900">
-              Ils nous font confiance
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {testimonials.map((t, i) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                whileHover={{ scale: 1.02, boxShadow: "0 8px 32px rgba(99,102,241,0.08)" }}
-                className="flex flex-col rounded-2xl border border-slate-100 bg-white p-6 shadow-sm"
-              >
-                <StarRating count={t.rating} />
-                <p className="my-4 flex-1 text-sm leading-relaxed text-slate-600">
-                  &ldquo;{t.content}&rdquo;
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="relative size-10 shrink-0 rounded-full overflow-hidden border border-slate-100">
-                    <Image
-                      src={t.image}
-                      alt={t.name}
-                      fill
-                      className="object-cover"
-                      sizes="40px"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-slate-900">{t.name}</p>
-                    <p className="text-xs text-slate-500">{t.role}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── CTA FINAL ── */}
       <section className="bg-indigo-600 py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
@@ -809,7 +697,7 @@ export default function LandingPage() {
               Prêt à simplifier votre facturation ?
             </h2>
             <p className="mb-8 text-indigo-200">
-              Rejoignez des milliers de professionnels qui gagnent du temps chaque jour.
+              Une solution simple pour gérer vos devis et factures, conforme à la législation française.
             </p>
             <Link href="/register">
               <Button className="h-12 bg-white px-8 text-base font-bold text-indigo-600 shadow-lg hover:bg-indigo-50">

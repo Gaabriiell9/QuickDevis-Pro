@@ -281,6 +281,27 @@ export default function OnboardingPage() {
 
       const org = await res.json();
       await update({ organizationId: org.id, onboardingCompleted: true });
+
+      const pendingPlan = sessionStorage.getItem("pendingPlan");
+      if (pendingPlan) {
+        sessionStorage.removeItem("pendingPlan");
+        try {
+          const checkoutRes = await fetch("/api/v1/billing/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ plan: pendingPlan }),
+          });
+          const checkoutData = await checkoutRes.json();
+          if (checkoutData.url) {
+            window.location.href = checkoutData.url;
+            return;
+          }
+        } catch {
+          // En cas d'erreur, on redirige vers le dashboard normalement
+        }
+      }
+
       router.push("/dashboard");
       router.refresh();
     } catch {

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -37,6 +37,7 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -78,6 +79,10 @@ export default function RegisterPage() {
         return;
       }
 
+      const plan = searchParams.get("plan");
+      if (plan) {
+        sessionStorage.setItem("pendingPlan", plan);
+      }
       router.push("/welcome");
       router.refresh();
     } catch {

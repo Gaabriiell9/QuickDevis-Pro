@@ -88,7 +88,7 @@ const plans = [
   },
   {
     name: "Pro",
-    price: "29€",
+    price: "15€",
     period: "/mois",
     desc: "Pour les indépendants actifs",
     popular: true,
@@ -102,8 +102,8 @@ const plans = [
     ],
   },
   {
-    name: "Business",
-    price: "79€",
+    name: "Premium",
+    price: "32€",
     period: "/mois",
     desc: "Pour les équipes et PME",
     popular: false,
@@ -398,9 +398,9 @@ export default function LandingPage() {
                         <p className="text-[9px] font-semibold text-slate-600">Devis récents</p>
                       </div>
                       {[
-                        { ref: "DEV-2025-047", client: "Martin SARL",  amount: "3 200 €", status: "Envoyé",   sc: "bg-blue-100 text-blue-700" },
-                        { ref: "DEV-2025-046", client: "Dupont & Co",  amount: "1 850 €", status: "Accepté",  sc: "bg-emerald-100 text-emerald-700" },
-                        { ref: "DEV-2025-045", client: "Leblanc SAS",  amount: "920 €",   status: "Brouillon", sc: "bg-slate-100 text-slate-500" },
+                        { ref: "DEV-2025-047", client: "Martin SARL", amount: "3 200 €", status: "Envoyé", sc: "bg-blue-100 text-blue-700" },
+                        { ref: "DEV-2025-046", client: "Dupont & Co", amount: "1 850 €", status: "Accepté", sc: "bg-emerald-100 text-emerald-700" },
+                        { ref: "DEV-2025-045", client: "Leblanc SAS", amount: "920 €", status: "Brouillon", sc: "bg-slate-100 text-slate-500" },
                       ].map((row, i) => (
                         <div key={i} className="flex items-center gap-2 border-b border-slate-50 px-2.5 py-1.5 last:border-0">
                           <span className="w-[68px] shrink-0 font-mono text-[7px] text-slate-500">{row.ref}</span>

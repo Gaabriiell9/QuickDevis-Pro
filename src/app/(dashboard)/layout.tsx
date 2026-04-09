@@ -29,7 +29,7 @@ export default function DashboardLayout({
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ plan: pendingPlan }),
+      body: JSON.stringify({ plan: pendingPlan, returnUrl: window.location.href }),
     })
       .then((res) => res.json())
       .then((data) => {

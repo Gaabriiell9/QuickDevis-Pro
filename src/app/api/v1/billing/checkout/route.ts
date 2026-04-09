@@ -25,11 +25,19 @@ export async function POST(req: NextRequest) {
   }
 
   let plan: string;
+  let returnUrl: string | undefined;
   try {
     const body = await req.json();
     plan = body.plan?.toLowerCase();
+    returnUrl = typeof body.returnUrl === "string" ? body.returnUrl : undefined;
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  // Sécurité : returnUrl doit appartenir à notre domaine
+  const appOrigin = (process.env.NEXTAUTH_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "");
+  if (returnUrl && !returnUrl.startsWith(appOrigin)) {
+    returnUrl = undefined;
   }
 
   const priceId = PRICE_IDS[plan];
@@ -64,8 +72,8 @@ export async function POST(req: NextRequest) {
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
       metadata: { organizationId },
-      success_url: `${appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/#tarifs`,
+      success_url: `${appUrl}/settings/billing?success=true`,
+      cancel_url: returnUrl ?? `${appUrl}/dashboard`,
     };
 
     // Réutilise le customer Stripe existant si disponible

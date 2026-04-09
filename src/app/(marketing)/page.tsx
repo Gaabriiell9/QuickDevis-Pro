@@ -147,7 +147,7 @@ export default function LandingPage() {
       const res = await fetch("/api/v1/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planKey }),
+        body: JSON.stringify({ plan: planKey, returnUrl: window.location.href }),
       });
       const data = await res.json();
       if (data.url) {

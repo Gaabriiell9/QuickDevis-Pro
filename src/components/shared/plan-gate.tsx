@@ -44,7 +44,7 @@ export function PlanGate({ plan, feature, children, className }: PlanGateProps) 
       const res = await fetch("/api/v1/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planKey }),
+        body: JSON.stringify({ plan: planKey, returnUrl: window.location.href }),
       });
       if (res.status === 401) {
         router.push(`/register?plan=${planKey}`);

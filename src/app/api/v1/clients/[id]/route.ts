@@ -62,6 +62,26 @@ export async function DELETE(
   const { id } = await params;
   const orgId = await getOrgId(token.id as string);
 
+  const activeQuotes = await prisma.quote.count({
+    where: { clientId: id, organizationId: orgId ?? undefined, deletedAt: null, status: { in: ["DRAFT", "SENT"] } },
+  });
+  if (activeQuotes > 0) {
+    return NextResponse.json(
+      { error: "Ce client a des devis actifs. Archivez-les avant de supprimer le client." },
+      { status: 409 }
+    );
+  }
+
+  const activeInvoices = await prisma.invoice.count({
+    where: { clientId: id, organizationId: orgId ?? undefined, deletedAt: null, status: { in: ["DRAFT", "SENT", "PARTIALLY_PAID", "OVERDUE"] } },
+  });
+  if (activeInvoices > 0) {
+    return NextResponse.json(
+      { error: "Ce client a des factures actives. Réglez-les avant de supprimer le client." },
+      { status: 409 }
+    );
+  }
+
   await prisma.client.updateMany({
     where: { id, organizationId: orgId ?? undefined },
     data: { deletedAt: new Date() },

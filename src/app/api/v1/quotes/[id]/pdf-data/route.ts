@@ -25,8 +25,8 @@ export async function GET(
   if (!quote) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   let templateConfig = null;
-  if ((quote as any).templateId) {
-    const tmpl = await prisma.template.findUnique({ where: { id: (quote as any).templateId }, select: { content: true } });
+  if (quote.templateId) {
+    const tmpl = await prisma.template.findUnique({ where: { id: quote.templateId }, select: { content: true } });
     templateConfig = tmpl?.content ?? null;
   } else {
     const defaultTmpl = await prisma.template.findFirst({
@@ -63,9 +63,9 @@ export async function GET(
       email: quote.organization.email,
       siret: quote.organization.siret,
       vatNumber: quote.organization.vatNumber,
-      logo: (quote.organization as any).logo ?? null,
-      iban: (quote.organization as any).iban ?? null,
-      bic: (quote.organization as any).bic ?? null,
+      logo: quote.organization.logo ?? null,
+      iban: quote.organization.iban ?? null,
+      bic: quote.organization.bic ?? null,
     },
     client: {
       type: quote.client.type,

@@ -65,7 +65,8 @@ function ResetPasswordForm() {
       }
       toast.success("Mot de passe mis à jour !");
       router.push("/login");
-    } catch {
+    } catch (err) {
+      console.error("[reset-password]", err);
       toast.error("Une erreur est survenue");
     } finally {
       setIsLoading(false);

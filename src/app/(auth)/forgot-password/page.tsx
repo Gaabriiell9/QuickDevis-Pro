@@ -45,7 +45,8 @@ export default function ForgotPasswordPage() {
         return;
       }
       setSubmitted(true);
-    } catch {
+    } catch (err) {
+      console.error("[forgot-password]", err);
       toast.error("Une erreur est survenue");
     } finally {
       setIsLoading(false);

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db/prisma";
 import { Decimal } from "@/generated/prisma/runtime/library";
 import { requireAuth, getOrgId } from "@/lib/auth/guards";
+import { PLAN_LIMITS } from "@/lib/constants/plans";
 
 const itemSchema = z.object({
   description: z.string().min(1),
@@ -74,6 +75,12 @@ export async function GET(req: NextRequest) {
     }),
   };
 
+  // Auto-update OVERDUE status for SENT invoices with past due date
+  await prisma.invoice.updateMany({
+    where: { organizationId: orgId, deletedAt: null, status: "SENT", dueDate: { lt: new Date() } },
+    data: { status: "OVERDUE" },
+  });
+
   const [data, total] = await Promise.all([
     prisma.invoice.findMany({
       where,
@@ -105,7 +112,7 @@ export async function POST(req: NextRequest) {
     const count = await prisma.invoice.count({
       where: { organizationId: orgId, deletedAt: null, createdAt: { gte: startOfMonth } },
     });
-    if (count >= 5) {
+    if (count >= PLAN_LIMITS.FREE.invoices) {
       return NextResponse.json(
         { error: "Limite atteinte", message: "Vous avez atteint la limite de 5 factures par mois sur le plan Gratuit. Passez au plan Pro pour des factures illimitées." },
         { status: 403 }
@@ -192,7 +199,7 @@ export async function POST(req: NextRequest) {
     if (err instanceof z.ZodError) {
       return NextResponse.json({ error: err.issues[0].message }, { status: 400 });
     }
-    console.error(err);
+    if (process.env.NODE_ENV !== "production") console.error("[invoices POST]", err);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

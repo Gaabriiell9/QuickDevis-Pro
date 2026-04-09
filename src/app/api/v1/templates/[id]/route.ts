@@ -41,7 +41,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       },
     });
     return NextResponse.json(template);
-  } catch {
+  } catch (err) {
+    console.error("[templates/[id] PATCH]", err);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -51,6 +52,22 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
   const orgId = await getOrgId(token.id as string);
+
+  const usedByQuotes = await prisma.quote.count({ where: { templateId: id, organizationId: orgId ?? undefined, deletedAt: null } });
+  if (usedByQuotes > 0) {
+    return NextResponse.json(
+      { error: "Ce modèle est utilisé par des devis existants." },
+      { status: 409 }
+    );
+  }
+  const usedByInvoices = await prisma.invoice.count({ where: { templateId: id, organizationId: orgId ?? undefined, deletedAt: null } });
+  if (usedByInvoices > 0) {
+    return NextResponse.json(
+      { error: "Ce modèle est utilisé par des factures existantes." },
+      { status: 409 }
+    );
+  }
+
   await prisma.template.updateMany({ where: { id, organizationId: orgId ?? undefined }, data: { deletedAt: new Date() } });
   return NextResponse.json({ success: true });
 }

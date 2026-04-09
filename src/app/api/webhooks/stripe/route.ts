@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/db/prisma";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "sk_placeholder", {
   apiVersion: "2026-03-25.dahlia",
 });
 
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
       }
     }
   } catch (err) {
-    console.error("[stripe-webhook] Error processing event:", event.type, err);
+    if (process.env.NODE_ENV !== "production") console.error("[stripe-webhook] Error processing event:", event.type, err);
     return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
   }
 

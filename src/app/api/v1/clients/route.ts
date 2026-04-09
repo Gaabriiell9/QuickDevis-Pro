@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuth, getOrgId } from "@/lib/auth/guards";
+import { PLAN_LIMITS } from "@/lib/constants/plans";
 
 const postSchema = z.object({
   type: z.enum(["INDIVIDUAL", "COMPANY"]).default("INDIVIDUAL"),
@@ -72,7 +73,7 @@ export async function POST(req: NextRequest) {
   const org = await prisma.organization.findUnique({ where: { id: orgId }, select: { plan: true } });
   if (org?.plan === "FREE") {
     const clientCount = await prisma.client.count({ where: { organizationId: orgId, deletedAt: null } });
-    if (clientCount >= 2) {
+    if (clientCount >= PLAN_LIMITS.FREE.clients) {
       return NextResponse.json(
         { error: "Limite atteinte", message: "Vous avez atteint la limite de 2 clients sur le plan Gratuit. Passez au plan Pro pour des clients illimités." },
         { status: 403 }

@@ -20,6 +20,12 @@ export async function GET(
   const { id } = await params;
   const orgId = await getOrgId(token.id as string);
 
+  // Auto-update OVERDUE status if SENT and past due date
+  await prisma.invoice.updateMany({
+    where: { id, organizationId: orgId ?? undefined, deletedAt: null, status: "SENT", dueDate: { lt: new Date() } },
+    data: { status: "OVERDUE" },
+  });
+
   const invoice = await prisma.invoice.findFirst({
     where: { id, organizationId: orgId ?? undefined, deletedAt: null },
     include: {

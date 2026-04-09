@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuth, getOrgId } from "@/lib/auth/guards";
-
-const FREE_LIMITS = {
-  quotesPerMonth: 5,
-  invoicesPerMonth: 5,
-  clientsTotal: 2,
-};
+import { PLAN_LIMITS } from "@/lib/constants/plans";
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req);
@@ -33,6 +28,8 @@ export async function GET(req: NextRequest) {
     quotesThisMonth,
     invoicesThisMonth,
     clientsTotal,
-    limits: plan === "FREE" ? FREE_LIMITS : { quotesPerMonth: null, invoicesPerMonth: null, clientsTotal: null },
+    limits: plan === "FREE"
+      ? { quotesPerMonth: PLAN_LIMITS.FREE.quotes, invoicesPerMonth: PLAN_LIMITS.FREE.invoices, clientsTotal: PLAN_LIMITS.FREE.clients }
+      : { quotesPerMonth: null, invoicesPerMonth: null, clientsTotal: null },
   });
 }

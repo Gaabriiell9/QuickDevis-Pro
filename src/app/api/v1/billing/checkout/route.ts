@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuth, getOrgId } from "@/lib/auth/guards";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "sk_placeholder", {
   apiVersion: "2026-03-25.dahlia",
 });
 
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create(sessionParams);
     return NextResponse.json({ url: session.url });
   } catch (err) {
-    console.error("[billing/checkout] Stripe error:", err);
+    if (process.env.NODE_ENV !== "production") console.error("[billing/checkout] Stripe error:", err);
     return NextResponse.json({ error: "Impossible de créer la session de paiement" }, { status: 500 });
   }
 }

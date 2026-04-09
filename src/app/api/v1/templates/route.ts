@@ -48,7 +48,8 @@ export async function POST(req: NextRequest) {
       data: { organizationId: orgId, name, type, isDefault: isDefault ?? false, content: config ?? {} },
     });
     return NextResponse.json(template, { status: 201 });
-  } catch {
+  } catch (err) {
+    console.error("[templates POST]", err);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

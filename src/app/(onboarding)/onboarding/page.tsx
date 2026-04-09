@@ -283,7 +283,8 @@ export default function OnboardingPage() {
       await update({ organizationId: org.id, onboardingCompleted: true });
       router.push("/dashboard");
       router.refresh();
-    } catch {
+    } catch (err) {
+      console.error("[onboarding]", err);
       toast.error("Une erreur est survenue");
     } finally {
       setIsLoading(false);

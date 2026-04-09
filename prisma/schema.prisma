@@ -456,6 +456,7 @@ model CreditNote {
   client       Client           @relation(fields: [clientId], references: [id])
   invoice      Invoice?         @relation(fields: [invoiceId], references: [id])
   createdBy    User             @relation("CreditNoteCreatedBy", fields: [createdById], references: [id])
+  template     Template?        @relation(fields: [templateId], references: [id], onDelete: SetNull)
   items        CreditNoteItem[]
 
   @@index([organizationId])
@@ -504,6 +505,7 @@ model Template {
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   quotes       Quote[]
   invoices     Invoice[]
+  creditNotes  CreditNote[]
 
   @@index([organizationId])
   @@index([deletedAt])

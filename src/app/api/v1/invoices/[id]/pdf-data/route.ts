@@ -26,8 +26,8 @@ export async function GET(
   if (!invoice) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   let templateConfig = null;
-  if ((invoice as any).templateId) {
-    const tmpl = await prisma.template.findUnique({ where: { id: (invoice as any).templateId }, select: { content: true } });
+  if (invoice.templateId) {
+    const tmpl = await prisma.template.findUnique({ where: { id: invoice.templateId }, select: { content: true } });
     templateConfig = tmpl?.content ?? null;
   } else {
     const defaultTmpl = await prisma.template.findFirst({
@@ -68,9 +68,9 @@ export async function GET(
       email: invoice.organization.email,
       siret: invoice.organization.siret,
       vatNumber: invoice.organization.vatNumber,
-      logo: (invoice.organization as any).logo ?? null,
-      iban: (invoice.organization as any).iban ?? null,
-      bic: (invoice.organization as any).bic ?? null,
+      logo: invoice.organization.logo ?? null,
+      iban: invoice.organization.iban ?? null,
+      bic: invoice.organization.bic ?? null,
     },
     client: {
       type: invoice.client.type,

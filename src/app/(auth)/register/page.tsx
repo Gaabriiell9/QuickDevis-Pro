@@ -86,7 +86,8 @@ export default function RegisterPage() {
       }
       router.push("/welcome");
       router.refresh();
-    } catch {
+    } catch (err) {
+      console.error("[register]", err);
       toast.error("Une erreur est survenue");
     } finally {
       setIsLoading(false);

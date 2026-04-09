@@ -124,7 +124,8 @@ export async function PATCH(req: NextRequest) {
       data: body,
     });
     return NextResponse.json(updated);
-  } catch {
+  } catch (err) {
+    console.error("[organization PATCH]", err);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

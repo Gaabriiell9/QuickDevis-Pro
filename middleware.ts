@@ -12,7 +12,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+  const secureCookie = process.env.NEXTAUTH_URL?.startsWith("https://") ?? false
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET, secureCookie })
   const isAuthenticated = !!token
   const isAuthRoute = AUTH_ROUTES.some(r => pathname.startsWith(r))
   const isProtectedRoute = PROTECTED_PREFIXES.some(p => pathname.startsWith(p))

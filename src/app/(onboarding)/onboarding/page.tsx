@@ -20,6 +20,10 @@ import {
   Building,
   Building2,
   Store,
+  FileMinus,
+  Package,
+  BarChart2,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,23 +45,25 @@ const onboardingSchema = z.object({
 
 type OnboardingForm = z.infer<typeof onboardingSchema>;
 
-type StartFocus = "quotes" | "invoices" | "clients" | "payments" | null;
-type LegalForm = "AE" | "SARL" | "SAS" | "SASU" | "EI" | null;
+type StartFocus = "quotes" | "invoices" | "clients" | "payments" | "credit-notes" | "products" | "analytics" | null;
+type LegalForm = "PARTICULIER" | "AE" | "SARL" | "SAS" | "SASU" | null;
 
 // ─── Step visuals ──────────────────────────────────────────────────────────
 
 function VisualStep1({ selected }: { selected: StartFocus }) {
   const items = [
-    { key: "quotes", icon: FileText, label: "Devis", color: "bg-indigo-100 text-indigo-600" },
-    { key: "invoices", icon: Receipt, label: "Factures", color: "bg-violet-100 text-violet-600" },
-    { key: "clients", icon: Users, label: "Clients", color: "bg-emerald-100 text-emerald-600" },
-    { key: "payments", icon: CreditCard, label: "Paiements", color: "bg-amber-100 text-amber-600" },
+    { key: "quotes",       icon: FileText,   label: "Devis",        color: "bg-indigo-100 text-indigo-600"  },
+    { key: "invoices",     icon: Receipt,    label: "Factures",     color: "bg-violet-100 text-violet-600"  },
+    { key: "clients",      icon: Users,      label: "Clients",      color: "bg-emerald-100 text-emerald-600"},
+    { key: "payments",     icon: CreditCard, label: "Paiements",    color: "bg-amber-100 text-amber-600"    },
+    { key: "credit-notes", icon: FileMinus,  label: "Avoirs",       color: "bg-rose-100 text-rose-600"      },
+    { key: "products",     icon: Package,    label: "Produits",     color: "bg-sky-100 text-sky-600"        },
   ] as const;
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-6 p-8">
       <p className="text-indigo-200 text-sm font-medium mb-2">Votre futur tableau de bord</p>
-      <div className="grid grid-cols-2 gap-4 w-full max-w-xs">
+      <div className="grid grid-cols-3 gap-3 w-full max-w-xs">
         {items.map(({ key, icon: Icon, label, color }) => (
           <div
             key={key}
@@ -196,10 +202,11 @@ function VisualStep4({ name }: { name: string }) {
 // ─── Legal form card ────────────────────────────────────────────────────────
 
 const LEGAL_FORMS: { key: LegalForm; label: string; desc: string; icon: typeof Briefcase }[] = [
-  { key: "AE",   label: "Auto-entrepreneur", desc: "Micro-entreprise",    icon: Store     },
-  { key: "SARL", label: "SARL",             desc: "Société à resp. lim.", icon: Building  },
-  { key: "SAS",  label: "SAS",              desc: "Société par actions",  icon: Building2 },
-  { key: "SASU", label: "SASU",             desc: "SAS unipersonnelle",   icon: Briefcase },
+  { key: "PARTICULIER", label: "Particulier",       desc: "Devis simples",        icon: User      },
+  { key: "AE",          label: "Auto-entrepreneur", desc: "Micro-entreprise",     icon: Store     },
+  { key: "SARL",        label: "SARL",              desc: "Soc. à resp. lim.",    icon: Building  },
+  { key: "SAS",         label: "SAS",               desc: "Société par actions",  icon: Building2 },
+  { key: "SASU",        label: "SASU",              desc: "SAS unipersonnelle",   icon: Briefcase },
 ];
 
 // ─── Progress bar ───────────────────────────────────────────────────────────
@@ -292,10 +299,13 @@ export default function OnboardingPage() {
   };
 
   const startFocusItems = [
-    { key: "quotes" as StartFocus,   icon: FileText,  label: "Devis",      desc: "Créez et envoyez des devis"    },
-    { key: "invoices" as StartFocus, icon: Receipt,   label: "Factures",   desc: "Facturez vos clients"          },
-    { key: "clients" as StartFocus,  icon: Users,     label: "Clients",    desc: "Gérez votre portefeuille"      },
-    { key: "payments" as StartFocus, icon: CreditCard,label: "Paiements",  desc: "Suivez vos encaissements"      },
+    { key: "quotes" as StartFocus,        icon: FileText,   label: "Devis",               desc: "Créez et envoyez des devis"    },
+    { key: "invoices" as StartFocus,      icon: Receipt,    label: "Factures",             desc: "Facturez vos clients"          },
+    { key: "clients" as StartFocus,       icon: Users,      label: "Clients",              desc: "Gérez votre portefeuille"      },
+    { key: "payments" as StartFocus,      icon: CreditCard, label: "Paiements",            desc: "Suivez vos encaissements"      },
+    { key: "credit-notes" as StartFocus,  icon: FileMinus,  label: "Avoirs",               desc: "Gérez vos avoirs clients"      },
+    { key: "products" as StartFocus,      icon: Package,    label: "Produits & Services",  desc: "Votre catalogue tarifaire"     },
+    { key: "analytics" as StartFocus,     icon: BarChart2,  label: "Analytiques",          desc: "Pilotez votre activité"        },
   ];
 
   return (
@@ -328,7 +338,7 @@ export default function OnboardingPage() {
                 </h2>
                 <p className="text-slate-500">Sélectionnez votre priorité — vous aurez accès à tout par la suite.</p>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 {startFocusItems.map(({ key, icon: Icon, label, desc }) => (
                   <button
                     key={key}
@@ -377,7 +387,7 @@ export default function OnboardingPage() {
               {/* Legal form cards */}
               <div>
                 <Label className="text-sm font-semibold text-slate-700 mb-2 block">Forme juridique</Label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                   {LEGAL_FORMS.map(({ key, label, desc, icon: Icon }) => (
                     <button
                       key={key}
@@ -403,11 +413,12 @@ export default function OnboardingPage() {
               <div className="space-y-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="name" className="text-sm font-semibold text-slate-700">
-                    Nom de la société <span className="text-rose-500">*</span>
+                    {legalForm === "PARTICULIER" ? "Nom complet" : "Nom de la société"}{" "}
+                    <span className="text-rose-500">*</span>
                   </Label>
                   <Input
                     id="name"
-                    placeholder={legalForm === "AE" ? "Jean Dupont" : "Ma Société SAS"}
+                    placeholder={legalForm === "PARTICULIER" ? "Nom" : "Nom"}
                     className="h-11"
                     {...register("name")}
                   />
@@ -418,12 +429,16 @@ export default function OnboardingPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <Label htmlFor="email" className="text-sm font-semibold text-slate-700">Email pro</Label>
-                    <Input id="email" type="email" placeholder="contact@exemple.fr" className="h-11" {...register("email")} />
+                    <Label htmlFor="email" className="text-sm font-semibold text-slate-700">
+                      {legalForm === "PARTICULIER" ? "Email" : "Email pro"}
+                    </Label>
+                    <Input id="email" type="email" placeholder="Email" className="h-11" {...register("email")} />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="phone" className="text-sm font-semibold text-slate-700">Téléphone</Label>
-                    <Input id="phone" placeholder="01 23 45 67 89" className="h-11" {...register("phone")} />
+                    <Label htmlFor="phone" className="text-sm font-semibold text-slate-700">
+                      {legalForm === "PARTICULIER" ? "Téléphone" : "Téléphone pro"}
+                    </Label>
+                    <Input id="phone" placeholder="Téléphone" className="h-11" {...register("phone")} />
                   </div>
                 </div>
               </div>
@@ -490,13 +505,13 @@ export default function OnboardingPage() {
                     <Label htmlFor="siret" className="text-sm font-semibold text-slate-700">
                       SIRET <span className="text-slate-400 font-normal">(optionnel)</span>
                     </Label>
-                    <Input id="siret" placeholder="123 456 789 00012" className="h-11" {...register("siret")} />
+                    <Input id="siret" placeholder="SIRET" className="h-11" {...register("siret")} />
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="vatNumber" className="text-sm font-semibold text-slate-700">
                       N° TVA <span className="text-slate-400 font-normal">(optionnel)</span>
                     </Label>
-                    <Input id="vatNumber" placeholder="FR12345678901" className="h-11" {...register("vatNumber")} />
+                    <Input id="vatNumber" placeholder="N° TVA" className="h-11" {...register("vatNumber")} />
                   </div>
                 </div>
               </div>

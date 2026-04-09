@@ -3183,11 +3183,13 @@ export namespace Prisma {
   export type TemplateCountOutputType = {
     quotes: number
     invoices: number
+    creditNotes: number
   }
 
   export type TemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     quotes?: boolean | TemplateCountOutputTypeCountQuotesArgs
     invoices?: boolean | TemplateCountOutputTypeCountInvoicesArgs
+    creditNotes?: boolean | TemplateCountOutputTypeCountCreditNotesArgs
   }
 
   // Custom InputTypes
@@ -3213,6 +3215,13 @@ export namespace Prisma {
    */
   export type TemplateCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InvoiceWhereInput
+  }
+
+  /**
+   * TemplateCountOutputType without action
+   */
+  export type TemplateCountOutputTypeCountCreditNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreditNoteWhereInput
   }
 
 
@@ -7273,6 +7282,8 @@ export namespace Prisma {
     iban: string | null
     bic: string | null
     plan: string | null
+    stripeCustomerId: string | null
+    stripeSubscriptionId: string | null
     currency: string | null
     locale: string | null
     timezone: string | null
@@ -7298,6 +7309,8 @@ export namespace Prisma {
     iban: string | null
     bic: string | null
     plan: string | null
+    stripeCustomerId: string | null
+    stripeSubscriptionId: string | null
     currency: string | null
     locale: string | null
     timezone: string | null
@@ -7323,6 +7336,8 @@ export namespace Prisma {
     iban: number
     bic: number
     plan: number
+    stripeCustomerId: number
+    stripeSubscriptionId: number
     currency: number
     locale: number
     timezone: number
@@ -7350,6 +7365,8 @@ export namespace Prisma {
     iban?: true
     bic?: true
     plan?: true
+    stripeCustomerId?: true
+    stripeSubscriptionId?: true
     currency?: true
     locale?: true
     timezone?: true
@@ -7375,6 +7392,8 @@ export namespace Prisma {
     iban?: true
     bic?: true
     plan?: true
+    stripeCustomerId?: true
+    stripeSubscriptionId?: true
     currency?: true
     locale?: true
     timezone?: true
@@ -7400,6 +7419,8 @@ export namespace Prisma {
     iban?: true
     bic?: true
     plan?: true
+    stripeCustomerId?: true
+    stripeSubscriptionId?: true
     currency?: true
     locale?: true
     timezone?: true
@@ -7498,6 +7519,8 @@ export namespace Prisma {
     iban: string | null
     bic: string | null
     plan: string
+    stripeCustomerId: string | null
+    stripeSubscriptionId: string | null
     currency: string
     locale: string
     timezone: string
@@ -7540,6 +7563,8 @@ export namespace Prisma {
     iban?: boolean
     bic?: boolean
     plan?: boolean
+    stripeCustomerId?: boolean
+    stripeSubscriptionId?: boolean
     currency?: boolean
     locale?: boolean
     timezone?: boolean
@@ -7579,6 +7604,8 @@ export namespace Prisma {
     iban?: boolean
     bic?: boolean
     plan?: boolean
+    stripeCustomerId?: boolean
+    stripeSubscriptionId?: boolean
     currency?: boolean
     locale?: boolean
     timezone?: boolean
@@ -7604,6 +7631,8 @@ export namespace Prisma {
     iban?: boolean
     bic?: boolean
     plan?: boolean
+    stripeCustomerId?: boolean
+    stripeSubscriptionId?: boolean
     currency?: boolean
     locale?: boolean
     timezone?: boolean
@@ -7664,6 +7693,8 @@ export namespace Prisma {
       iban: string | null
       bic: string | null
       plan: string
+      stripeCustomerId: string | null
+      stripeSubscriptionId: string | null
       currency: string
       locale: string
       timezone: string
@@ -8092,6 +8123,8 @@ export namespace Prisma {
     readonly iban: FieldRef<"Organization", 'String'>
     readonly bic: FieldRef<"Organization", 'String'>
     readonly plan: FieldRef<"Organization", 'String'>
+    readonly stripeCustomerId: FieldRef<"Organization", 'String'>
+    readonly stripeSubscriptionId: FieldRef<"Organization", 'String'>
     readonly currency: FieldRef<"Organization", 'String'>
     readonly locale: FieldRef<"Organization", 'String'>
     readonly timezone: FieldRef<"Organization", 'String'>
@@ -18359,6 +18392,7 @@ export namespace Prisma {
     client?: boolean | ClientDefaultArgs<ExtArgs>
     invoice?: boolean | CreditNote$invoiceArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | CreditNote$templateArgs<ExtArgs>
     items?: boolean | CreditNote$itemsArgs<ExtArgs>
     _count?: boolean | CreditNoteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["creditNote"]>
@@ -18388,6 +18422,7 @@ export namespace Prisma {
     client?: boolean | ClientDefaultArgs<ExtArgs>
     invoice?: boolean | CreditNote$invoiceArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | CreditNote$templateArgs<ExtArgs>
   }, ExtArgs["result"]["creditNote"]>
 
   export type CreditNoteSelectScalar = {
@@ -18418,6 +18453,7 @@ export namespace Prisma {
     client?: boolean | ClientDefaultArgs<ExtArgs>
     invoice?: boolean | CreditNote$invoiceArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | CreditNote$templateArgs<ExtArgs>
     items?: boolean | CreditNote$itemsArgs<ExtArgs>
     _count?: boolean | CreditNoteCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -18426,6 +18462,7 @@ export namespace Prisma {
     client?: boolean | ClientDefaultArgs<ExtArgs>
     invoice?: boolean | CreditNote$invoiceArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | CreditNote$templateArgs<ExtArgs>
   }
 
   export type $CreditNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18435,6 +18472,7 @@ export namespace Prisma {
       client: Prisma.$ClientPayload<ExtArgs>
       invoice: Prisma.$InvoicePayload<ExtArgs> | null
       createdBy: Prisma.$UserPayload<ExtArgs>
+      template: Prisma.$TemplatePayload<ExtArgs> | null
       items: Prisma.$CreditNoteItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -18826,6 +18864,7 @@ export namespace Prisma {
     client<T extends ClientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientDefaultArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     invoice<T extends CreditNote$invoiceArgs<ExtArgs> = {}>(args?: Subset<T, CreditNote$invoiceArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    template<T extends CreditNote$templateArgs<ExtArgs> = {}>(args?: Subset<T, CreditNote$templateArgs<ExtArgs>>): Prisma__TemplateClient<$Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     items<T extends CreditNote$itemsArgs<ExtArgs> = {}>(args?: Subset<T, CreditNote$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreditNoteItemPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -19206,6 +19245,21 @@ export namespace Prisma {
      */
     include?: InvoiceInclude<ExtArgs> | null
     where?: InvoiceWhereInput
+  }
+
+  /**
+   * CreditNote.template
+   */
+  export type CreditNote$templateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Template
+     */
+    select?: TemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TemplateInclude<ExtArgs> | null
+    where?: TemplateWhereInput
   }
 
   /**
@@ -20594,6 +20648,7 @@ export namespace Prisma {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     quotes?: boolean | Template$quotesArgs<ExtArgs>
     invoices?: boolean | Template$invoicesArgs<ExtArgs>
+    creditNotes?: boolean | Template$creditNotesArgs<ExtArgs>
     _count?: boolean | TemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["template"]>
 
@@ -20628,6 +20683,7 @@ export namespace Prisma {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     quotes?: boolean | Template$quotesArgs<ExtArgs>
     invoices?: boolean | Template$invoicesArgs<ExtArgs>
+    creditNotes?: boolean | Template$creditNotesArgs<ExtArgs>
     _count?: boolean | TemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20640,6 +20696,7 @@ export namespace Prisma {
       organization: Prisma.$OrganizationPayload<ExtArgs>
       quotes: Prisma.$QuotePayload<ExtArgs>[]
       invoices: Prisma.$InvoicePayload<ExtArgs>[]
+      creditNotes: Prisma.$CreditNotePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -21019,6 +21076,7 @@ export namespace Prisma {
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     quotes<T extends Template$quotesArgs<ExtArgs> = {}>(args?: Subset<T, Template$quotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuotePayload<ExtArgs>, T, "findMany"> | Null>
     invoices<T extends Template$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Template$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany"> | Null>
+    creditNotes<T extends Template$creditNotesArgs<ExtArgs> = {}>(args?: Subset<T, Template$creditNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreditNotePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -21413,6 +21471,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InvoiceScalarFieldEnum | InvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * Template.creditNotes
+   */
+  export type Template$creditNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreditNote
+     */
+    select?: CreditNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreditNoteInclude<ExtArgs> | null
+    where?: CreditNoteWhereInput
+    orderBy?: CreditNoteOrderByWithRelationInput | CreditNoteOrderByWithRelationInput[]
+    cursor?: CreditNoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CreditNoteScalarFieldEnum | CreditNoteScalarFieldEnum[]
   }
 
   /**
@@ -26578,6 +26656,8 @@ export namespace Prisma {
     iban: 'iban',
     bic: 'bic',
     plan: 'plan',
+    stripeCustomerId: 'stripeCustomerId',
+    stripeSubscriptionId: 'stripeSubscriptionId',
     currency: 'currency',
     locale: 'locale',
     timezone: 'timezone',
@@ -27522,6 +27602,8 @@ export namespace Prisma {
     iban?: StringNullableFilter<"Organization"> | string | null
     bic?: StringNullableFilter<"Organization"> | string | null
     plan?: StringFilter<"Organization"> | string
+    stripeCustomerId?: StringNullableFilter<"Organization"> | string | null
+    stripeSubscriptionId?: StringNullableFilter<"Organization"> | string | null
     currency?: StringFilter<"Organization"> | string
     locale?: StringFilter<"Organization"> | string
     timezone?: StringFilter<"Organization"> | string
@@ -27560,6 +27642,8 @@ export namespace Prisma {
     iban?: SortOrderInput | SortOrder
     bic?: SortOrderInput | SortOrder
     plan?: SortOrder
+    stripeCustomerId?: SortOrderInput | SortOrder
+    stripeSubscriptionId?: SortOrderInput | SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -27584,6 +27668,7 @@ export namespace Prisma {
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     slug?: string
+    stripeCustomerId?: string
     AND?: OrganizationWhereInput | OrganizationWhereInput[]
     OR?: OrganizationWhereInput[]
     NOT?: OrganizationWhereInput | OrganizationWhereInput[]
@@ -27601,6 +27686,7 @@ export namespace Prisma {
     iban?: StringNullableFilter<"Organization"> | string | null
     bic?: StringNullableFilter<"Organization"> | string | null
     plan?: StringFilter<"Organization"> | string
+    stripeSubscriptionId?: StringNullableFilter<"Organization"> | string | null
     currency?: StringFilter<"Organization"> | string
     locale?: StringFilter<"Organization"> | string
     timezone?: StringFilter<"Organization"> | string
@@ -27620,7 +27706,7 @@ export namespace Prisma {
     attachments?: AttachmentListRelationFilter
     emailLogs?: EmailLogListRelationFilter
     auditLogs?: AuditLogListRelationFilter
-  }, "id" | "slug">
+  }, "id" | "slug" | "stripeCustomerId">
 
   export type OrganizationOrderByWithAggregationInput = {
     id?: SortOrder
@@ -27639,6 +27725,8 @@ export namespace Prisma {
     iban?: SortOrderInput | SortOrder
     bic?: SortOrderInput | SortOrder
     plan?: SortOrder
+    stripeCustomerId?: SortOrderInput | SortOrder
+    stripeSubscriptionId?: SortOrderInput | SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -27670,6 +27758,8 @@ export namespace Prisma {
     iban?: StringNullableWithAggregatesFilter<"Organization"> | string | null
     bic?: StringNullableWithAggregatesFilter<"Organization"> | string | null
     plan?: StringWithAggregatesFilter<"Organization"> | string
+    stripeCustomerId?: StringNullableWithAggregatesFilter<"Organization"> | string | null
+    stripeSubscriptionId?: StringNullableWithAggregatesFilter<"Organization"> | string | null
     currency?: StringWithAggregatesFilter<"Organization"> | string
     locale?: StringWithAggregatesFilter<"Organization"> | string
     timezone?: StringWithAggregatesFilter<"Organization"> | string
@@ -28711,6 +28801,7 @@ export namespace Prisma {
     client?: XOR<ClientRelationFilter, ClientWhereInput>
     invoice?: XOR<InvoiceNullableRelationFilter, InvoiceWhereInput> | null
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
+    template?: XOR<TemplateNullableRelationFilter, TemplateWhereInput> | null
     items?: CreditNoteItemListRelationFilter
   }
 
@@ -28739,6 +28830,7 @@ export namespace Prisma {
     client?: ClientOrderByWithRelationInput
     invoice?: InvoiceOrderByWithRelationInput
     createdBy?: UserOrderByWithRelationInput
+    template?: TemplateOrderByWithRelationInput
     items?: CreditNoteItemOrderByRelationAggregateInput
   }
 
@@ -28770,6 +28862,7 @@ export namespace Prisma {
     client?: XOR<ClientRelationFilter, ClientWhereInput>
     invoice?: XOR<InvoiceNullableRelationFilter, InvoiceWhereInput> | null
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
+    template?: XOR<TemplateNullableRelationFilter, TemplateWhereInput> | null
     items?: CreditNoteItemListRelationFilter
   }, "id">
 
@@ -28959,6 +29052,7 @@ export namespace Prisma {
     organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
     quotes?: QuoteListRelationFilter
     invoices?: InvoiceListRelationFilter
+    creditNotes?: CreditNoteListRelationFilter
   }
 
   export type TemplateOrderByWithRelationInput = {
@@ -28975,6 +29069,7 @@ export namespace Prisma {
     organization?: OrganizationOrderByWithRelationInput
     quotes?: QuoteOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
+    creditNotes?: CreditNoteOrderByRelationAggregateInput
   }
 
   export type TemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -28994,6 +29089,7 @@ export namespace Prisma {
     organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
     quotes?: QuoteListRelationFilter
     invoices?: InvoiceListRelationFilter
+    creditNotes?: CreditNoteListRelationFilter
   }, "id">
 
   export type TemplateOrderByWithAggregationInput = {
@@ -29783,6 +29879,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -29821,6 +29919,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -29859,6 +29959,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -29897,6 +29999,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -29935,6 +30039,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -29960,6 +30066,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -29985,6 +30093,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -31139,7 +31249,6 @@ export namespace Prisma {
 
   export type CreditNoteCreateInput = {
     id?: string
-    templateId?: string | null
     reference: string
     status?: $Enums.CreditNoteStatus
     subject?: string | null
@@ -31158,6 +31267,7 @@ export namespace Prisma {
     client: ClientCreateNestedOneWithoutCreditNotesInput
     invoice?: InvoiceCreateNestedOneWithoutCreditNotesInput
     createdBy: UserCreateNestedOneWithoutCreatedCreditNotesInput
+    template?: TemplateCreateNestedOneWithoutCreditNotesInput
     items?: CreditNoteItemCreateNestedManyWithoutCreditNoteInput
   }
 
@@ -31187,7 +31297,6 @@ export namespace Prisma {
 
   export type CreditNoteUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: StringFieldUpdateOperationsInput | string
     status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
     subject?: NullableStringFieldUpdateOperationsInput | string | null
@@ -31206,6 +31315,7 @@ export namespace Prisma {
     client?: ClientUpdateOneRequiredWithoutCreditNotesNestedInput
     invoice?: InvoiceUpdateOneWithoutCreditNotesNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedCreditNotesNestedInput
+    template?: TemplateUpdateOneWithoutCreditNotesNestedInput
     items?: CreditNoteItemUpdateManyWithoutCreditNoteNestedInput
   }
 
@@ -31258,7 +31368,6 @@ export namespace Prisma {
 
   export type CreditNoteUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: StringFieldUpdateOperationsInput | string
     status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
     subject?: NullableStringFieldUpdateOperationsInput | string | null
@@ -31442,6 +31551,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutTemplatesInput
     quotes?: QuoteCreateNestedManyWithoutTemplateInput
     invoices?: InvoiceCreateNestedManyWithoutTemplateInput
+    creditNotes?: CreditNoteCreateNestedManyWithoutTemplateInput
   }
 
   export type TemplateUncheckedCreateInput = {
@@ -31457,6 +31567,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     quotes?: QuoteUncheckedCreateNestedManyWithoutTemplateInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutTemplateInput
+    creditNotes?: CreditNoteUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type TemplateUpdateInput = {
@@ -31472,6 +31583,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
     quotes?: QuoteUpdateManyWithoutTemplateNestedInput
     invoices?: InvoiceUpdateManyWithoutTemplateNestedInput
+    creditNotes?: CreditNoteUpdateManyWithoutTemplateNestedInput
   }
 
   export type TemplateUncheckedUpdateInput = {
@@ -31487,6 +31599,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotes?: QuoteUncheckedUpdateManyWithoutTemplateNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutTemplateNestedInput
+    creditNotes?: CreditNoteUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type TemplateCreateManyInput = {
@@ -32460,6 +32573,8 @@ export namespace Prisma {
     iban?: SortOrder
     bic?: SortOrder
     plan?: SortOrder
+    stripeCustomerId?: SortOrder
+    stripeSubscriptionId?: SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -32485,6 +32600,8 @@ export namespace Prisma {
     iban?: SortOrder
     bic?: SortOrder
     plan?: SortOrder
+    stripeCustomerId?: SortOrder
+    stripeSubscriptionId?: SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -32510,6 +32627,8 @@ export namespace Prisma {
     iban?: SortOrder
     bic?: SortOrder
     plan?: SortOrder
+    stripeCustomerId?: SortOrder
+    stripeSubscriptionId?: SortOrder
     currency?: SortOrder
     locale?: SortOrder
     timezone?: SortOrder
@@ -35781,6 +35900,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type TemplateCreateNestedOneWithoutCreditNotesInput = {
+    create?: XOR<TemplateCreateWithoutCreditNotesInput, TemplateUncheckedCreateWithoutCreditNotesInput>
+    connectOrCreate?: TemplateCreateOrConnectWithoutCreditNotesInput
+    connect?: TemplateWhereUniqueInput
+  }
+
   export type CreditNoteItemCreateNestedManyWithoutCreditNoteInput = {
     create?: XOR<CreditNoteItemCreateWithoutCreditNoteInput, CreditNoteItemUncheckedCreateWithoutCreditNoteInput> | CreditNoteItemCreateWithoutCreditNoteInput[] | CreditNoteItemUncheckedCreateWithoutCreditNoteInput[]
     connectOrCreate?: CreditNoteItemCreateOrConnectWithoutCreditNoteInput | CreditNoteItemCreateOrConnectWithoutCreditNoteInput[]
@@ -35831,6 +35956,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCreatedCreditNotesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedCreditNotesInput, UserUpdateWithoutCreatedCreditNotesInput>, UserUncheckedUpdateWithoutCreatedCreditNotesInput>
+  }
+
+  export type TemplateUpdateOneWithoutCreditNotesNestedInput = {
+    create?: XOR<TemplateCreateWithoutCreditNotesInput, TemplateUncheckedCreateWithoutCreditNotesInput>
+    connectOrCreate?: TemplateCreateOrConnectWithoutCreditNotesInput
+    upsert?: TemplateUpsertWithoutCreditNotesInput
+    disconnect?: TemplateWhereInput | boolean
+    delete?: TemplateWhereInput | boolean
+    connect?: TemplateWhereUniqueInput
+    update?: XOR<XOR<TemplateUpdateToOneWithWhereWithoutCreditNotesInput, TemplateUpdateWithoutCreditNotesInput>, TemplateUncheckedUpdateWithoutCreditNotesInput>
   }
 
   export type CreditNoteItemUpdateManyWithoutCreditNoteNestedInput = {
@@ -35911,6 +36046,13 @@ export namespace Prisma {
     connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
   }
 
+  export type CreditNoteCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<CreditNoteCreateWithoutTemplateInput, CreditNoteUncheckedCreateWithoutTemplateInput> | CreditNoteCreateWithoutTemplateInput[] | CreditNoteUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutTemplateInput | CreditNoteCreateOrConnectWithoutTemplateInput[]
+    createMany?: CreditNoteCreateManyTemplateInputEnvelope
+    connect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+  }
+
   export type QuoteUncheckedCreateNestedManyWithoutTemplateInput = {
     create?: XOR<QuoteCreateWithoutTemplateInput, QuoteUncheckedCreateWithoutTemplateInput> | QuoteCreateWithoutTemplateInput[] | QuoteUncheckedCreateWithoutTemplateInput[]
     connectOrCreate?: QuoteCreateOrConnectWithoutTemplateInput | QuoteCreateOrConnectWithoutTemplateInput[]
@@ -35923,6 +36065,13 @@ export namespace Prisma {
     connectOrCreate?: InvoiceCreateOrConnectWithoutTemplateInput | InvoiceCreateOrConnectWithoutTemplateInput[]
     createMany?: InvoiceCreateManyTemplateInputEnvelope
     connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+  }
+
+  export type CreditNoteUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<CreditNoteCreateWithoutTemplateInput, CreditNoteUncheckedCreateWithoutTemplateInput> | CreditNoteCreateWithoutTemplateInput[] | CreditNoteUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutTemplateInput | CreditNoteCreateOrConnectWithoutTemplateInput[]
+    createMany?: CreditNoteCreateManyTemplateInputEnvelope
+    connect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
   }
 
   export type EnumDocumentTypeFieldUpdateOperationsInput = {
@@ -35965,6 +36114,20 @@ export namespace Prisma {
     deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
   }
 
+  export type CreditNoteUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<CreditNoteCreateWithoutTemplateInput, CreditNoteUncheckedCreateWithoutTemplateInput> | CreditNoteCreateWithoutTemplateInput[] | CreditNoteUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutTemplateInput | CreditNoteCreateOrConnectWithoutTemplateInput[]
+    upsert?: CreditNoteUpsertWithWhereUniqueWithoutTemplateInput | CreditNoteUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: CreditNoteCreateManyTemplateInputEnvelope
+    set?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    disconnect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    delete?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    connect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    update?: CreditNoteUpdateWithWhereUniqueWithoutTemplateInput | CreditNoteUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: CreditNoteUpdateManyWithWhereWithoutTemplateInput | CreditNoteUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: CreditNoteScalarWhereInput | CreditNoteScalarWhereInput[]
+  }
+
   export type QuoteUncheckedUpdateManyWithoutTemplateNestedInput = {
     create?: XOR<QuoteCreateWithoutTemplateInput, QuoteUncheckedCreateWithoutTemplateInput> | QuoteCreateWithoutTemplateInput[] | QuoteUncheckedCreateWithoutTemplateInput[]
     connectOrCreate?: QuoteCreateOrConnectWithoutTemplateInput | QuoteCreateOrConnectWithoutTemplateInput[]
@@ -35991,6 +36154,20 @@ export namespace Prisma {
     update?: InvoiceUpdateWithWhereUniqueWithoutTemplateInput | InvoiceUpdateWithWhereUniqueWithoutTemplateInput[]
     updateMany?: InvoiceUpdateManyWithWhereWithoutTemplateInput | InvoiceUpdateManyWithWhereWithoutTemplateInput[]
     deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+  }
+
+  export type CreditNoteUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<CreditNoteCreateWithoutTemplateInput, CreditNoteUncheckedCreateWithoutTemplateInput> | CreditNoteCreateWithoutTemplateInput[] | CreditNoteUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: CreditNoteCreateOrConnectWithoutTemplateInput | CreditNoteCreateOrConnectWithoutTemplateInput[]
+    upsert?: CreditNoteUpsertWithWhereUniqueWithoutTemplateInput | CreditNoteUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: CreditNoteCreateManyTemplateInputEnvelope
+    set?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    disconnect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    delete?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    connect?: CreditNoteWhereUniqueInput | CreditNoteWhereUniqueInput[]
+    update?: CreditNoteUpdateWithWhereUniqueWithoutTemplateInput | CreditNoteUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: CreditNoteUpdateManyWithWhereWithoutTemplateInput | CreditNoteUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: CreditNoteScalarWhereInput | CreditNoteScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutDocumentSequencesInput = {
@@ -37059,7 +37236,6 @@ export namespace Prisma {
 
   export type CreditNoteCreateWithoutCreatedByInput = {
     id?: string
-    templateId?: string | null
     reference: string
     status?: $Enums.CreditNoteStatus
     subject?: string | null
@@ -37077,6 +37253,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutCreditNotesInput
     client: ClientCreateNestedOneWithoutCreditNotesInput
     invoice?: InvoiceCreateNestedOneWithoutCreditNotesInput
+    template?: TemplateCreateNestedOneWithoutCreditNotesInput
     items?: CreditNoteItemCreateNestedManyWithoutCreditNoteInput
   }
 
@@ -37835,7 +38012,6 @@ export namespace Prisma {
 
   export type CreditNoteCreateWithoutOrganizationInput = {
     id?: string
-    templateId?: string | null
     reference: string
     status?: $Enums.CreditNoteStatus
     subject?: string | null
@@ -37853,6 +38029,7 @@ export namespace Prisma {
     client: ClientCreateNestedOneWithoutCreditNotesInput
     invoice?: InvoiceCreateNestedOneWithoutCreditNotesInput
     createdBy: UserCreateNestedOneWithoutCreatedCreditNotesInput
+    template?: TemplateCreateNestedOneWithoutCreditNotesInput
     items?: CreditNoteItemCreateNestedManyWithoutCreditNoteInput
   }
 
@@ -37901,6 +38078,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     quotes?: QuoteCreateNestedManyWithoutTemplateInput
     invoices?: InvoiceCreateNestedManyWithoutTemplateInput
+    creditNotes?: CreditNoteCreateNestedManyWithoutTemplateInput
   }
 
   export type TemplateUncheckedCreateWithoutOrganizationInput = {
@@ -37915,6 +38093,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     quotes?: QuoteUncheckedCreateNestedManyWithoutTemplateInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutTemplateInput
+    creditNotes?: CreditNoteUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type TemplateCreateOrConnectWithoutOrganizationInput = {
@@ -38429,6 +38608,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -38466,6 +38647,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -38566,6 +38749,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -38603,6 +38788,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -38693,6 +38880,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -38730,6 +38919,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -38897,7 +39088,6 @@ export namespace Prisma {
 
   export type CreditNoteCreateWithoutClientInput = {
     id?: string
-    templateId?: string | null
     reference: string
     status?: $Enums.CreditNoteStatus
     subject?: string | null
@@ -38915,6 +39105,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutCreditNotesInput
     invoice?: InvoiceCreateNestedOneWithoutCreditNotesInput
     createdBy: UserCreateNestedOneWithoutCreatedCreditNotesInput
+    template?: TemplateCreateNestedOneWithoutCreditNotesInput
     items?: CreditNoteItemCreateNestedManyWithoutCreditNoteInput
   }
 
@@ -38979,6 +39170,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -39016,6 +39209,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -39101,6 +39296,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -39138,6 +39335,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -39329,6 +39528,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -39366,6 +39567,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -39517,6 +39720,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -39554,6 +39759,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -39691,6 +39898,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     organization: OrganizationCreateNestedOneWithoutTemplatesInput
     invoices?: InvoiceCreateNestedManyWithoutTemplateInput
+    creditNotes?: CreditNoteCreateNestedManyWithoutTemplateInput
   }
 
   export type TemplateUncheckedCreateWithoutQuotesInput = {
@@ -39705,6 +39913,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     invoices?: InvoiceUncheckedCreateNestedManyWithoutTemplateInput
+    creditNotes?: CreditNoteUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type TemplateCreateOrConnectWithoutQuotesInput = {
@@ -39858,6 +40067,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -39895,6 +40106,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -40050,6 +40263,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
     invoices?: InvoiceUpdateManyWithoutTemplateNestedInput
+    creditNotes?: CreditNoteUpdateManyWithoutTemplateNestedInput
   }
 
   export type TemplateUncheckedUpdateWithoutQuotesInput = {
@@ -40064,6 +40278,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     invoices?: InvoiceUncheckedUpdateManyWithoutTemplateNestedInput
+    creditNotes?: CreditNoteUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type QuoteItemUpsertWithWhereUniqueWithoutQuoteInput = {
@@ -40335,6 +40550,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -40372,6 +40589,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -40572,6 +40791,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     organization: OrganizationCreateNestedOneWithoutTemplatesInput
     quotes?: QuoteCreateNestedManyWithoutTemplateInput
+    creditNotes?: CreditNoteCreateNestedManyWithoutTemplateInput
   }
 
   export type TemplateUncheckedCreateWithoutInvoicesInput = {
@@ -40586,6 +40806,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     quotes?: QuoteUncheckedCreateNestedManyWithoutTemplateInput
+    creditNotes?: CreditNoteUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type TemplateCreateOrConnectWithoutInvoicesInput = {
@@ -40679,7 +40900,6 @@ export namespace Prisma {
 
   export type CreditNoteCreateWithoutInvoiceInput = {
     id?: string
-    templateId?: string | null
     reference: string
     status?: $Enums.CreditNoteStatus
     subject?: string | null
@@ -40697,6 +40917,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutCreditNotesInput
     client: ClientCreateNestedOneWithoutCreditNotesInput
     createdBy: UserCreateNestedOneWithoutCreatedCreditNotesInput
+    template?: TemplateCreateNestedOneWithoutCreditNotesInput
     items?: CreditNoteItemCreateNestedManyWithoutCreditNoteInput
   }
 
@@ -40761,6 +40982,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -40798,6 +41021,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -41022,6 +41247,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
     quotes?: QuoteUpdateManyWithoutTemplateNestedInput
+    creditNotes?: CreditNoteUpdateManyWithoutTemplateNestedInput
   }
 
   export type TemplateUncheckedUpdateWithoutInvoicesInput = {
@@ -41036,6 +41262,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotes?: QuoteUncheckedUpdateManyWithoutTemplateNestedInput
+    creditNotes?: CreditNoteUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type InvoiceItemUpsertWithWhereUniqueWithoutInvoiceInput = {
@@ -41331,6 +41558,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -41368,6 +41597,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -41535,6 +41766,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -41572,6 +41805,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -41735,6 +41970,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -41772,6 +42009,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -41964,6 +42203,41 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutCreatedCreditNotesInput, UserUncheckedCreateWithoutCreatedCreditNotesInput>
   }
 
+  export type TemplateCreateWithoutCreditNotesInput = {
+    id?: string
+    name: string
+    type: $Enums.DocumentType
+    isDefault?: boolean
+    content: JsonNullValueInput | InputJsonValue
+    previewUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    organization: OrganizationCreateNestedOneWithoutTemplatesInput
+    quotes?: QuoteCreateNestedManyWithoutTemplateInput
+    invoices?: InvoiceCreateNestedManyWithoutTemplateInput
+  }
+
+  export type TemplateUncheckedCreateWithoutCreditNotesInput = {
+    id?: string
+    organizationId: string
+    name: string
+    type: $Enums.DocumentType
+    isDefault?: boolean
+    content: JsonNullValueInput | InputJsonValue
+    previewUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    quotes?: QuoteUncheckedCreateNestedManyWithoutTemplateInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type TemplateCreateOrConnectWithoutCreditNotesInput = {
+    where: TemplateWhereUniqueInput
+    create: XOR<TemplateCreateWithoutCreditNotesInput, TemplateUncheckedCreateWithoutCreditNotesInput>
+  }
+
   export type CreditNoteItemCreateWithoutCreditNoteInput = {
     id?: string
     position: number
@@ -42038,6 +42312,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42075,6 +42351,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42280,6 +42558,47 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type TemplateUpsertWithoutCreditNotesInput = {
+    update: XOR<TemplateUpdateWithoutCreditNotesInput, TemplateUncheckedUpdateWithoutCreditNotesInput>
+    create: XOR<TemplateCreateWithoutCreditNotesInput, TemplateUncheckedCreateWithoutCreditNotesInput>
+    where?: TemplateWhereInput
+  }
+
+  export type TemplateUpdateToOneWithWhereWithoutCreditNotesInput = {
+    where?: TemplateWhereInput
+    data: XOR<TemplateUpdateWithoutCreditNotesInput, TemplateUncheckedUpdateWithoutCreditNotesInput>
+  }
+
+  export type TemplateUpdateWithoutCreditNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    content?: JsonNullValueInput | InputJsonValue
+    previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
+    quotes?: QuoteUpdateManyWithoutTemplateNestedInput
+    invoices?: InvoiceUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type TemplateUncheckedUpdateWithoutCreditNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    content?: JsonNullValueInput | InputJsonValue
+    previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotes?: QuoteUncheckedUpdateManyWithoutTemplateNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
   export type CreditNoteItemUpsertWithWhereUniqueWithoutCreditNoteInput = {
     where: CreditNoteItemWhereUniqueInput
     update: XOR<CreditNoteItemUpdateWithoutCreditNoteInput, CreditNoteItemUncheckedUpdateWithoutCreditNoteInput>
@@ -42298,7 +42617,6 @@ export namespace Prisma {
 
   export type CreditNoteCreateWithoutItemsInput = {
     id?: string
-    templateId?: string | null
     reference: string
     status?: $Enums.CreditNoteStatus
     subject?: string | null
@@ -42317,6 +42635,7 @@ export namespace Prisma {
     client: ClientCreateNestedOneWithoutCreditNotesInput
     invoice?: InvoiceCreateNestedOneWithoutCreditNotesInput
     createdBy: UserCreateNestedOneWithoutCreatedCreditNotesInput
+    template?: TemplateCreateNestedOneWithoutCreditNotesInput
   }
 
   export type CreditNoteUncheckedCreateWithoutItemsInput = {
@@ -42401,7 +42720,6 @@ export namespace Prisma {
 
   export type CreditNoteUpdateWithoutItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: StringFieldUpdateOperationsInput | string
     status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
     subject?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42420,6 +42738,7 @@ export namespace Prisma {
     client?: ClientUpdateOneRequiredWithoutCreditNotesNestedInput
     invoice?: InvoiceUpdateOneWithoutCreditNotesNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedCreditNotesNestedInput
+    template?: TemplateUpdateOneWithoutCreditNotesNestedInput
   }
 
   export type CreditNoteUncheckedUpdateWithoutItemsInput = {
@@ -42509,6 +42828,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -42546,6 +42867,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -42711,6 +43034,62 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CreditNoteCreateWithoutTemplateInput = {
+    id?: string
+    reference: string
+    status?: $Enums.CreditNoteStatus
+    subject?: string | null
+    issueDate?: Date | string
+    notes?: string | null
+    subtotal?: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    vatAmount?: Decimal | DecimalJsLike | number | string
+    total?: Decimal | DecimalJsLike | number | string
+    sentAt?: Date | string | null
+    appliedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    organization: OrganizationCreateNestedOneWithoutCreditNotesInput
+    client: ClientCreateNestedOneWithoutCreditNotesInput
+    invoice?: InvoiceCreateNestedOneWithoutCreditNotesInput
+    createdBy: UserCreateNestedOneWithoutCreatedCreditNotesInput
+    items?: CreditNoteItemCreateNestedManyWithoutCreditNoteInput
+  }
+
+  export type CreditNoteUncheckedCreateWithoutTemplateInput = {
+    id?: string
+    organizationId: string
+    clientId: string
+    invoiceId?: string | null
+    createdById: string
+    reference: string
+    status?: $Enums.CreditNoteStatus
+    subject?: string | null
+    issueDate?: Date | string
+    notes?: string | null
+    subtotal?: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    vatAmount?: Decimal | DecimalJsLike | number | string
+    total?: Decimal | DecimalJsLike | number | string
+    sentAt?: Date | string | null
+    appliedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    items?: CreditNoteItemUncheckedCreateNestedManyWithoutCreditNoteInput
+  }
+
+  export type CreditNoteCreateOrConnectWithoutTemplateInput = {
+    where: CreditNoteWhereUniqueInput
+    create: XOR<CreditNoteCreateWithoutTemplateInput, CreditNoteUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type CreditNoteCreateManyTemplateInputEnvelope = {
+    data: CreditNoteCreateManyTemplateInput | CreditNoteCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganizationUpsertWithoutTemplatesInput = {
     update: XOR<OrganizationUpdateWithoutTemplatesInput, OrganizationUncheckedUpdateWithoutTemplatesInput>
     create: XOR<OrganizationCreateWithoutTemplatesInput, OrganizationUncheckedCreateWithoutTemplatesInput>
@@ -42739,6 +43118,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42776,6 +43157,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42828,6 +43211,22 @@ export namespace Prisma {
     data: XOR<InvoiceUpdateManyMutationInput, InvoiceUncheckedUpdateManyWithoutTemplateInput>
   }
 
+  export type CreditNoteUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: CreditNoteWhereUniqueInput
+    update: XOR<CreditNoteUpdateWithoutTemplateInput, CreditNoteUncheckedUpdateWithoutTemplateInput>
+    create: XOR<CreditNoteCreateWithoutTemplateInput, CreditNoteUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type CreditNoteUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: CreditNoteWhereUniqueInput
+    data: XOR<CreditNoteUpdateWithoutTemplateInput, CreditNoteUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type CreditNoteUpdateManyWithWhereWithoutTemplateInput = {
+    where: CreditNoteScalarWhereInput
+    data: XOR<CreditNoteUpdateManyMutationInput, CreditNoteUncheckedUpdateManyWithoutTemplateInput>
+  }
+
   export type OrganizationCreateWithoutDocumentSequencesInput = {
     id?: string
     name: string
@@ -42845,6 +43244,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -42882,6 +43283,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -42935,6 +43338,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -42972,6 +43377,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43009,6 +43416,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -43046,6 +43455,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -43099,6 +43510,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43136,6 +43549,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43173,6 +43588,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -43210,6 +43627,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -43310,6 +43729,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43347,6 +43768,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43437,6 +43860,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -43474,6 +43899,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -43527,6 +43954,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43564,6 +43993,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43601,6 +44032,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -43638,6 +44071,8 @@ export namespace Prisma {
     iban?: string | null
     bic?: string | null
     plan?: string
+    stripeCustomerId?: string | null
+    stripeSubscriptionId?: string | null
     currency?: string
     locale?: string
     timezone?: string
@@ -43738,6 +44173,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -43775,6 +44212,8 @@ export namespace Prisma {
     iban?: NullableStringFieldUpdateOperationsInput | string | null
     bic?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
     locale?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
@@ -44310,7 +44749,6 @@ export namespace Prisma {
 
   export type CreditNoteUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
-    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: StringFieldUpdateOperationsInput | string
     status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
     subject?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44328,6 +44766,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutCreditNotesNestedInput
     client?: ClientUpdateOneRequiredWithoutCreditNotesNestedInput
     invoice?: InvoiceUpdateOneWithoutCreditNotesNestedInput
+    template?: TemplateUpdateOneWithoutCreditNotesNestedInput
     items?: CreditNoteItemUpdateManyWithoutCreditNoteNestedInput
   }
 
@@ -45043,7 +45482,6 @@ export namespace Prisma {
 
   export type CreditNoteUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: StringFieldUpdateOperationsInput | string
     status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
     subject?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45061,6 +45499,7 @@ export namespace Prisma {
     client?: ClientUpdateOneRequiredWithoutCreditNotesNestedInput
     invoice?: InvoiceUpdateOneWithoutCreditNotesNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedCreditNotesNestedInput
+    template?: TemplateUpdateOneWithoutCreditNotesNestedInput
     items?: CreditNoteItemUpdateManyWithoutCreditNoteNestedInput
   }
 
@@ -45121,6 +45560,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotes?: QuoteUpdateManyWithoutTemplateNestedInput
     invoices?: InvoiceUpdateManyWithoutTemplateNestedInput
+    creditNotes?: CreditNoteUpdateManyWithoutTemplateNestedInput
   }
 
   export type TemplateUncheckedUpdateWithoutOrganizationInput = {
@@ -45135,6 +45575,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotes?: QuoteUncheckedUpdateManyWithoutTemplateNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutTemplateNestedInput
+    creditNotes?: CreditNoteUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type TemplateUncheckedUpdateManyWithoutOrganizationInput = {
@@ -45586,7 +46027,6 @@ export namespace Prisma {
 
   export type CreditNoteUpdateWithoutClientInput = {
     id?: StringFieldUpdateOperationsInput | string
-    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: StringFieldUpdateOperationsInput | string
     status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
     subject?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45604,6 +46044,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutCreditNotesNestedInput
     invoice?: InvoiceUpdateOneWithoutCreditNotesNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedCreditNotesNestedInput
+    template?: TemplateUpdateOneWithoutCreditNotesNestedInput
     items?: CreditNoteItemUpdateManyWithoutCreditNoteNestedInput
   }
 
@@ -46210,7 +46651,6 @@ export namespace Prisma {
 
   export type CreditNoteUpdateWithoutInvoiceInput = {
     id?: StringFieldUpdateOperationsInput | string
-    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: StringFieldUpdateOperationsInput | string
     status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
     subject?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46228,6 +46668,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutCreditNotesNestedInput
     client?: ClientUpdateOneRequiredWithoutCreditNotesNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedCreditNotesNestedInput
+    template?: TemplateUpdateOneWithoutCreditNotesNestedInput
     items?: CreditNoteItemUpdateManyWithoutCreditNoteNestedInput
   }
 
@@ -46403,6 +46844,28 @@ export namespace Prisma {
     deletedAt?: Date | string | null
   }
 
+  export type CreditNoteCreateManyTemplateInput = {
+    id?: string
+    organizationId: string
+    clientId: string
+    invoiceId?: string | null
+    createdById: string
+    reference: string
+    status?: $Enums.CreditNoteStatus
+    subject?: string | null
+    issueDate?: Date | string
+    notes?: string | null
+    subtotal?: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    vatAmount?: Decimal | DecimalJsLike | number | string
+    total?: Decimal | DecimalJsLike | number | string
+    sentAt?: Date | string | null
+    appliedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
   export type QuoteUpdateWithoutTemplateInput = {
     id?: StringFieldUpdateOperationsInput | string
     reference?: StringFieldUpdateOperationsInput | string
@@ -46573,6 +47036,74 @@ export namespace Prisma {
     discountType?: NullableEnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CreditNoteUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    vatAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    organization?: OrganizationUpdateOneRequiredWithoutCreditNotesNestedInput
+    client?: ClientUpdateOneRequiredWithoutCreditNotesNestedInput
+    invoice?: InvoiceUpdateOneWithoutCreditNotesNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedCreditNotesNestedInput
+    items?: CreditNoteItemUpdateManyWithoutCreditNoteNestedInput
+  }
+
+  export type CreditNoteUncheckedUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    clientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    vatAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    items?: CreditNoteItemUncheckedUpdateManyWithoutCreditNoteNestedInput
+  }
+
+  export type CreditNoteUncheckedUpdateManyWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    clientId?: StringFieldUpdateOperationsInput | string
+    invoiceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    status?: EnumCreditNoteStatusFieldUpdateOperationsInput | $Enums.CreditNoteStatus
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    vatAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

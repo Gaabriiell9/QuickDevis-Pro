@@ -180,6 +180,8 @@ exports.Prisma.OrganizationScalarFieldEnum = {
   iban: 'iban',
   bic: 'bic',
   plan: 'plan',
+  stripeCustomerId: 'stripeCustomerId',
+  stripeSubscriptionId: 'stripeSubscriptionId',
   currency: 'currency',
   locale: 'locale',
   timezone: 'timezone',

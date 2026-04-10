@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Plus, Search, MoreHorizontal, Trash2 } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Trash2, Download } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useClients } from "@/hooks/use-clients";
 import { usePlanUsage } from "@/hooks/use-plan-usage";
+import { usePlan } from "@/hooks/use-plan";
 import { PlanQuotaBadge } from "@/components/shared/plan-quota-badge";
 import { PageHeader } from "@/components/shared/page-header";
+import { exportToCsv } from "@/lib/utils/export-csv";
 import { RichEmptyState } from "@/components/shared/rich-empty-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +29,23 @@ export default function ClientsPage() {
   const queryClient = useQueryClient();
   const { data, isLoading } = useClients({ search, type, page });
   const { data: usage } = usePlanUsage();
+  const { hasAccess } = usePlan();
+  const totalPages = data?.total ? Math.ceil(data.total / 20) : 1;
+
+  function handleExportCsv() {
+    const rows = (data?.data ?? []).map((c: any) => {
+      const nom = c.type === "COMPANY" ? c.companyName : `${c.firstName ?? ""} ${c.lastName ?? ""}`.trim();
+      return [
+        c.reference,
+        nom,
+        c.email ?? "",
+        c.phone ?? "",
+        c.city ?? "",
+        c.type === "COMPANY" ? "Société" : "Particulier",
+      ];
+    });
+    exportToCsv(`clients-${new Date().toISOString().slice(0, 10)}.csv`, ["Référence", "Nom", "Email", "Téléphone", "Ville", "Type"], rows);
+  }
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -42,13 +61,13 @@ export default function ClientsPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Supprimer ce client ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action est irréversible. Le document sera archivé définitivement.
+              Cette action est irréversible. Le client sera archivé définitivement.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -71,6 +90,12 @@ export default function ClientsPage() {
                 label="clients"
               />
             )}
+            {hasAccess("PRO") && data?.data?.length > 0 && (
+              <Button variant="outline" size="sm" onClick={handleExportCsv}>
+                <Download className="mr-2 h-4 w-4" />
+                Exporter CSV
+              </Button>
+            )}
             <Button asChild>
               <Link href="/clients/new">
                 <Plus className="mr-2 h-4 w-4" />
@@ -81,59 +106,76 @@ export default function ClientsPage() {
         }
       />
 
+      {/* Filters */}
       <div className="flex gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input className="pl-9" placeholder="Rechercher..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Input
+            className="pl-9 bg-white border-slate-200 rounded-lg h-9 text-sm"
+            placeholder="Rechercher un client..."
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+          />
         </div>
-        <select className="h-10 rounded-md border border-input bg-background px-3 text-sm" value={type} onChange={(e) => { setType(e.target.value); setPage(1); }}>
+        <select
+          className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          value={type}
+          onChange={(e) => { setType(e.target.value); setPage(1); }}
+        >
           <option value="">Tous les types</option>
           <option value="INDIVIDUAL">Particulier</option>
           <option value="COMPANY">Société</option>
         </select>
       </div>
 
+      {/* Table */}
       {isLoading ? (
-        <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => (<Skeleton key={i} className="h-14" />))}</div>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-4 space-y-3">
+            {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-12 rounded-lg" />)}
+          </div>
+        </div>
       ) : !data?.data?.length ? (
         <RichEmptyState variant="clients" />
       ) : (
-        <>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Référence</TableHead>
-                <TableHead>Nom / Société</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Téléphone</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Créé le</TableHead>
+              <TableRow className="bg-slate-50 border-b border-slate-200 hover:bg-slate-50">
+                <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wide h-10">Référence</TableHead>
+                <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wide">Nom / Société</TableHead>
+                <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wide">Email</TableHead>
+                <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wide">Téléphone</TableHead>
+                <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wide">Type</TableHead>
+                <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wide">Créé le</TableHead>
                 <TableHead className="w-10" />
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.data.map((client: any) => (
-                <TableRow key={client.id} className="cursor-pointer hover:bg-muted/50">
+                <TableRow key={client.id} className="border-b border-slate-100 hover:bg-slate-50/80 transition-colors">
                   <TableCell>
-                    <Link href={`/clients/${client.id}`} className="font-mono text-sm hover:underline">
+                    <Link href={`/clients/${client.id}`} className="font-mono text-sm text-indigo-600 hover:text-indigo-700 hover:underline">
                       {client.reference}
                     </Link>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="font-medium text-slate-900">
                     {client.type === "COMPANY"
                       ? client.companyName
                       : `${client.firstName ?? ""} ${client.lastName ?? ""}`.trim()}
                   </TableCell>
-                  <TableCell>{client.email ?? "—"}</TableCell>
-                  <TableCell>{client.phone ?? "—"}</TableCell>
+                  <TableCell className="text-slate-600">{client.email ?? "—"}</TableCell>
+                  <TableCell className="text-slate-600">{client.phone ?? "—"}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{client.type === "COMPANY" ? "Société" : "Particulier"}</Badge>
+                    <Badge variant="outline" className="text-xs font-normal border-slate-200 text-slate-600">
+                      {client.type === "COMPANY" ? "Société" : "Particulier"}
+                    </Badge>
                   </TableCell>
-                  <TableCell>{formatDateShort(client.createdAt)}</TableCell>
+                  <TableCell className="text-slate-500 text-sm">{formatDateShort(client.createdAt)}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-600">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -154,15 +196,17 @@ export default function ClientsPage() {
           </Table>
 
           {data.total > 20 && (
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">{data.total} clients au total</p>
+            <div className="flex items-center justify-between px-4 py-3 border-t border-slate-100">
+              <p className="text-sm text-slate-500">
+                Page {page} sur {totalPages} · <span className="font-medium text-slate-700">{data.total}</span> clients
+              </p>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>Précédent</Button>
-                <Button variant="outline" size="sm" disabled={page * 20 >= data.total} onClick={() => setPage((p) => p + 1)}>Suivant</Button>
+                <Button variant="outline" size="sm" className="h-8 text-xs" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>Précédent</Button>
+                <Button variant="outline" size="sm" className="h-8 text-xs" disabled={page * 20 >= data.total} onClick={() => setPage((p) => p + 1)}>Suivant</Button>
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

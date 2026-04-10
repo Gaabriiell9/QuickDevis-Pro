@@ -5,18 +5,18 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatMoney } from "@/lib/utils/money";
 import { formatDateShort } from "@/lib/utils/dates";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FileDown, Loader2, Mail, Pencil } from "lucide-react";
+import { FileDown, Loader2, Mail, Pencil, Receipt, Copy, X } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export default function QuoteDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -38,31 +38,25 @@ export default function QuoteDetailPage() {
   });
 
   const ACTION_MESSAGES: Record<string, { success: string; error: string }> = {
-    accept:    { success: "Devis accepté",    error: "Impossible d'accepter ce devis" },
-    reject:    { success: "Devis refusé",     error: "Impossible de refuser ce devis" },
-    duplicate: { success: "Devis dupliqué",   error: "Impossible de dupliquer ce devis" },
+    accept:    { success: "Devis accepte",  error: "Impossible d'accepter ce devis" },
+    reject:    { success: "Devis refuse",   error: "Impossible de refuser ce devis" },
+    duplicate: { success: "Devis duplique", error: "Impossible de dupliquer ce devis" },
   };
 
   const handleAction = async (action: string, redirectTo?: string) => {
-    const res = await fetch(`/api/v1/quotes/${id}/${action}`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(`/api/v1/quotes/${id}/${action}`, { method: "POST", credentials: "include" });
     const msg = ACTION_MESSAGES[action];
     if (!res.ok) { toast.error(msg?.error ?? "Une erreur est survenue"); return; }
-    toast.success(msg?.success ?? "Action effectuée");
+    toast.success(msg?.success ?? "Action effectuee");
     qc.invalidateQueries({ queryKey: ["quote", id] });
     if (redirectTo) router.push(redirectTo);
   };
 
   const handleConvert = async () => {
-    const res = await fetch(`/api/v1/quotes/${id}/convert-to-invoice`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(`/api/v1/quotes/${id}/convert-to-invoice`, { method: "POST", credentials: "include" });
     if (!res.ok) { toast.error("Erreur lors de la conversion"); return; }
     const inv = await res.json();
-    toast.success("Facture créée");
+    toast.success("Facture creee");
     router.push(`/invoices/${inv.id}`);
   };
 
@@ -74,12 +68,9 @@ export default function QuoteDetailPage() {
       const data = await res.json();
       const { generateQuotePdf } = await import("@/lib/pdf/generate-quote-pdf");
       generateQuotePdf(data);
-      toast.success("PDF téléchargé !");
-    } catch {
-      toast.error("Erreur lors de la génération du PDF");
-    } finally {
-      setPdfLoading(false);
-    }
+      toast.success("PDF telecharge");
+    } catch { toast.error("Erreur lors de la generation du PDF"); }
+    finally { setPdfLoading(false); }
   };
 
   const handleSendEmail = async () => {
@@ -93,24 +84,35 @@ export default function QuoteDetailPage() {
         body: JSON.stringify({ to: sendTo, message: sendMessage }),
       });
       if (!res.ok) { toast.error("Erreur lors de l'envoi"); return; }
-      toast.success("Devis envoyé par email");
+      toast.success("Devis envoye par email");
       setSendOpen(false);
       qc.invalidateQueries({ queryKey: ["quote", id] });
-    } catch { toast.error("Une erreur est survenue lors de l'envoi"); }
+    } catch { toast.error("Une erreur est survenue"); }
     finally { setSendLoading(false); }
   };
 
-  if (isLoading) return <Skeleton className="h-64 w-full" />;
-  if (!quote) return <p>Devis introuvable.</p>;
+  if (isLoading) return (
+    <div className="space-y-4">
+      <Skeleton className="h-12 w-64" />
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="lg:col-span-2 space-y-4">
+          <Skeleton className="h-40" />
+          <Skeleton className="h-64" />
+        </div>
+        <div className="space-y-4">
+          <Skeleton className="h-48" />
+          <Skeleton className="h-40" />
+        </div>
+      </div>
+    </div>
+  );
+  if (!quote) return <p className="text-slate-500">Devis introuvable.</p>;
 
-  const clientName =
-    quote.client?.companyName ??
-    `${quote.client?.firstName ?? ""} ${quote.client?.lastName ?? ""}`.trim();
-
+  const clientName = quote.client?.companyName ?? `${quote.client?.firstName ?? ""} ${quote.client?.lastName ?? ""}`.trim();
   const clientEmail = quote.client?.email ?? "";
 
   return (
-    <div className="space-y-6 max-w-4xl animate-in">
+    <div className="max-w-6xl">
       {/* Dialog envoi email */}
       <Dialog open={sendOpen} onOpenChange={setSendOpen}>
         <DialogContent className="max-w-md">
@@ -118,29 +120,18 @@ export default function QuoteDetailPage() {
             <DialogTitle>Envoyer le devis par email</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label>Destinataire</Label>
-              <input
-                type="email"
-                className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
-                placeholder="client@exemple.fr"
-                value={sendTo}
-                onChange={(e) => setSendTo(e.target.value)}
-              />
+              <Input type="email" placeholder="client@exemple.fr" value={sendTo} onChange={(e) => setSendTo(e.target.value)} />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label>Message</Label>
-              <Textarea
-                rows={5}
-                value={sendMessage}
-                onChange={(e) => setSendMessage(e.target.value)}
-                placeholder={`Bonjour,\n\nVeuillez trouver ci-joint votre devis ${quote.reference}.\n\nCordialement`}
-              />
+              <Textarea rows={5} value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} placeholder={`Bonjour,\n\nVeuillez trouver ci-joint votre devis ${quote.reference}.\n\nCordialement`} />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setSendOpen(false)}>Annuler</Button>
-            <Button onClick={handleSendEmail} disabled={sendLoading}>
+            <Button onClick={handleSendEmail} disabled={sendLoading} className="bg-indigo-600 hover:bg-indigo-700">
               {sendLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Envoyer
             </Button>
@@ -150,132 +141,152 @@ export default function QuoteDetailPage() {
 
       <PageHeader
         title={quote.reference}
-        description={clientName}
         breadcrumb={[{ label: "Devis", href: "/quotes" }, { label: quote.reference }]}
-        action={
-          <div className="flex gap-2 flex-wrap">
-            {(quote.status === "DRAFT" || quote.status === "SENT") && (
-              <Button size="sm" variant="outline" asChild>
-                <Link href={`/quotes/${id}/edit`}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Modifier
-                </Link>
-              </Button>
-            )}
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => { setSendTo(clientEmail); setSendOpen(true); }}
-            >
-              <Mail className="mr-2 h-4 w-4" />
-              Envoyer par email
-            </Button>
-            <Button
-              onClick={downloadPdf}
-              size="sm"
-              variant="outline"
-              disabled={pdfLoading}
-            >
-              {pdfLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <FileDown className="mr-2 h-4 w-4" />
-              )}
-              Télécharger PDF
-            </Button>
-            {(quote.status === "ACCEPTED" || quote.status === "SENT") && (
-              <Button onClick={handleConvert} size="sm">
-                Convertir en facture
-              </Button>
-            )}
-            {(quote.status === "DRAFT" || quote.status === "SENT") && (
-              <>
-                <Button onClick={() => handleAction("accept")} size="sm" variant="outline">
-                  Accepter
-                </Button>
-                <Button onClick={() => handleAction("reject")} size="sm" variant="outline">
-                  Refuser
-                </Button>
-              </>
-            )}
-            <Button onClick={() => handleAction("duplicate")} size="sm" variant="outline">
-              Dupliquer
-            </Button>
-            <StatusBadge status={quote.status} type="quote" />
-          </div>
-        }
+        action={<StatusBadge status={quote.status} type="quote" />}
       />
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader><CardTitle>Informations</CardTitle></CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            <p><span className="text-muted-foreground">Client :</span> {clientName}</p>
-            <p><span className="text-muted-foreground">Émis le :</span> {formatDateShort(quote.issueDate)}</p>
-            {quote.validUntilDate && (
-              <p>
-                <span className="text-muted-foreground">Valide jusqu&apos;au :</span>{" "}
-                {formatDateShort(quote.validUntilDate)}
-              </p>
-            )}
-            {quote.subject && (
-              <p><span className="text-muted-foreground">Objet :</span> {quote.subject}</p>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader><CardTitle>Totaux</CardTitle></CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Sous-total HT</span>
-              <span>{formatMoney(Number(quote.subtotal))}</span>
+      <div className="grid gap-5 lg:grid-cols-3">
+        {/* Left col (65%) */}
+        <div className="lg:col-span-2 space-y-4">
+          {/* Infos document */}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100">
+              <h2 className="text-sm font-semibold text-slate-800">Informations</h2>
             </div>
-            {Number(quote.discountAmount) > 0 && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Remise</span>
-                <span>- {formatMoney(Number(quote.discountAmount))}</span>
+            <div className="px-5 py-4 grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-xs text-slate-400 mb-0.5">Client</p>
+                <p className="font-medium text-slate-800">{clientName}</p>
               </div>
-            )}
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">TVA</span>
-              <span>{formatMoney(Number(quote.vatAmount))}</span>
+              <div>
+                <p className="text-xs text-slate-400 mb-0.5">Statut</p>
+                <StatusBadge status={quote.status} type="quote" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-400 mb-0.5">Date d&apos;emission</p>
+                <p className="text-slate-700">{formatDateShort(quote.issueDate)}</p>
+              </div>
+              {quote.validUntilDate && (
+                <div>
+                  <p className="text-xs text-slate-400 mb-0.5">Valide jusqu&apos;au</p>
+                  <p className="text-slate-700">{formatDateShort(quote.validUntilDate)}</p>
+                </div>
+              )}
+              {quote.subject && (
+                <div className="col-span-2">
+                  <p className="text-xs text-slate-400 mb-0.5">Objet</p>
+                  <p className="text-slate-700">{quote.subject}</p>
+                </div>
+              )}
             </div>
-            <div className="flex justify-between font-bold border-t pt-2 mt-2 text-base">
-              <span>Total TTC</span>
-              <span className="text-primary">{formatMoney(Number(quote.total))}</span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
 
-      <Card>
-        <CardHeader><CardTitle>Lignes</CardTitle></CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Description</TableHead>
-                <TableHead>Qté</TableHead>
-                <TableHead>Prix HT</TableHead>
-                <TableHead>TVA</TableHead>
-                <TableHead className="text-right">Total HT</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {quote.items?.map((item: any) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.description}</TableCell>
-                  <TableCell>{Number(item.quantity)} {item.unit ?? ""}</TableCell>
-                  <TableCell>{formatMoney(Number(item.unitPrice))}</TableCell>
-                  <TableCell>{Number(item.vatRate)}%</TableCell>
-                  <TableCell className="text-right">{formatMoney(Number(item.subtotal))}</TableCell>
+          {/* Lignes */}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100">
+              <h2 className="text-sm font-semibold text-slate-800">Lignes du devis</h2>
+            </div>
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50 hover:bg-slate-50">
+                  <TableHead className="text-xs font-medium text-slate-500 uppercase pl-5">Description</TableHead>
+                  <TableHead className="text-xs font-medium text-slate-500 uppercase">Qte</TableHead>
+                  <TableHead className="text-xs font-medium text-slate-500 uppercase">Prix HT</TableHead>
+                  <TableHead className="text-xs font-medium text-slate-500 uppercase">TVA</TableHead>
+                  <TableHead className="text-xs font-medium text-slate-500 uppercase text-right pr-5">Total HT</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {quote.items?.map((item: any) => (
+                  <TableRow key={item.id} className="hover:bg-slate-50">
+                    <TableCell className="pl-5 font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-slate-600">{Number(item.quantity)} {item.unit ?? ""}</TableCell>
+                    <TableCell className="text-slate-600">{formatMoney(Number(item.unitPrice))}</TableCell>
+                    <TableCell className="text-slate-600">{Number(item.vatRate)}%</TableCell>
+                    <TableCell className="text-right pr-5 font-medium text-slate-800">{formatMoney(Number(item.subtotal))}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        {/* Right col (35%) */}
+        <div className="space-y-4">
+          {/* Totaux */}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100">
+              <h2 className="text-sm font-semibold text-slate-800">Totaux</h2>
+            </div>
+            <div className="px-5 py-4 space-y-2.5 text-sm">
+              <div className="flex justify-between text-slate-500">
+                <span>Sous-total HT</span>
+                <span className="tabular-nums">{formatMoney(Number(quote.subtotal))}</span>
+              </div>
+              {Number(quote.discountAmount) > 0 && (
+                <div className="flex justify-between text-slate-500">
+                  <span>Remise</span>
+                  <span className="tabular-nums text-red-600">- {formatMoney(Number(quote.discountAmount))}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-slate-500">
+                <span>TVA</span>
+                <span className="tabular-nums">{formatMoney(Number(quote.vatAmount))}</span>
+              </div>
+              <div className="flex justify-between font-semibold text-slate-900 border-t border-slate-100 pt-2.5 mt-2.5 text-base">
+                <span>Total TTC</span>
+                <span className="tabular-nums text-indigo-600">{formatMoney(Number(quote.total))}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100">
+              <h2 className="text-sm font-semibold text-slate-800">Actions</h2>
+            </div>
+            <div className="p-4 space-y-2">
+              {(quote.status === "DRAFT" || quote.status === "SENT") && (
+                <Button size="sm" variant="outline" asChild className="w-full justify-start h-9">
+                  <Link href={`/quotes/${id}/edit`}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Modifier
+                  </Link>
+                </Button>
+              )}
+              <Button size="sm" variant="outline" className="w-full justify-start h-9" onClick={() => { setSendTo(clientEmail); setSendOpen(true); }}>
+                <Mail className="mr-2 h-4 w-4" />
+                Envoyer par email
+              </Button>
+              <Button size="sm" variant="outline" className="w-full justify-start h-9" onClick={downloadPdf} disabled={pdfLoading}>
+                {pdfLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileDown className="mr-2 h-4 w-4" />}
+                Telecharger PDF
+              </Button>
+              {(quote.status === "ACCEPTED" || quote.status === "SENT") && (
+                <Button size="sm" className="w-full justify-start h-9 bg-indigo-600 hover:bg-indigo-700" onClick={handleConvert}>
+                  <Receipt className="mr-2 h-4 w-4" />
+                  Convertir en facture
+                </Button>
+              )}
+              {(quote.status === "DRAFT" || quote.status === "SENT") && (
+                <>
+                  <Button size="sm" variant="outline" className="w-full justify-start h-9 text-emerald-600 border-emerald-200 hover:bg-emerald-50" onClick={() => handleAction("accept")}>
+                    Accepter
+                  </Button>
+                  <Button size="sm" variant="outline" className="w-full justify-start h-9 text-red-600 border-red-200 hover:bg-red-50" onClick={() => handleAction("reject")}>
+                    <X className="mr-2 h-4 w-4" />
+                    Refuser
+                  </Button>
+                </>
+              )}
+              <Button size="sm" variant="outline" className="w-full justify-start h-9" onClick={() => handleAction("duplicate")}>
+                <Copy className="mr-2 h-4 w-4" />
+                Dupliquer
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -55,6 +55,42 @@ export async function sendQuoteEmail(
   });
 }
 
+export async function sendInviteEmail(
+  to: string,
+  orgName: string,
+  inviterName: string,
+  registerUrl: string
+) {
+  await resend.emails.send({
+    from: FROM,
+    to,
+    subject: `Vous avez été invité à rejoindre ${orgName} sur QuickDevis Pro`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px;">
+        <div style="background: #4338CA; color: white; padding: 24px; border-radius: 12px 12px 0 0; text-align: center;">
+          <h1 style="margin: 0; font-size: 24px;">QuickDevis Pro</h1>
+        </div>
+        <div style="border: 1px solid #E2E8F0; border-top: none; padding: 32px; border-radius: 0 0 12px 12px;">
+          <h2 style="color: #111827; margin-top: 0;">Vous avez été invité !</h2>
+          <p style="color: #64748B;">
+            <strong>${inviterName}</strong> vous invite à rejoindre l'organisation
+            <strong>${orgName}</strong> sur QuickDevis Pro.
+          </p>
+          <a href="${registerUrl}" style="display: inline-block; background: #4338CA; color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 16px 0;">
+            Créer mon compte
+          </a>
+          <p style="color: #94A3B8; font-size: 13px;">
+            Si vous avez déjà un compte, connectez-vous et demandez à votre administrateur de vous ajouter manuellement.
+          </p>
+          <p style="color: #94A3B8; font-size: 12px; margin-top: 24px; border-top: 1px solid #F1F5F9; padding-top: 16px;">
+            Invitation envoyée via QuickDevis Pro — Si vous n'attendiez pas cet email, ignorez-le.
+          </p>
+        </div>
+      </div>
+    `,
+  });
+}
+
 export async function sendInvoiceEmail(
   to: string,
   invoiceRef: string,

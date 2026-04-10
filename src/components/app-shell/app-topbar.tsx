@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, LogOut, User, Settings, Bell, ChevronRight, Home, Search } from "lucide-react";
+import { Menu, LogOut, User, Settings, Bell, ChevronRight, Search } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { CommandSearch } from "@/components/shared/command-search";
 import Link from "next/link";
@@ -27,16 +27,17 @@ const ROUTE_LABELS: Record<string, string> = {
   templates: "Templates",
   documents: "Documents",
   analytics: "Analytiques",
-  team: "Équipe",
+  team: "Equipe",
   profile: "Profil",
-  settings: "Paramètres",
+  settings: "Parametres",
   new: "Nouveau",
   edit: "Modifier",
-  company: "Société",
+  company: "Societe",
+  billing: "Facturation",
 };
 
-function isUUID(str: string) {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str) || str.length > 20;
+function isId(str: string) {
+  return str.length > 20 || /^[0-9a-f]{8}-/.test(str);
 }
 
 interface AppTopbarProps {
@@ -62,122 +63,122 @@ export function AppTopbar({ onMenuClick, orgName }: AppTopbarProps) {
   }, []);
 
   const initials = user?.name
-    ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
     : "?";
 
-  // Build breadcrumb from pathname
   const segments = pathname.split("/").filter(Boolean);
-  const breadcrumb = segments.map((seg, i) => {
-    const href = "/" + segments.slice(0, i + 1).join("/");
-    const label = isUUID(seg) ? "Détail" : (ROUTE_LABELS[seg] ?? seg);
-    return { href, label };
-  });
+  const breadcrumb = segments.map((seg, i) => ({
+    href: "/" + segments.slice(0, i + 1).join("/"),
+    label: isId(seg) ? "Detail" : (ROUTE_LABELS[seg] ?? seg),
+  }));
 
   return (
     <>
       <CommandSearch open={searchOpen} onOpenChange={setSearchOpen} />
-    <header className="flex h-16 items-center justify-between border-b bg-white shadow-sm px-4 gap-4">
-      <div className="flex items-center gap-3 min-w-0">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden shrink-0"
-          onClick={onMenuClick}
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
+      <header className="flex h-14 items-center justify-between border-b border-slate-200 bg-white px-4 gap-4 shrink-0">
+        {/* Left: mobile menu + breadcrumb */}
+        <div className="flex items-center gap-3 min-w-0">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden shrink-0 h-8 w-8"
+            onClick={onMenuClick}
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
 
-        {/* Breadcrumb */}
-        <nav className="hidden sm:flex items-center gap-1 text-sm">
-          <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
-            <Home className="h-3.5 w-3.5" />
-          </Link>
-          {breadcrumb.map((crumb, i) => (
-            <span key={crumb.href} className="flex items-center gap-1">
-              <ChevronRight className="h-3 w-3 text-muted-foreground" />
-              {i === breadcrumb.length - 1 ? (
-                <span className="font-medium text-foreground">{crumb.label}</span>
-              ) : (
-                <Link
-                  href={crumb.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {crumb.label}
-                </Link>
-              )}
+          <nav className="hidden sm:flex items-center gap-1 text-sm min-w-0">
+            {breadcrumb.map((crumb, i) => (
+              <span key={crumb.href} className="flex items-center gap-1 min-w-0">
+                {i > 0 && <ChevronRight className="h-3 w-3 text-slate-300 shrink-0" />}
+                {i === breadcrumb.length - 1 ? (
+                  <span className="font-semibold text-slate-800 truncate">{crumb.label}</span>
+                ) : (
+                  <Link
+                    href={crumb.href}
+                    className="text-slate-400 hover:text-slate-700 transition-colors truncate"
+                  >
+                    {crumb.label}
+                  </Link>
+                )}
+              </span>
+            ))}
+          </nav>
+
+          {orgName && (
+            <span className="text-sm font-medium text-slate-500 sm:hidden truncate">
+              {orgName}
             </span>
-          ))}
-        </nav>
+          )}
+        </div>
 
-        {orgName && (
-          <span className="text-sm font-medium text-muted-foreground sm:hidden truncate">
-            {orgName}
-          </span>
-        )}
-      </div>
+        {/* Center: search */}
+        <div className="flex-1 max-w-xs hidden sm:block">
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-400 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+          >
+            <Search className="size-3.5 shrink-0" />
+            <span className="flex-1 text-left">Rechercher...</span>
+            <kbd className="text-[10px] bg-white border border-slate-200 rounded px-1.5 py-0.5 text-slate-400 font-mono">
+              ⌘K
+            </kbd>
+          </button>
+        </div>
 
-      <div className="flex items-center gap-2">
-        {/* Search button */}
-        <button
-          onClick={() => setSearchOpen(true)}
-          className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground bg-muted rounded-lg hover:bg-muted/80 transition-colors"
-        >
-          <Search className="size-3.5" />
-          <span>Rechercher...</span>
-          <kbd className="text-xs bg-background border rounded px-1 ml-1">⌘K</kbd>
-        </button>
-        <Button variant="ghost" size="icon" className="sm:hidden" onClick={() => setSearchOpen(true)}>
-          <Search className="size-4" />
-        </Button>
+        {/* Right: actions */}
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" className="sm:hidden h-8 w-8" onClick={() => setSearchOpen(true)}>
+            <Search className="size-4" />
+          </Button>
 
-        {/* Notification bell (demo) */}
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-4 w-4" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500" />
-        </Button>
+          <Button variant="ghost" size="icon" className="relative h-8 w-8">
+            <Bell className="h-4 w-4 text-slate-500" />
+          </Button>
 
-        {/* User avatar dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={user?.image ?? ""} alt={user?.name ?? ""} />
-                <AvatarFallback className="bg-indigo-100 text-indigo-700 font-medium text-sm">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <div className="px-2 py-1.5">
-              <p className="text-sm font-medium">{user?.name}</p>
-              <p className="text-xs text-muted-foreground">{user?.email}</p>
-            </div>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/profile">
-                <User className="mr-2 h-4 w-4" />
-                Profil
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/settings">
-                <Settings className="mr-2 h-4 w-4" />
-                Paramètres
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => signOut({ callbackUrl: "/login" })}
-              className="text-destructive"
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Déconnexion
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </header>
+          <div className="w-px h-5 bg-slate-200 mx-1" />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
+                <Avatar className="h-7 w-7">
+                  <AvatarImage src={user?.image ?? ""} alt={user?.name ?? ""} />
+                  <AvatarFallback className="bg-indigo-100 text-indigo-700 text-xs font-semibold">
+                    {initials}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <div className="px-2 py-2">
+                <p className="text-sm font-semibold text-slate-800">{user?.name}</p>
+                <p className="text-xs text-slate-400">{user?.email}</p>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/profile">
+                  <User className="mr-2 h-4 w-4" />
+                  Profil
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/settings">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Parametres
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                className="text-red-600 focus:text-red-600"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Deconnexion
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </header>
     </>
   );
 }

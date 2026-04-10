@@ -88,6 +88,17 @@
   --sidebar-border: 222 47% 18%;
 
   --radius: 0.625rem;
+
+  /* Semantic tokens */
+  --brand: 243 75% 59%;
+  --brand-dark: 243 75% 45%;
+  --brand-light: 243 75% 97%;
+  --success: 142 72% 29%;
+  --success-bg: 142 72% 95%;
+  --warning: 38 92% 50%;
+  --warning-bg: 48 96% 89%;
+  --danger: 0 72% 51%;
+  --danger-bg: 0 93% 94%;
 }
 
 .dark {

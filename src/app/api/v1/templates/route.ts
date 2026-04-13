@@ -1,14 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "@/lib/db/prisma";
-
-async function getOrgId(userId: string): Promise<string | null> {
-  const m = await prisma.organizationMember.findFirst({
-    where: { userId, joinedAt: { not: null } },
-    select: { organizationId: true },
-  });
-  return m?.organizationId ?? null;
-}
+import { getOrgId } from "@/lib/auth/guards";
 
 export async function GET(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -49,7 +42,7 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json(template, { status: 201 });
   } catch (err) {
-    console.error("[templates POST]", err);
+    if (process.env.NODE_ENV !== "production") console.error("[templates POST]", err);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

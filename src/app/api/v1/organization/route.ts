@@ -125,7 +125,7 @@ export async function PATCH(req: NextRequest) {
     });
     return NextResponse.json(updated);
   } catch (err) {
-    console.error("[organization PATCH]", err);
+    if (process.env.NODE_ENV !== "production") console.error("[organization PATCH]", err);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

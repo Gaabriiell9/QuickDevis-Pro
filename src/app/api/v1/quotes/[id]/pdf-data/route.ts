@@ -20,15 +20,13 @@ export async function GET(
       organization: true,
       client: true,
       items: { orderBy: { position: "asc" } },
+      template: true,
     },
   });
   if (!quote) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  let templateConfig = null;
-  if (quote.templateId) {
-    const tmpl = await prisma.template.findUnique({ where: { id: quote.templateId }, select: { content: true } });
-    templateConfig = tmpl?.content ?? null;
-  } else {
+  let templateConfig = quote.template?.content ?? null;
+  if (!templateConfig) {
     const defaultTmpl = await prisma.template.findFirst({
       where: { organizationId: orgId, type: "QUOTE", isDefault: true, deletedAt: null },
       select: { content: true },

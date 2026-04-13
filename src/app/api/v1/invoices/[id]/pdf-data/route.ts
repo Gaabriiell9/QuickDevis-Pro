@@ -21,15 +21,13 @@ export async function GET(
       client: true,
       items: { orderBy: { position: "asc" } },
       quote: { select: { reference: true } },
+      template: true,
     },
   });
   if (!invoice) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  let templateConfig = null;
-  if (invoice.templateId) {
-    const tmpl = await prisma.template.findUnique({ where: { id: invoice.templateId }, select: { content: true } });
-    templateConfig = tmpl?.content ?? null;
-  } else {
+  let templateConfig = invoice.template?.content ?? null;
+  if (!templateConfig) {
     const defaultTmpl = await prisma.template.findFirst({
       where: { organizationId: orgId, type: "INVOICE", isDefault: true, deletedAt: null },
       select: { content: true },

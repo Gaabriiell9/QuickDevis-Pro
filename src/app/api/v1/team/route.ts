@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
     data: { identifier: `invite:${orgId}:${role}:${email}`, token: inviteToken, expires },
   });
 
-  const registerUrl = `${APP_URL}/register?email=${encodeURIComponent(email)}`;
+  const registerUrl = `${APP_URL}/register?invite=${inviteToken}&email=${encodeURIComponent(email)}`;
   const inviterName = inviterMember.user?.name ?? "Un administrateur";
 
   try {

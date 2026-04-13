@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,7 +8,7 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,10 +35,13 @@ const registerSchema = z
 
 type RegisterForm = z.infer<typeof registerSchema>;
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan");
+  const inviteToken = searchParams.get("invite");
+  const inviteEmail = searchParams.get("email");
+  const isInvited = !!inviteToken && !!inviteEmail;
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -47,6 +50,9 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      email: inviteEmail ?? "",
+    },
   });
 
   const onSubmit = async (data: RegisterForm) => {
@@ -59,6 +65,7 @@ export default function RegisterPage() {
           name: data.name,
           email: data.email,
           password: data.password,
+          ...(inviteToken ? { inviteToken } : {}),
         }),
       });
 
@@ -80,14 +87,18 @@ export default function RegisterPage() {
         return;
       }
 
-      const plan = searchParams.get("plan");
       if (plan) {
         sessionStorage.setItem("pendingPlan", plan);
       }
-      router.push("/welcome");
+
+      if (isInvited) {
+        router.push("/dashboard");
+      } else {
+        router.push("/welcome");
+      }
       router.refresh();
     } catch (err) {
-      console.error("[register]", err);
+      if (process.env.NODE_ENV !== "production") console.error("[register]", err);
       toast.error("Une erreur est survenue");
     } finally {
       setIsLoading(false);
@@ -99,11 +110,21 @@ export default function RegisterPage() {
       <CardHeader>
         <CardTitle>Créer un compte</CardTitle>
         <CardDescription>
-          Commencez votre essai gratuit QuickDevis Pro
+          {isInvited
+            ? "Créez votre compte pour rejoindre l'organisation"
+            : "Commencez votre essai gratuit QuickDevis Pro"}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
+          {isInvited && (
+            <div className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
+              <Info className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
+              <p className="text-sm text-blue-800">
+                Vous avez été invité à rejoindre une organisation. Créez votre compte pour accepter l&apos;invitation.
+              </p>
+            </div>
+          )}
           <div className="space-y-2">
             <Label htmlFor="name">Nom complet</Label>
             <Input id="name" placeholder="Jean Dupont" {...register("name")} />
@@ -117,6 +138,8 @@ export default function RegisterPage() {
               id="email"
               type="email"
               placeholder="vous@exemple.fr"
+              disabled={isInvited}
+              readOnly={isInvited}
               {...register("email")}
             />
             {errors.email && (
@@ -151,7 +174,7 @@ export default function RegisterPage() {
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Créer mon compte
           </Button>
-          {process.env.NEXT_PUBLIC_ENABLE_GOOGLE_AUTH === "true" && (
+          {!isInvited && process.env.NEXT_PUBLIC_ENABLE_GOOGLE_AUTH === "true" && (
             <>
               <div className="relative w-full flex items-center gap-3">
                 <div className="flex-1 h-px bg-border" />
@@ -183,5 +206,13 @@ export default function RegisterPage() {
         </CardFooter>
       </form>
     </Card>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div />}>
+      <RegisterForm />
+    </Suspense>
   );
 }

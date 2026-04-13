@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuth, getOrgId } from "@/lib/auth/guards";
+import { STRIPE_API_VERSION } from "@/config/app";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "sk_placeholder", {
-  apiVersion: "2026-03-25.dahlia",
+  apiVersion: STRIPE_API_VERSION,
 });
 
 const PRICE_IDS: Record<string, string> = {
@@ -60,8 +61,9 @@ export async function POST(req: NextRequest) {
           { status: 400 }
         );
       }
-    } catch {
+    } catch (err) {
       // Subscription introuvable sur Stripe → on laisse passer
+      if (process.env.NODE_ENV !== "production") console.error("[billing/checkout] subscription lookup:", err);
     }
   }
 
